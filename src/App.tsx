@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchPopularMovies } from "./api/tmdb";
-import type { Movie } from "./types/movie";
 import { MovieRanking } from "./components/MovieRanking";
+import type { Movie } from "./types/movie";
 
 function App() {
     const [movies, setMovies] = useState<Movie[]>([]);
