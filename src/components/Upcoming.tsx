@@ -1,11 +1,11 @@
 import type { Movie } from "../types/movie";
 import { useState, useCallback, useMemo } from "react";
 
-interface MovieRankingProps {
+interface UpcomingProps {
     movies: Movie[];
 }
 
-export function MovieRanking({ movies }: MovieRankingProps) {
+export function Upcoming({ movies }: UpcomingProps) {
     const [index, setIndex] = useState(0);
     const moviePages = 5;
     const currentMovies = movies.slice(index, index + moviePages);
@@ -29,7 +29,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     // -----------------------------------------------
     return (
         <div className="max-w-6xl mx-auto p-8">
-            <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
+            <h1 className="text-3xl font-bold mb-8">공개 예정작</h1>
             <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {currentMovies.map((movie: Movie) => {
                     const overallRank =

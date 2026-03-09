@@ -1,28 +1,41 @@
 import { useEffect, useState } from "react";
-import { fetchPopularMovies } from "./api/tmdb";
-import { MovieRanking } from "./components/MovieRanking";
+import { fetchPopularMovies, fetchUpcomingMovies } from "./api/tmdb";
 import type { Movie } from "./types/movie";
+import { MovieRanking } from "./components/MovieRanking";
+import { Header } from "./components/Header";
+import { Upcoming } from "./components/Upcoming";
 
 function App() {
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+    const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchPopularMovies()
-            .then((data) => {
-                console.log("영화 데이터:", data.results);
-                setMovies(data.results);
+        const loadAllData = async () => {
+            setLoading(true);
+            try {
+                const [popularRes, upcomingRes] = await Promise.all([
+                    fetchPopularMovies(),
+                    fetchUpcomingMovies(),
+                ]);
+                setPopularMovies(popularRes.results);
+                setUpcomingMovies(upcomingRes.results);
+            } catch (error) {
+                console.error(error);
+            } finally {
                 setLoading(false);
-            })
-            .catch(console.error);
+            }
+        };
+        loadAllData();
     }, []);
 
     if (loading) return <div> 로딩중...</div>;
 
     return (
         <>
-            <div>Mubee</div>
-            <MovieRanking movies={movies} />
+            <Header />
+            <MovieRanking movies={popularMovies} />
+            <Upcoming movies={upcomingMovies}/>
         </>
     );
 }
