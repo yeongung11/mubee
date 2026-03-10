@@ -1,21 +1,42 @@
 import type { Movie } from "../types/movie";
-import { useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useEffectEvent } from "react";
 
 interface MovieRankingProps {
     movies: Movie[];
 }
 
 export function MovieRanking({ movies }: MovieRankingProps) {
+    const [prevDailyRank, setPrevDailyRank] = useState<Record<number, number>>(
+        {},
+    );
     const [index, setIndex] = useState(0);
     const moviePages = 5;
     const currentMovies = movies.slice(index, index + moviePages);
 
-    const dailyRanks = useMemo(() => {
-        const ranks: Record<number, number> = {};
-        movies.forEach((movie, idx) => {
-            ranks[movie.id] = idx + 1;
-        });
-        return ranks;
+    // 초기 로드
+    const loadRanks = useEffectEvent(() => {
+        // setState 무한호출 방지
+        try {
+            const saved = localStorage.getItem("prevMovieRanks");
+            if (saved) {
+                setPrevDailyRank(JSON.parse(saved));
+            }
+            
+        } catch {
+            console.warn("랭킹 로드 실패");
+           
+        }
+    });
+
+    useEffect(() => {
+        loadRanks();
+    }, []);
+
+    // 현재 데이터 저장
+    useEffect(() => {
+        const currentRanks: Record<number, number> = {};
+        movies.forEach((m, i) => (currentRanks[m.id] = i + 1));
+        localStorage.setItem("prevMovieRanks", JSON.stringify(currentRanks));
     }, [movies]);
 
     const handlePrev = useCallback(() => {
@@ -26,6 +47,15 @@ export function MovieRanking({ movies }: MovieRankingProps) {
         setIndex(Math.min(movies.length - moviePages, index + moviePages));
     }, [index, movies.length, moviePages]);
 
+    // 순위 등락 확인용 하드 코딩
+    // const PREV_RANKINGS: Record<number, number> = {
+    //     1290821: 5, // 1위 → 이전 5위 (↗)
+    //     680493: 2, // 2위 → 이전 2위 (-)
+    //     1159559: 1, // 3위 → 이전 1위 (↙)
+    //     799882: 7, // 4위 → 이전 7위 (↗)
+    //     1265609: 3, // 5위 → 이전 3위 (↙)
+    // };
+
     // -----------------------------------------------
     return (
         <div className="max-w-6xl mx-auto p-8">
@@ -34,9 +64,8 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                 {currentMovies.map((movie: Movie) => {
                     const overallRank =
                         movies.findIndex((m) => m.id === movie.id) + 1;
-                    const prevRank = dailyRanks[movie.id];
-                    const rankChange =
-                        prevRank !== undefined ? overallRank - prevRank : 0;
+                    const prevRank = prevDailyRank[movie.id];
+                    const rankChange = overallRank - prevRank;
 
                     return (
                         <li key={movie.id} className="relative w-48">
@@ -63,12 +92,17 @@ export function MovieRanking({ movies }: MovieRankingProps) {
             </ul>
 
             <div className="flex items-center justify-center mt-7 gap-5">
-                <button onClick={handlePrev} disabled={index === 0}>
+                <button
+                    onClick={handlePrev}
+                    disabled={index === 0}
+                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+                >
                     이전
                 </button>
                 <button
                     onClick={handleNext}
                     disabled={index + moviePages >= movies.length}
+                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
                 >
                     다음
                 </button>

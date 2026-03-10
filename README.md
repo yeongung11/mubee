@@ -27,3 +27,19 @@ cd mubee
 npm install
 npm run dev
 ```
+
+트러블 슈팅
+
+### 1
+
+에러
+
+-   `calling setstate synchronously within an effect can trigger cascading renders`
+
+원인
+
+-   `useEffect` 안에서 `setState`를 호출해서 리렌더링을 발생시키게 되기 때문에 무한루프 발생
+
+해결
+
+-   `useEffectEvent`를 사용해 무한호출을 차단

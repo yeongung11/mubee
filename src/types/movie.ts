@@ -10,3 +10,7 @@ export interface Movie {
     popularity: number;
     genre_ids: number[];
 }
+
+export interface ExtendedMovie extends Movie {
+    releaseDate: Date;
+}
