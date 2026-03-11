@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { fetchPopularMovies, fetchUpcomingMovies } from "../api/tmdb";
 import type { Movie } from "../types/movie";
 import { MovieRanking } from "../components/MovieRanking";
-import { Header } from "../components/Header";
 import { Upcoming } from "../components/Upcoming";
 
 export function Home() {
@@ -33,7 +32,6 @@ export function Home() {
 
     return (
         <>
-            <Header />
             <MovieRanking movies={popularMovies} />
             <Upcoming movies={upcomingMovies} />
         </>

@@ -1,5 +1,6 @@
 import type { Movie } from "../types/movie";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface MovieRankingProps {
     movies: Movie[];
@@ -12,6 +13,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     const [index, setIndex] = useState(0);
     const moviePages = 5;
     const currentMovies = movies.slice(index, index + moviePages);
+    const navigate = useNavigate();
 
     // 초기 로드
     const loadRanks = useEffectEvent(() => {
@@ -21,10 +23,8 @@ export function MovieRanking({ movies }: MovieRankingProps) {
             if (saved) {
                 setPrevDailyRank(JSON.parse(saved));
             }
-            
         } catch {
             console.warn("랭킹 로드 실패");
-           
         }
     });
 
@@ -68,7 +68,11 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                     const rankChange = overallRank - prevRank;
 
                     return (
-                        <li key={movie.id} className="relative w-48">
+                        <li
+                            key={movie.id}
+                            className="relative w-48"
+                            onClick={() => navigate(`/movie/${movie.id}`)}
+                        >
                             <img
                                 src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                                 className="w-full h-80 object-cover rounded mb-2"

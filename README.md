@@ -8,9 +8,10 @@
 -   TypeScript
 -   Tailwind CSS
 -   Vite
--   React Router(예정)
+-   React Router
 -   Zustand(예정)
 -   TMDB API
+-   KOBIS API
 
 ## 기능
 

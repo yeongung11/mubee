@@ -49,3 +49,9 @@ export const fetchUpcomingMovies = async () => {
     );
     return { results: allMovies };
 };
+
+// 상세 페이지
+export const fetchDetail = async (id: string) => {
+    const res = await fetch(`${BASE_URL}/movie/${id}?language=ko-KR`, options);
+    return res.json();
+};
