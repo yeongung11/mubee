@@ -52,6 +52,10 @@ export const fetchUpcomingMovies = async () => {
 
 // 상세 페이지
 export const fetchDetail = async (id: string) => {
-    const res = await fetch(`${BASE_URL}/movie/${id}?language=ko-KR`, options);
+    const res = await fetch(
+        `${BASE_URL}/movie/${id}?language=ko-KR&append_to_response=credits`,
+        options,
+    );
+
     return res.json();
 };

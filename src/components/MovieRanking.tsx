@@ -58,7 +58,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
 
     // -----------------------------------------------
     return (
-        <div className="max-w-6xl mx-auto p-8">
+        <div className="max-w-6xl mx-auto p-8 mt-7">
             <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
             <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {currentMovies.map((movie: Movie) => {
