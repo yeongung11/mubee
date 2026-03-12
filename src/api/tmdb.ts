@@ -1,5 +1,6 @@
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = import.meta.env.VITE_TMDB_TOKEN;
+import type { Movie } from "../types/movie";
 
 const options = {
     headers: {

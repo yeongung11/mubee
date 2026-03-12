@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import type { Movie, MovieWithCredits } from "../types/movie";
 import { fetchDetail } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
@@ -13,7 +13,7 @@ export function Detail() {
     const castPageSize = 15;
     const { convertFive } = useRating();
 
-    useEffect(() => {
+    useEffectEvent(() => {
         if (movie?.id) {
             const saved = localStorage.getItem(`rating_${movie.id}`);
             setUserRating(saved ? parseInt(saved) : 0);
@@ -21,6 +21,7 @@ export function Detail() {
     }, [movie?.id]);
 
     const setRating = (rating: number) => {
+        if (!movie?.id) return;
         const newRating = userRating === rating ? 0 : rating;
         setUserRating(newRating);
         localStorage.setItem(`rating_${movie.id}`, newRating.toString());

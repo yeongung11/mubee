@@ -1,5 +1,6 @@
 import type { Movie, ExtendedMovie } from "../types/movie";
 import { useState, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
 
 interface UpcomingProps {
     movies: Movie[];
@@ -52,7 +53,11 @@ export function Upcoming({ movies }: UpcomingProps) {
                         diffTime / (1000 * 60 * 60 * 24),
                     );
                     return (
-                        <li key={movie.id} className="relative w-48">
+                        <Link
+                            to={`/movie/${movie.id}`}
+                            key={movie.id}
+                            className="relative w-48"
+                        >
                             <img
                                 src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                                 className="w-full h-80 object-cover rounded mb-2"
@@ -65,7 +70,7 @@ export function Upcoming({ movies }: UpcomingProps) {
                             </div>
                             {movie.title}
                             <br />
-                        </li>
+                        </Link>
                     );
                 })}
             </ul>

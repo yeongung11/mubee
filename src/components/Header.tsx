@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
-import { debounce } from "lodash";
 import type { Movie } from "../types/movie";
 
 interface HeaderProps {
