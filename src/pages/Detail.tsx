@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import type { Movie, MovieWithCredits } from "../types/movie";
 import { fetchDetail } from "../api/tmdb";
+import { useRating } from "../utils/useRating";
 
 export function Detail() {
     const { id } = useParams();
@@ -10,6 +11,7 @@ export function Detail() {
     const [hoverRating, setHoverRating] = useState(0); // hover
     const [castIdx, setCastIdx] = useState(0);
     const castPageSize = 15;
+    const { convertFive } = useRating();
 
     useEffect(() => {
         if (movie?.id) {
@@ -115,15 +117,15 @@ export function Detail() {
                                 ))}
                             </div>
                             {/* 내 평점 */}
-                            {userRating > 0 && (
-                                <p className="text-3xl font-bold p-2 px-4 bg-gradient-to-r  text-black font-bold  text-lg min-w-[55px] text-center">
-                                    내 평점 {userRating}
-                                </p>
-                            )}
+
+                            <p className="!text-3xl font-bold p-2 px-4 bg-gradient-to-r  text-black font-bold  text-lg min-w-[55px] text-center">
+                                나의 평가 {userRating}.0
+                            </p>
+
                             {/* 평균 */}
                             <div className="flex items-center gap-2">
                                 <span className="text-3xl font-bold ">
-                                    평균 {movie.vote_average.toFixed(1)}
+                                    평균 {convertFive(movie.vote_average)}
                                 </span>
                             </div>
                         </div>
@@ -131,9 +133,16 @@ export function Detail() {
 
                     {/* 2️⃣ 하단: 영화 내용 */}
                     <div className="pt-4 pb-8 border-t border-white/20">
-                        <p className="text-gray-400 leading-relaxed text-lg">
-                            {movie.overview}
-                        </p>
+                        {movie.overview ? (
+                            <p>{movie.overview}</p>
+                        ) : (
+                            <p className="text-gray-500">
+                                {movie.title}에 대한 상세 줄거리 정보가
+                                없습니다. 감독{" "}
+                                {movie.directors?.[0]?.name || "미상"}의{" "}
+                                {movie.genres[0]?.name || ""} 장르 작품입니다.
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

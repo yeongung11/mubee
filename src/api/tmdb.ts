@@ -59,3 +59,15 @@ export const fetchDetail = async (id: string) => {
 
     return res.json();
 };
+
+// 검색
+export async function searchMovies(query: string): Promise<Movie[]> {
+    const response = await fetch(
+        `${BASE_URL}/search/movie?query=${encodeURIComponent(
+            query,
+        )}&language=ko-KR`,
+        options,
+    );
+    const data = await response.json();
+    return data.results;
+}
