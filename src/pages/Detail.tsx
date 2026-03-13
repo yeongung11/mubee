@@ -3,9 +3,10 @@ import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import type { Movie, MovieWithCredits } from "../types/movie";
 import { fetchDetail } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
+import { Link } from "react-router-dom";
 
 export function Detail() {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const [movie, setMovie] = useState<Movie | null>(null);
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0); // hover
@@ -13,11 +14,15 @@ export function Detail() {
     const castPageSize = 15;
     const { convertFive } = useRating();
 
-    useEffectEvent(() => {
+    const loadRating = useEffectEvent(() => {
         if (movie?.id) {
             const saved = localStorage.getItem(`rating_${movie.id}`);
             setUserRating(saved ? parseInt(saved) : 0);
         }
+    });
+
+    useEffect(() => {
+        loadRating();
     }, [movie?.id]);
 
     const setRating = (rating: number) => {
@@ -49,7 +54,10 @@ export function Detail() {
         setCastIdx(Math.min(maxIndex, castIdx + castPageSize));
     }, [castIdx, castPageSize, movieWithCredits?.credits?.cast?.length]);
 
-    if (!movie) return <div>로딩중...</div>;
+    if (!movie)
+        return (
+            <div className="flex items-center justify-center">로딩중...</div>
+        );
 
     return (
         <div className="relative">
@@ -156,7 +164,8 @@ export function Detail() {
                 {/* 그리드 */}
                 <div className=" grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
                     {currentCasts.map((actor, index) => (
-                        <div
+                        <Link
+                            to={`/actor/${actor.id}`}
                             key={actor.id ?? index}
                             className="group flex items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
                         >
@@ -183,7 +192,7 @@ export function Detail() {
                                     출연 | {actor.character || "출연"}
                                 </p>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 

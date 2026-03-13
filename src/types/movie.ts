@@ -12,6 +12,9 @@ export interface Movie {
     runtime?: number;
     genres: Genre[];
     adult: boolean;
+    directors: Array<{
+        name: string;
+    }>;
     production_countries?: Array<{
         iso_3166_1: string;
         name: string;
@@ -41,11 +44,37 @@ interface Genre {
     name: string;
 }
 
-// interface Country {
-//     iso_3166_1: string;
-//     name: string;
-// }
+export interface MultiSearchItem {
+    id: number;
+    name: string;
+    title: string;
+    media_type: "movie" | "tv" | "person";
+    poster_path?: string | null;
+    profile_path?: string | null;
+    vote_average?: number;
+    release_date?: string;
+}
+
+export interface MultiSearchResult {
+    id: number;
+    title: string;
+    media_type: "movie" | "tv" | "person";
+    poster_path?: string | null;
+    profile_path?: string | null;
+}
 
 export interface ExtendedMovie extends Movie {
     releaseDate: Date;
+}
+
+export interface Actor {
+    id: number;
+    name: string;
+    profile_path?: string | null;
+    known_for_department: string;
+    biography?: string;
+}
+
+export interface Credits {
+    cast: Actor[];
 }

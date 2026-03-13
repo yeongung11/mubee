@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Detail } from "./pages/Detail";
 import { Header } from "./components/Header";
+import { Actor } from "./pages/Actor";
 
 function App() {
     return (
@@ -11,6 +12,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/movie/:id" element={<Detail />} />
+                    <Route path="/actor/:actorId" element={<Actor />} />
                 </Routes>
             </main>
         </BrowserRouter>

@@ -1,6 +1,6 @@
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = import.meta.env.VITE_TMDB_TOKEN;
-import type { Movie } from "../types/movie";
+import type { Movie, MultiSearchItem, Actor } from "../types/movie";
 
 const options = {
     headers: {
@@ -62,13 +62,70 @@ export const fetchDetail = async (id: string) => {
 };
 
 // 검색
-export async function searchMovies(query: string): Promise<Movie[]> {
+export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
     const response = await fetch(
-        `${BASE_URL}/search/movie?query=${encodeURIComponent(
+        `${BASE_URL}/search/multi?query=${encodeURIComponent(
             query,
         )}&language=ko-KR`,
         options,
     );
-    const data = await response.json();
-    return data.results;
+    const data: { results: MultiSearchItem[] } = await response.json();
+
+    const movies = data.results
+        .filter(
+            (r): r is MultiSearchItem & { media_type: "movie" } =>
+                r.media_type === "movie",
+        )
+        .slice(0, 2)
+        .map<Movie>((item) => ({
+            id: item.id,
+            title: item.title,
+            poster_path: item.poster_path || "",
+            vote_average: item.vote_average || 0,
+            release_date: item.release_date || "",
+            overview: "",
+            vote_count: 0,
+            popularity: 0,
+            genre_ids: [],
+            runtime: 0,
+            genres: [],
+            adult: false,
+            directors: [],
+        }));
+
+    const actors = data.results
+        .filter(
+            (r): r is MultiSearchItem & { media_type: "person" } =>
+                r.media_type === "person",
+        )
+        .slice(0, 2)
+
+        .map<Actor>((item) => ({
+            id: item.id,
+            name: item.name,
+            profile_path: item.poster_path || "",
+            known_for_department: "Acting",
+            biography: "",
+        }));
+
+    return [...movies, ...actors];
 }
+
+// 배우 출연작
+export const fetchActorMovies = async (actorId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/person/${actorId}/movie_credits?language=ko-KR`,
+        options,
+    );
+    const data = await res.json();
+    return data.cast;
+};
+
+// 배우 상세 정보
+export const fetchActorDetail = async (actorId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/person/${actorId}?language=ko-KR`,
+        options,
+    );
+    return res.json();
+};
