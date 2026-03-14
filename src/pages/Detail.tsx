@@ -4,6 +4,7 @@ import type { Movie, MovieWithCredits } from "../types/movie";
 import { fetchDetail } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 import { Link } from "react-router-dom";
+import { useFavoritesStore } from "../store/favorite";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
@@ -13,6 +14,7 @@ export function Detail() {
     const [castIdx, setCastIdx] = useState(0);
     const castPageSize = 15;
     const { convertFive } = useRating();
+    const { isFavorite, toggleFavorite } = useFavoritesStore();
 
     const loadRating = useEffectEvent(() => {
         if (movie?.id) {
@@ -137,6 +139,16 @@ export function Detail() {
                                     평균 {convertFive(movie.vote_average)}
                                 </span>
                             </div>
+                            <button
+                                onClick={() => toggleFavorite(movie)}
+                                className={
+                                    isFavorite(movie.id)
+                                        ? "favorite active"
+                                        : "favorite"
+                                }
+                            >
+                                {isFavorite(movie.id) ? "❤️" : "♡"}
+                            </button>
                         </div>
                     </div>
 

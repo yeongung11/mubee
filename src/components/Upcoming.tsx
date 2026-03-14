@@ -1,6 +1,6 @@
 import type { Movie, ExtendedMovie } from "../types/movie";
 import { useState, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { MovieGrid } from "./MovieGrid";
 
 interface UpcomingProps {
     movies: Movie[];
@@ -44,36 +44,25 @@ export function Upcoming({ movies }: UpcomingProps) {
     return (
         <div className="max-w-6xl mx-auto p-8">
             <h1 className="text-3xl font-bold mb-8">공개 예정작</h1>
-            <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                {currentMovies.map((movie: ExtendedMovie) => {
+            <MovieGrid
+                showRating={false}
+                movies={currentMovies}
+                renderBadge={(movie) => {
+                    const typedMovie = movie as ExtendedMovie;
                     const today = new Date();
                     const diffTime =
-                        movie.releaseDate.getTime() - today.getTime();
+                        typedMovie.releaseDate!.getTime() - today.getTime();
                     const diffDays = Math.ceil(
                         diffTime / (1000 * 60 * 60 * 24),
                     );
+
                     return (
-                        <Link
-                            to={`/movie/${movie.id}`}
-                            key={movie.id}
-                            className="relative w-48"
-                        >
-                            <img
-                                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                                className="w-full h-80 object-cover rounded mb-2"
-                            />
-                            <div
-                                className="absolute top-2 left-2 bg-gradient-to-r from-orange-400 to-red-500 
-                      text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg z-10"
-                            >
-                                D-{diffDays > 0 ? diffDays : "개봉"}
-                            </div>
-                            {movie.title}
-                            <br />
-                        </Link>
+                        <div className="absolute top-2 left-2 bg-gradient-to-r from-orange-400 to-red-500 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg z-10">
+                            D-{diffDays > 0 ? diffDays : "개봉"}
+                        </div>
                     );
-                })}
-            </ul>
+                }}
+            />
 
             {futureMovies.length > moviePages && (
                 <div className="flex justify-center mt-8 gap-4">

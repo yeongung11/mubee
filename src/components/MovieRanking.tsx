@@ -1,7 +1,7 @@
 import type { Movie } from "../types/movie";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
-import { Link } from "react-router-dom";
-import { useRating } from "../utils/useRating";
+import { MovieGrid } from "./MovieGrid";
+
 
 interface MovieRankingProps {
     movies: Movie[];
@@ -14,8 +14,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     const [index, setIndex] = useState(0);
     const moviePages = 5;
     const currentMovies = movies.slice(index, index + moviePages);
-    const { convertFive } = useRating();
-    // const navigate = useNavigate();
+    
 
     // 초기 로드
     const loadRanks = useEffectEvent(() => {
@@ -62,40 +61,24 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     return (
         <div className="max-w-6xl mx-auto p-8 mt-7">
             <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
-            <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                {currentMovies.map((movie: Movie) => {
+            <MovieGrid
+                movies={currentMovies}
+                renderBadge={(movie) => {
                     const overallRank =
                         movies.findIndex((m) => m.id === movie.id) + 1;
                     const prevRank = prevDailyRank[movie.id];
                     const rankChange = overallRank - prevRank;
 
                     return (
-                        <Link
-                            key={movie.id}
-                            className="relative w-48"
-                            to={`/movie/${movie.id}`}
-                        >
-                            <img
-                                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                                className="w-full h-80 object-cover rounded mb-2"
-                            />
-                            <div
-                                className="absolute top-2 left-2 w-14 h-12 sm:w-14 sm:h-8 
-    bg-black/70 rounded-xl shadow-2xl border-2 border-white/50
-    flex items-center justify-center text-2xl sm:text-xl 
-    font-bold text-amber-50 drop-shadow-xl z-10 gap-2"
-                            >
-                                {overallRank}
-                                {rankChange === 0 && <span>-</span>}
-                                {rankChange < 0 && <span>↗</span>}
-                                {rankChange > 0 && <span>↙</span>}
-                            </div>
-                            {movie.title}
-                            <br />⭐ {convertFive(movie.vote_average)}
-                        </Link>
+                        <div className="absolute top-2 left-2 w-14 h-12 sm:w-14 sm:h-8 bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center text-2xl sm:text-xl font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
+                            {overallRank}
+                            {rankChange === 0 && <span>-</span>}
+                            {rankChange < 0 && <span>↗</span>}
+                            {rankChange > 0 && <span>↙</span>}
+                        </div>
                     );
-                })}
-            </ul>
+                }}
+            />
 
             <div className="flex items-center justify-center mt-7 gap-5">
                 <button

@@ -46,7 +46,9 @@ export function Header({ className }: HeaderProps) {
                     }}
                 />
                 {/* <p className="mr-3">프로필</p> */}
-
+                <Link to="/favorites" className=" hover:text-blue-400">
+                    찜한 영화
+                </Link>
                 {searchResults.length > 0 && (
                     <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-64 overflow-auto z-50 border">
                         {searchResults.map((result) => {

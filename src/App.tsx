@@ -3,6 +3,7 @@ import { Home } from "./pages/Home";
 import { Detail } from "./pages/Detail";
 import { Header } from "./components/Header";
 import { Actor } from "./pages/Actor";
+import { FavoritePage } from "./pages/FavoritePage";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/movie/:id" element={<Detail />} />
                     <Route path="/actor/:actorId" element={<Actor />} />
+                    <Route path="/favorites" element={<FavoritePage />} />
                 </Routes>
             </main>
         </BrowserRouter>

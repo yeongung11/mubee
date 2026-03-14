@@ -78,3 +78,12 @@ export interface Actor {
 export interface Credits {
     cast: Actor[];
 }
+
+// store/favorite.ts
+export interface FavoriteStore {
+    favorites: Movie[];
+    addFavorite: (movie: Movie) => void;
+    removeFavorite: (movieId: number) => void;
+    isFavorite: (movieId: number) => boolean;
+    toggleFavorite: (movie: Movie) => void;
+}
