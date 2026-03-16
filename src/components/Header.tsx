@@ -28,11 +28,39 @@ export function Header({ className }: HeaderProps) {
     }, []);
 
     return (
-        <div className={`flex justify-between mt-5 ${className || ""}`}>
-            <h1 className="ml-3">Mubee</h1>
-            <div className="relative flex-1 max-w-md">
+        // 왼쪽
+
+        <div
+            className={`flex items-center justify-between px-12 py-4 ${
+                className || ""
+            }`}
+        >
+            {/* 왼쪽 묶음 */}
+            <div className="flex items-center gap-8">
+                <Link
+                    to="/"
+                    className="text-2xl font-bold tracking-widest hover:text-blue-400 transition"
+                >
+                    Mubee
+                </Link>
+                <Link to="/" className="text-sm hover:text-blue-400 transition">
+                    홈
+                </Link>
+                <Link to="/" className="text-sm hover:text-blue-400 transition">
+                    영화 목록
+                </Link>
+                <Link
+                    to="/favorites"
+                    className="text-sm hover:text-blue-400 transition whitespace-nowrap"
+                >
+                    찜한 영화
+                </Link>
+            </div>
+
+            {/* 오른쪽: 검색창 */}
+            <div className="relative max-w-md w-full">
                 <input
-                    className="border-amber-700 backdrop-blur bg-black/30 text-center text-xl"
+                    className="w-full bg-gray-800 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
                     type="text"
                     placeholder="영화 검색"
                     onChange={(e) => {
@@ -45,10 +73,6 @@ export function Header({ className }: HeaderProps) {
                         }
                     }}
                 />
-                {/* <p className="mr-3">프로필</p> */}
-                <Link to="/favorites" className=" hover:text-blue-400">
-                    찜한 영화
-                </Link>
                 {searchResults.length > 0 && (
                     <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-64 overflow-auto z-50 border">
                         {searchResults.map((result) => {
@@ -71,9 +95,7 @@ export function Header({ className }: HeaderProps) {
                                     className="flex gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors"
                                 >
                                     <img
-                                        src={`https://image.tmdb.org/t/p/w92${
-                                            imagePath || ""
-                                        }`}
+                                        src={`https://image.tmdb.org/t/p/w92${imagePath}`}
                                         className="w-10 h-14 object-cover rounded flex-shrink-0 bg-gray-200"
                                         alt={title}
                                     />

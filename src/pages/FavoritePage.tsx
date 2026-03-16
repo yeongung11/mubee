@@ -2,6 +2,7 @@ import { useFavoritesStore } from "../store/favorite";
 import { MovieGrid } from "../components/MovieGrid";
 import { Link } from "react-router-dom";
 
+
 export function FavoritePage() {
     const { favorites } = useFavoritesStore();
     if (favorites.length === 0) {
@@ -15,8 +16,10 @@ export function FavoritePage() {
         );
     }
     return (
-        <div>
-            <h1>즐겨찾기한 영화</h1>
+        <div className="max-w-screen-xl mx-auto px-10 py-10 mt-16">
+            <h1 className="text-3xl font-bold text-center mb-8">
+                즐겨찾기한 영화
+            </h1>
             <MovieGrid movies={favorites} />
         </div>
     );

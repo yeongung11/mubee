@@ -19,6 +19,7 @@ export interface Movie {
         iso_3166_1: string;
         name: string;
     }>;
+    character: string;
 }
 
 export interface MovieWithCredits extends Movie {
@@ -53,6 +54,9 @@ export interface MultiSearchItem {
     profile_path?: string | null;
     vote_average?: number;
     release_date?: string;
+    place_of_birth: string;
+    birthday: string;
+    character: string;
 }
 
 export interface MultiSearchResult {
@@ -73,6 +77,8 @@ export interface Actor {
     profile_path?: string | null;
     known_for_department: string;
     biography?: string;
+    place_of_birth: string;
+    birthday: string;
 }
 
 export interface Credits {

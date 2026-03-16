@@ -91,6 +91,7 @@ export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
             genres: [],
             adult: false,
             directors: [],
+            character: item.character,
         }));
 
     const actors = data.results
@@ -106,6 +107,8 @@ export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
             profile_path: item.poster_path || "",
             known_for_department: "Acting",
             biography: "",
+            place_of_birth: item.place_of_birth || "",
+            birthday: item.birthday || "",
         }));
 
     return [...movies, ...actors];
