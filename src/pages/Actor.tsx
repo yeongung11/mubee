@@ -5,6 +5,7 @@ import { fetchActorDetail, fetchActorMovies } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 
 export function Actor() {
+    const { convertFive } = useRating();
     const { actorId } = useParams<{ actorId: string }>();
     const [actor, setActor] = useState<Actor | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -39,7 +40,7 @@ export function Actor() {
             </div>
         );
     if (!actor) return <div>배우 정보 없음</div>;
-    const { convertFive } = useRating();
+
     return (
         <div className="px-20">
             <div className="mt-30  mb-8">

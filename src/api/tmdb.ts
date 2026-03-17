@@ -5,8 +5,8 @@ import type { Movie, MultiSearchItem, Actor } from "../types/movie";
 const options = {
     headers: {
         Authorization: `Bearer ${TOKEN}`,
-    }, // fetch 요청할 때 항상 같이 보내는 헤더
-}; // Bearer: 토큰 기반 인증 방식
+    },
+};
 
 export const fetchKoreanBoxOffice = async () => {
     const key = import.meta.env.VITE_KOBIS_KEY;
@@ -24,7 +24,7 @@ export const fetchPopularMovies = async () => {
         `${BASE_URL}/movie/popular?language=ko-KR`,
         options,
     );
-    return res.json(); // JSON으로 변환
+    return res.json();
 };
 
 // 공개 예정 영화
@@ -63,13 +63,13 @@ export const fetchDetail = async (id: string) => {
 
 // 검색
 export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
-    const response = await fetch(
+    const res = await fetch(
         `${BASE_URL}/search/multi?query=${encodeURIComponent(
             query,
         )}&language=ko-KR`,
         options,
     );
-    const data: { results: MultiSearchItem[] } = await response.json();
+    const data: { results: MultiSearchItem[] } = await res.json();
 
     const movies = data.results
         .filter(

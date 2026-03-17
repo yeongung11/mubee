@@ -28,7 +28,13 @@ export function Home() {
         loadAllData();
     }, []);
 
-    if (loading) return <div> 로딩중...</div>;
+    if (loading)
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                {" "}
+                로딩중...
+            </div>
+        );
 
     return (
         <>

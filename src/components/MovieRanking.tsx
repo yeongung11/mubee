@@ -2,7 +2,6 @@ import type { Movie } from "../types/movie";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import { MovieGrid } from "./MovieGrid";
 
-
 interface MovieRankingProps {
     movies: Movie[];
 }
@@ -14,7 +13,6 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     const [index, setIndex] = useState(0);
     const moviePages = 5;
     const currentMovies = movies.slice(index, index + moviePages);
-    
 
     // 초기 로드
     const loadRanks = useEffectEvent(() => {
@@ -59,7 +57,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
 
     // -----------------------------------------------
     return (
-        <div className="max-w-6xl mx-auto p-8 mt-7">
+        <div className="max-w-6xl mx-auto p-8 mt-7 relative">
             <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
             <MovieGrid
                 movies={currentMovies}
@@ -80,20 +78,20 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                 }}
             />
 
-            <div className="flex items-center justify-center mt-7 gap-5">
+            <div className="flex items-center justify-center mt-7 gap-5 ">
                 <button
                     onClick={handlePrev}
                     disabled={index === 0}
-                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+                    className="absolute left-1 top-[55%] -translate-y-1/2 z-20 text-2xl font-bold bg-white/50 text-black  px-4 py-2 rounded-full backdrop-blur-sm disabled:opacity-0"
                 >
-                    이전
+                    ‹
                 </button>
                 <button
                     onClick={handleNext}
                     disabled={index + moviePages >= movies.length}
-                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+                    className="absolute right-1 top-[55%] -translate-y-1/2 z-20 text-2xl font-bold bg-black/150 text-black px-4 py-2 rounded-full backdrop-blur-sm shadow-2xl shadow-black/4 disabled:opacity-0"
                 >
-                    다음
+                    ›
                 </button>
             </div>
         </div>
