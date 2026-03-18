@@ -1,13 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
-import type { Movie, MovieWithCredits } from "../types/movie";
-import { fetchDetail } from "../api/tmdb";
+import type {
+    Movie,
+    MovieWithCredits,
+    WatchProviderResult,
+    Review,
+} from "../types/movie";
+import { fetchDetail, fetchWatchProvider, fetchReview } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
-import { Link } from "react-router-dom";
 import { useFavoritesStore } from "../store/favorite";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
+    const [reviews, setReviews] = useState<Review[]>([]);
+    const [provider, setProvider] = useState<WatchProviderResult | null>(null);
     const [movie, setMovie] = useState<Movie | null>(null);
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0); // hover
@@ -15,6 +21,13 @@ export function Detail() {
     const castPageSize = 15;
     const { convertFive } = useRating();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
+
+    useEffect(() => {
+        if (!movie?.id) return;
+        fetchReview(movie.id).then((data) => {
+            setReviews(data.results.slice(0, 3));
+        });
+    }, [movie?.id]);
 
     const loadRating = useEffectEvent(() => {
         if (movie?.id) {
@@ -38,6 +51,12 @@ export function Detail() {
         if (!id) return;
         fetchDetail(id).then((data) => setMovie(data));
     }, [id]);
+
+    // 감상 가능한 곳 로드
+    useEffect(() => {
+        if (!movie?.id) return;
+        fetchWatchProvider(movie.id).then(setProvider);
+    }, [movie?.id]);
 
     const movieWithCredits = movie ? (movie as MovieWithCredits) : null;
     const currentCasts =
@@ -167,6 +186,29 @@ export function Detail() {
                     </div>
                 </div>
             </div>
+            {/* 스트리밍 플랫폼 */}
+            {provider?.flatrate && (
+                <div className="pb-4 px-6">
+                    <div className="w-full h-px bg-gray-300 mb-4" />
+                    <p className="text-3xl font-bold ">스트리밍 플랫폼</p>
+                    {provider.flatrate.map((p) => (
+                        <div
+                            key={p.provider_id}
+                            className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2 mt-8"
+                        >
+                            <img
+                                src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
+                                alt={p.provider_name}
+                                className="w-14 h-14 rounded-lg"
+                            />
+                            <span className="text-xl font-medium">
+                                {p.provider_name}
+                            </span>
+                        </div>
+                    ))}
+                    <div className="w-full h-px bg-gray-300 mb-4" />
+                </div>
+            )}
             {/* 출연제작 */}
             <div className="mt-16 mx-auto px-6 pb-20 ">
                 <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
@@ -229,6 +271,52 @@ export function Detail() {
                     </button>
                 </div>
             </div>
+            {/* 리뷰 */}
+            {reviews.length > 0 && (
+                <div className="mx-auto px-6 pb-12">
+                    <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
+                        리뷰 ({reviews.length}+)
+                    </h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {reviews.map((review) => (
+                            <div
+                                key={review.id}
+                                className="p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all"
+                            >
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-sm text-white">
+                                        {review.author
+                                            .slice(0, 3)
+                                            .toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-xl  truncate">
+                                            {review.author}
+                                        </h4>
+                                        <p className=" text-sm">
+                                            {new Date(
+                                                review.created_at,
+                                            ).toLocaleDateString("ko-KR")}
+                                        </p>
+                                    </div>
+                                </div>
+                                <p className="text-lg leading-7  line-clamp-4">
+                                    {review.content}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="text-center mt-8">
+                        <button className="px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
+                            모든 리뷰 보기
+                        </button>
+                    </div>
+
+                    <div className="w-full h-px bg-gray-300 mt-12" />
+                </div>
+            )}
         </div>
     );
 }

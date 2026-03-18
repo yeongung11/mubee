@@ -132,3 +132,22 @@ export const fetchActorDetail = async (actorId: number) => {
     );
     return res.json();
 };
+
+// 넷플/왓챠/티빙 플랫폼 정보
+export const fetchWatchProvider = async (movieId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/movie/${movieId}/watch/providers?language=ko-KR`,
+        options,
+    );
+    const data = await res.json();
+    return data.results?.KR ?? null;
+};
+
+// 리뷰
+export const fetchReview = async (movieId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/movie/${movieId}/reviews?language=en-US&page=1`,
+        options,
+    );
+    return res.json();
+};

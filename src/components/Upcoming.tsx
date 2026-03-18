@@ -1,6 +1,7 @@
 import type { Movie, ExtendedMovie } from "../types/movie";
 import { useState, useCallback, useMemo } from "react";
 import { MovieGrid } from "./MovieGrid";
+import Buttons from "../components/Buttons";
 
 interface UpcomingProps {
     movies: Movie[];
@@ -57,7 +58,7 @@ export function Upcoming({ movies }: UpcomingProps) {
                     );
 
                     return (
-                        <div className="absolute top-2 left-2 bg-gradient-to-r from-orange-400 to-red-500 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg z-10">
+                        <div className="absolute top-2 left-2 w-14 h-8 bg-gradient-to-r bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center text-base sm:text-base font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
                             D-{diffDays > 0 ? diffDays : "개봉"}
                         </div>
                     );
@@ -66,20 +67,16 @@ export function Upcoming({ movies }: UpcomingProps) {
 
             {futureMovies.length > moviePages && (
                 <div className="flex justify-between mt-8 gap-4">
-                    <button
+                    <Buttons
+                        direction="left"
                         onClick={handlePrev}
                         disabled={index === 0}
-                        className="absolute left-1 top-[55%] -translate-y-1/2 z-20 text-2xl font-bold bg-white/50 text-black  px-4 py-2 rounded-full backdrop-blur-sm disabled:opacity-0"
-                    >
-                        ‹
-                    </button>
-                    <button
+                    />
+                    <Buttons
+                        direction="right"
                         onClick={handleNext}
-                        disabled={index + moviePages >= futureMovies.length}
-                        className="absolute right-1 top-[55%] -translate-y-1/2 z-20 text-2xl font-bold bg-black/150 text-black px-4 py-2 rounded-full backdrop-blur-sm shadow-2xl shadow-black/4 disabled:opacity-0"
-                    >
-                        ›
-                    </button>
+                        disabled={index + moviePages >= movies.length}
+                    />
                 </div>
             )}
         </div>

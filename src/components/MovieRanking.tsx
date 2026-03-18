@@ -1,6 +1,7 @@
 import type { Movie } from "../types/movie";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import { MovieGrid } from "./MovieGrid";
+import Buttons from "../components/Buttons";
 
 interface MovieRankingProps {
     movies: Movie[];
@@ -57,7 +58,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
 
     // -----------------------------------------------
     return (
-        <div className="max-w-6xl mx-auto p-8 mt-7 relative">
+        <div className="max-w-6xl mx-auto p-8 mt-15 relative">
             <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
             <MovieGrid
                 movies={currentMovies}
@@ -79,20 +80,16 @@ export function MovieRanking({ movies }: MovieRankingProps) {
             />
 
             <div className="flex items-center justify-center mt-7 gap-5 ">
-                <button
+                <Buttons
+                    direction="left"
                     onClick={handlePrev}
                     disabled={index === 0}
-                    className="absolute left-1 top-[55%] -translate-y-1/2 z-20 text-2xl font-bold bg-white/50 text-black  px-4 py-2 rounded-full backdrop-blur-sm disabled:opacity-0"
-                >
-                    ‹
-                </button>
-                <button
+                />
+                <Buttons
+                    direction="right"
                     onClick={handleNext}
                     disabled={index + moviePages >= movies.length}
-                    className="absolute right-1 top-[55%] -translate-y-1/2 z-20 text-2xl font-bold bg-black/150 text-black px-4 py-2 rounded-full backdrop-blur-sm shadow-2xl shadow-black/4 disabled:opacity-0"
-                >
-                    ›
-                </button>
+                />
             </div>
         </div>
     );

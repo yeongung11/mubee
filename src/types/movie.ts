@@ -93,3 +93,33 @@ export interface FavoriteStore {
     isFavorite: (movieId: number) => boolean;
     toggleFavorite: (movie: Movie) => void;
 }
+
+export interface WatchProvider {
+    provider_id: number;
+    provider_name: string;
+    logo_path: string;
+    display_priority: number;
+}
+
+export interface WatchProviderResult {
+    link: string;
+    flatrate?: WatchProvider[];
+    rent?: WatchProvider[];
+    buy?: WatchProvider[];
+}
+
+export interface Review {
+    id: string;
+    author: string;
+    content: string;
+    created_at: string;
+    rating?: number;
+}
+
+export interface ReviewResult {
+    id: number;
+    page: number;
+    results: Review[];
+    total_pages: number;
+    total_results: number;
+}
