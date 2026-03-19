@@ -3,6 +3,7 @@ import { fetchPopularMovies, fetchUpcomingMovies } from "../api/tmdb";
 import type { Movie } from "../types/movie";
 import { MovieRanking } from "../components/MovieRanking";
 import { Upcoming } from "../components/Upcoming";
+import { HeroBanner } from "../components/HeroBanner";
 
 export function Home() {
     const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
@@ -38,6 +39,7 @@ export function Home() {
 
     return (
         <>
+            <HeroBanner />
             <MovieRanking movies={popularMovies} />
             <Upcoming movies={upcomingMovies} />
         </>

@@ -151,3 +151,12 @@ export const fetchReview = async (movieId: number) => {
     );
     return res.json();
 };
+
+// 히어로배너
+export const fetchHeroBanner = async () => {
+    const res = await fetch(
+        `${BASE_URL}/trending/movie/day?language=ko-KR`,
+        options,
+    );
+    return res.json();
+};

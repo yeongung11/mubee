@@ -52,7 +52,7 @@ export function Detail() {
         fetchDetail(id).then((data) => setMovie(data));
     }, [id]);
 
-    // 감상 가능한 곳 로드
+    // 스트리밍 플랫폼
     useEffect(() => {
         if (!movie?.id) return;
         fetchWatchProvider(movie.id).then(setProvider);
