@@ -160,3 +160,21 @@ export const fetchHeroBanner = async () => {
     );
     return res.json();
 };
+
+// 카테고리
+export const fetchGenre = async () => {
+    const res = await fetch(
+        `${BASE_URL}/genre/movie/list?language=ko-KR`,
+        options,
+    );
+    return res.json();
+};
+
+// 카테고리별 영화 목록
+export const fetchMovieGenre = async (genreId: number | string, page = 1) => {
+    const res = await fetch(
+        `${BASE_URL}/discover/movie?with_genres=${genreId}&language=ko-KR`,
+        options,
+    );
+    return res.json();
+};

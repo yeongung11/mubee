@@ -123,3 +123,8 @@ export interface ReviewResult {
     total_pages: number;
     total_results: number;
 }
+
+export interface GenreType {
+    id: number;
+    name: string;
+}

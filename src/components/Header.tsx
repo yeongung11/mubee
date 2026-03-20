@@ -46,8 +46,11 @@ export function Header({ className }: HeaderProps) {
                 <Link to="/" className="text-sm hover:text-blue-400 transition">
                     홈
                 </Link>
-                <Link to="/" className="text-sm hover:text-blue-400 transition">
-                    영화 목록
+                <Link
+                    to="/genre"
+                    className="text-sm hover:text-blue-400 transition"
+                >
+                    카테고리
                 </Link>
                 <Link
                     to="/favorites"
