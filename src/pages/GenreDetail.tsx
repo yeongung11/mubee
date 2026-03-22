@@ -4,8 +4,10 @@ import { fetchMovieGenre } from "@/api/tmdb";
 import { useRating } from "../utils/useRating";
 import type { Movie } from "@/types/movie";
 import { GENRE_NAMES } from "@/types/movie";
+import { useNavigate } from "react-router-dom";
 
 export default function GenreDetail() {
+    const navigate = useNavigate();
     const params = useParams();
     const genreId = params.genreId as string;
     const { convertFive } = useRating();
@@ -69,7 +71,7 @@ export default function GenreDetail() {
 
     return (
         <div className="max-w-screen-xl mx-auto px-10 py-10 mt-16 min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-            {/* 헤더 (FavoritePage 스타일) */}
+            {/* 헤더 */}
             <div className="text-center mb-16">
                 <h1 className="text-3xl lg:text-5xl font-bold text-gray-800 mb-8 drop-shadow-lg">
                     {genreName}
@@ -83,11 +85,12 @@ export default function GenreDetail() {
                 </p>
             </div>
 
-            {/* 그리드 (FavoritePage 동일) */}
+            {/* 그리드 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
                 {movies.map((movie: Movie) => (
                     <div
                         key={movie.id}
+                        onClick={() => navigate(`/movie/${movie.id}`)}
                         className="group cursor-pointer hover:scale-105 transition-all duration-300"
                     >
                         <img

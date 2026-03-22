@@ -206,7 +206,7 @@ export function Detail() {
                             </span>
                         </div>
                     ))}
-                    <div className="w-full h-px bg-gray-300 mb-4" />
+                    <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
                 </div>
             )}
             {/* 출연제작 */}

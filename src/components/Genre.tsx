@@ -28,7 +28,7 @@ export default function Genre() {
     }, [selectedGenre]);
 
     return (
-        <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8 mt-15">
+        <div className="max-w-screen-xl mx-auto px-10 py-10 mt-16 min-h-screen  to-blue-50">
             <div className="max-w-7xl mx-auto">
                 {/* 헤더 */}
                 <div className="text-center mb-16">
@@ -59,7 +59,7 @@ export default function Genre() {
         min-w-[120px] flex-1 sm:flex-none
         ${
             selectedGenre?.id === genre.id
-                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/50 border-blue-400"
+                ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/50 border-blue-400"
                 : "bg-white/90 hover:bg-white text-gray-800 hover:shadow-xl hover:-translate-y-1 border-gray-200"
         }`}
                             >
@@ -78,25 +78,22 @@ export default function Genre() {
 
                 {/* 영화 그리드 */}
                 {movies.length > 0 ? (
-                    <div
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 
-                         xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-8 auto-rows-fr"
-                    >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
                         {movies.map((movie) => (
                             <div
                                 key={movie.id}
                                 onClick={() => navigate(`/movie/${movie.id}`)}
-                                className="group cursor-pointer bg-white/70 backdrop-blur-sm rounded-2xl 
-                          shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300
-                          overflow-hidden border border-gray-100 hover:border-blue-200"
+                                className="group cursor-pointer rounded-2xl 
+  hover:-translate-y-2 transition-all duration-300
+  overflow-hidden"
                             >
                                 <img
                                     src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
                                     alt={movie.title}
-                                    className="w-full h-56 lg:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                                    className="w-full h-72 lg:h-80 object-cover rounded-2xl  group-hover:scale-[1.02] transition-all"
                                 />
-                                <div className="p-4 lg:p-5">
-                                    <h3 className="font-bold text-lg lg:text-xl line-clamp-2 text-gray-800 mb-2">
+                                <div className="p-4 lg:p-5 ">
+                                    <h3 className="text-lg lg:text-xl line-clamp-2 text-gray-800 mb-2">
                                         {movie.title}
                                     </h3>
                                     <div className="flex items-center text-sm text-yellow-500 font-semibold">
@@ -111,7 +108,7 @@ export default function Genre() {
                 ) : selectedGenre ? (
                     <div className="text-center py-32">
                         <div
-                            className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-blue-200 to-indigo-200 
+                            className="w-24 h-24 mx-auto mb-6 bg-linear-to-r from-blue-200 to-indigo-200 
                            rounded-2xl flex items-center justify-center"
                         >
                             <span className="text-3xl">🎥</span>
