@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { fetchGenre, fetchMovieGenre } from "@/api/tmdb";
 import type { Movie, GenreType } from "@/types/movie";
 import { useRating } from "../utils/useRating";
+import { useNavigate } from "react-router-dom";
 
 export default function Genre() {
+    const navigate = useNavigate();
     const { convertFive } = useRating();
     const [genres, setGenres] = useState<GenreType[]>([]);
     const [selectedGenre, setSelectedGenre] = useState<GenreType | null>(null);
@@ -48,33 +50,30 @@ export default function Genre() {
                 </div>
 
                 {/* 드롭다운 */}
-                <div className="flex justify-center mb-16">
-                    <select
-                        value={selectedGenre?.id || ""}
-                        onChange={(e) => {
-                            const genreId = Number(e.target.value);
-                            if (genreId) {
-                                const genre = genres.find(
-                                    (g) => g.id === genreId,
-                                );
-                                setSelectedGenre(genre || null);
-                            } else {
-                                setSelectedGenre(null);
-                            }
-                        }}
-                        className="px-10 py-6 text-xl lg:text-2xl border-4 border-gray-200 rounded-3xl shadow-2xl 
-                       bg-white/80 backdrop-blur-md font-bold text-gray-800
-                       focus:outline-none focus:ring-8 focus:ring-blue-200 focus:border-blue-400
-                       hover:shadow-3xl transition-all duration-300 cursor-pointer
-                       min-w-[320px] lg:min-w-[380px]"
-                    >
-                        <option value=""> 카테고리 선택</option>
-                        {genres.map((genre) => (
-                            <option key={genre.id} value={genre.id}>
+                <div className="flex flex-wrap justify-center gap-4 mb-16 max-w-4xl mx-auto">
+                    {genres.slice(0, 12).map((genre) => (
+                        <div key={genre.id} className="flex items-center gap-1">
+                            <button
+                                onClick={() => setSelectedGenre(genre)}
+                                className={`px-6 py-3 rounded-xl font-bold text-lg transition-all shadow-lg border-2
+        min-w-[120px] flex-1 sm:flex-none
+        ${
+            selectedGenre?.id === genre.id
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/50 border-blue-400"
+                : "bg-white/90 hover:bg-white text-gray-800 hover:shadow-xl hover:-translate-y-1 border-gray-200"
+        }`}
+                            >
                                 {genre.name}
-                            </option>
-                        ))}
-                    </select>
+                            </button>
+
+                            <button
+                                onClick={() => navigate(`/genre/${genre.id}`)}
+                                className="text-gray-400 hover:text-blue-500 text-xl font-bold px-1"
+                            >
+                                ›
+                            </button>
+                        </div>
+                    ))}
                 </div>
 
                 {/* 영화 그리드 */}
@@ -86,6 +85,7 @@ export default function Genre() {
                         {movies.map((movie) => (
                             <div
                                 key={movie.id}
+                                onClick={() => navigate(`/movie/${movie.id}`)}
                                 className="group cursor-pointer bg-white/70 backdrop-blur-sm rounded-2xl 
                           shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300
                           overflow-hidden border border-gray-100 hover:border-blue-200"

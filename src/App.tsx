@@ -7,6 +7,7 @@ import { FavoritePage } from "./pages/FavoritePage";
 import MainLayout from "./layouts/MainLayout";
 import DetailLayout from "./layouts/DetailLayout";
 import Genre from "./components/Genre";
+import GenreDetail from "./pages/GenreDetail";
 
 function App() {
     return (
@@ -18,6 +19,10 @@ function App() {
                     <Route element={<MainLayout />}>
                         <Route path="/" element={<Home />} />
                         <Route path="/genre" element={<Genre />} />
+                        <Route
+                            path="/genre/:genreId"
+                            element={<GenreDetail />}
+                        />
                         <Route path="/actor/:actorId" element={<Actor />} />
                         <Route path="/favorites" element={<FavoritePage />} />
                     </Route>

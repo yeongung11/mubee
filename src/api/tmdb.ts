@@ -173,7 +173,7 @@ export const fetchGenre = async () => {
 // 카테고리별 영화 목록
 export const fetchMovieGenre = async (genreId: number | string, page = 1) => {
     const res = await fetch(
-        `${BASE_URL}/discover/movie?with_genres=${genreId}&language=ko-KR`,
+        `${BASE_URL}/discover/movie?with_genres=${genreId}&page=${page}&language=ko-KR`,
         options,
     );
     return res.json();

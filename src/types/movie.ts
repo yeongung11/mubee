@@ -128,3 +128,29 @@ export interface GenreType {
     id: number;
     name: string;
 }
+
+export interface GenreDetailParams {
+    genreId: string;
+}
+
+export const GENRE_NAMES: Record<number, string> = {
+    28: "액션",
+    12: "모험",
+    16: "애니메이션",
+    35: "코미디",
+    80: "범죄",
+    18: "드라마",
+    14: "판타지",
+    27: "호러",
+    10749: "로맨스",
+    878: "SF",
+    53: "스릴러",
+    10752: "전쟁",
+    37: "서부",
+    9648: "미스터리",
+    99: "다큐멘터리",
+    10770: "TV 영화",
+    10740: "로맨스 코미디",
+    32: "액션 코미디",
+    10768: "전쟁 다큐멘터리",
+};
