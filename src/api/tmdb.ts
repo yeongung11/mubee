@@ -178,3 +178,12 @@ export const fetchMovieGenre = async (genreId: number | string, page = 1) => {
     );
     return res.json();
 };
+
+// 유사한 영화 목록
+export const fetchSimilar = async (movieId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/movie/${movieId}/similar?language=ko-KR&page=1`,
+        options,
+    );
+    return res.json();
+};

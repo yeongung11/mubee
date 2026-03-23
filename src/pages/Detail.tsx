@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import type {
     Movie,
@@ -6,12 +6,18 @@ import type {
     WatchProviderResult,
     Review,
 } from "../types/movie";
-import { fetchDetail, fetchWatchProvider, fetchReview } from "../api/tmdb";
+import {
+    fetchDetail,
+    fetchWatchProvider,
+    fetchReview,
+    fetchSimilar,
+} from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 import { useFavoritesStore } from "../store/favorite";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [provider, setProvider] = useState<WatchProviderResult | null>(null);
     const [movie, setMovie] = useState<Movie | null>(null);
@@ -21,7 +27,18 @@ export function Detail() {
     const castPageSize = 15;
     const { convertFive } = useRating();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
+    const [sim, setSim] = useState<Movie[]>([]);
 
+    // 유사한 영화
+    useEffect(() => {
+        if (id) {
+            fetchSimilar(Number(id)).then((data) => {
+                setSim(data.results.slice(0, 6));
+            });
+        }
+    }, [id]);
+
+    // 리뷰
     useEffect(() => {
         if (!movie?.id) return;
         fetchReview(movie.id).then((data) => {
@@ -171,7 +188,7 @@ export function Detail() {
                         </div>
                     </div>
 
-                    {/* 2️⃣ 하단: 영화 내용 */}
+                    {/*  영화 내용 */}
                     <div className="pt-4 pb-8 border-t border-white/20">
                         {movie.overview ? (
                             <p>{movie.overview}</p>
@@ -271,13 +288,38 @@ export function Detail() {
                     </button>
                 </div>
             </div>
-            {/* 리뷰 */}
-            {reviews.length > 0 && (
-                <div className="mx-auto px-6 pb-12">
-                    <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
-                        리뷰 ({reviews.length}+)
+            {/* 유사한 영화  */}
+            {sim.length > 0 && (
+                <div className="px-6 mb-10">
+                    <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
+                        "{movie.title}"와 유사한 영화
                     </h2>
-
+                    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
+                        {sim.map((movie) => (
+                            <div
+                                key={movie.id}
+                                onClick={() => navigate(`/movie/${movie.id}`)}
+                                className="cursor-pointer transition-all duration-300"
+                            >
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                    alt={movie.title}
+                                    className="w-full rounded-xl shadow-lg"
+                                />
+                                <p className="text-sm font-semibold mt-2 line-clamp-1">
+                                    {movie.title}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+            {/* 리뷰 */}
+            <div className="mx-auto px-6 pb-12 mt-12">
+                <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
+                    리뷰 ({reviews.length}+)
+                </h2>
+                {reviews.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {reviews.map((review) => (
                             <div
@@ -307,21 +349,19 @@ export function Detail() {
                             </div>
                         ))}
                     </div>
-
-                    <div className="text-center mt-8">
-                        <button className="px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
-                            모든 리뷰 보기
-                        </button>
+                ) : (
+                    <div>
+                        <p className="text-xl">아직 등록된 리뷰가 없습니다.</p>
                     </div>
-
-                    <div className="w-full h-px bg-gray-300 mt-12" />
+                )}
+                <div className="text-center mt-8">
+                    <button className="px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
+                        모든 리뷰 보기
+                    </button>
                 </div>
-            )}
+
+                <div className="w-full h-px bg-gray-300 mt-12" />
+            </div>
         </div>
     );
 }
-
-// 실행 흐름
-// 1. 영화를 클릭하면 /movie/550 이동
-// 2. useParams()로 id = "550" 추출
-// 3. TMDB API /movie/550 호출
