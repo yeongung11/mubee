@@ -187,3 +187,36 @@ export const fetchSimilar = async (movieId: number) => {
     );
     return res.json();
 };
+
+// 평점 높은 작품
+export const fetchTopRate = async () => {
+    const res = await fetch(
+        `${BASE_URL}/movie/top_rated?language=ko-KR&page=1`,
+        options,
+    );
+    return res.json();
+};
+
+// 현재 상영 중
+export const fetchNowPlaying = async () => {
+    const res = await fetch(
+        `${BASE_URL}/movie/now_playing?language=ko-KR&page=1`,
+        options,
+    );
+    return res.json();
+};
+
+// 영화 트레일러(유튜브)
+export const fetchTrailer = async (movieId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/movie/${movieId}/videos?language=ko-KR`,
+        options,
+    );
+    return res.json();
+};
+
+// 스틸컷
+export const fetchStillCut = async (movieId: number) => {
+    const res = await fetch(`${BASE_URL}/movie/${movieId}/images`, options);
+    return res.json();
+};

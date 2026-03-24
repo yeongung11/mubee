@@ -154,3 +154,5 @@ export const GENRE_NAMES: Record<number, string> = {
     32: "액션 코미디",
     10768: "전쟁 다큐멘터리",
 };
+
+
