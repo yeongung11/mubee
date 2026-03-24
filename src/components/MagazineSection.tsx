@@ -1,7 +1,4 @@
 import type { Movie } from "../types/movie";
-// import { useState, useEffect } from "react";
-// import { fetchStillCut } from "../api/tmdb";
-// const [mgArticles, setMgArticles] = useState<MagazineArticle[]>([]);
 
 type MagazineArticle = {
     title: string;
