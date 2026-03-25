@@ -13,14 +13,14 @@ export function MagazineSection({
 }) {
     const magazineArticles: MagazineArticle[] = [
         {
-            title: "‘키스’가 금지된 세상? 💋",
-            content: "아카데미가 선택한 영화...",
+            title: "요즘엔 무슨 영화? 💋",
+            content: "대중이 선택한 컨텐츠...",
             backdrop: trendingMovies[0]?.backdrop_path
                 ? `https://image.tmdb.org/t/p/w1280${trendingMovies[0].backdrop_path}`
                 : "/static/fallback.jpg",
         },
         {
-            title: "영화관에서 잊힌 순간들 🎞️",
+            title: "새롭게 떠오르는 컨텐츠 🎞️",
             content: "요즘 넷플릭스 덕에 집에서 영화를 보지만...",
             backdrop: trendingMovies[1]?.backdrop_path
                 ? `https://image.tmdb.org/t/p/w1280${trendingMovies[1].backdrop_path}`
@@ -63,7 +63,7 @@ function MagazineCard({ article }: { article: MagazineArticle }) {
             </div>
 
             <div className="flex items-center gap-4 text-sm text-neutral-500">
-                <span>ㅇㅇ</span>
+                <span>ung</span>
                 <span>•</span>
                 <span>약 2시간 전</span>
                 <span className="ml-auto text-neutral-400 text-xs">
