@@ -8,6 +8,7 @@ import MainLayout from "./layouts/MainLayout";
 import DetailLayout from "./layouts/DetailLayout";
 import Genre from "./components/Genre";
 import GenreDetail from "./pages/GenreDetail";
+import { MainPageMovies } from "./pages/MainPageMovies";
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                             path="/genre/:genreId"
                             element={<GenreDetail />}
                         />
+                        <Route path="movies" element={<MainPageMovies />} />
                         <Route path="/actor/:actorId" element={<Actor />} />
                         <Route path="/favorites" element={<FavoritePage />} />
                     </Route>

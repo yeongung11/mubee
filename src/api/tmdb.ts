@@ -220,3 +220,22 @@ export const fetchStillCut = async (movieId: number) => {
     const res = await fetch(`${BASE_URL}/movie/${movieId}/images`, options);
     return res.json();
 };
+
+// 메인 화면 페이지 더보기
+export const fetchMainPageMovies = async (category: string, page = 1) => {
+    const endpoints: Record<string, string> = {
+        popular: `/movie/popular`,
+        now_playing: `/movie/now_playing`,
+        top_rated: `/movie/top_rated`,
+        upcoming: `/movie/upcoming`,
+    };
+
+    const endpoint = endpoints[category];
+    if (!endpoint) throw new Error("Invalid category");
+
+    const res = await fetch(
+        `${BASE_URL}${endpoint}?language=ko-KR&page=${page}`,
+        options,
+    );
+    return res.json();
+};

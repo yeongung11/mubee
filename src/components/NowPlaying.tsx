@@ -2,6 +2,7 @@ import type { Movie } from "@/types/movie";
 import { MovieGrid } from "./MovieGrid";
 import { useState, useCallback } from "react";
 import Buttons from "../components/Buttons";
+import { Link } from "react-router-dom";
 
 export function NowPlaying({ movies }: { movies: Movie[] }) {
     const [index, setIndex] = useState(0);
@@ -18,8 +19,10 @@ export function NowPlaying({ movies }: { movies: Movie[] }) {
 
     return (
         <div className="relative max-w-6xl mx-auto p-8 py-10">
-            <h2 className="text-2xl font-bold mb-6">🎥 현재 상영중</h2>
+            <h2 className="text-2xl font-bold mb-6"> 현재 상영중</h2>
+            <Link to="/movies?category=now_playing"> 더보기→</Link>
             <MovieGrid movies={current} />
+
             {movies.length > moviePages && (
                 <div className="flex justify-between mt-8 gap-4">
                     <Buttons

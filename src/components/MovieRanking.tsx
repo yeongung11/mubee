@@ -2,6 +2,7 @@ import type { Movie } from "../types/movie";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
+import { Link } from "react-router-dom";
 
 interface MovieRankingProps {
     movies: Movie[];
@@ -78,7 +79,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                     );
                 }}
             />
-
+            <Link to="/movies?category=popular">더보기</Link>
             <div className="flex items-center justify-center mt-7 gap-5 ">
                 <Buttons
                     direction="left"

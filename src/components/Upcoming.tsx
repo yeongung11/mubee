@@ -2,6 +2,7 @@ import type { Movie, ExtendedMovie } from "../types/movie";
 import { useState, useCallback, useMemo } from "react";
 import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
+import { Link } from "react-router-dom";
 
 interface UpcomingProps {
     movies: Movie[];
@@ -64,7 +65,7 @@ export function Upcoming({ movies }: UpcomingProps) {
                     );
                 }}
             />
-
+            <Link to="/movies?category=upcoming">더보기</Link>
             {futureMovies.length > moviePages && (
                 <div className="flex justify-between mt-8 gap-4">
                     <Buttons
