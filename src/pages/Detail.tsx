@@ -14,6 +14,7 @@ import {
 } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 import { useFavoritesStore } from "../store/favorite";
+import { getEngTitle } from "../utils/movieTitle";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
@@ -32,8 +33,14 @@ export function Detail() {
     // 유사한 영화
     useEffect(() => {
         if (id) {
-            fetchSimilar(Number(id)).then((data) => {
-                setSim(data.results.slice(0, 6));
+            fetchSimilar(Number(id)).then(async (data) => {
+                const resolved = await Promise.all(
+                    data.results.slice(0, 6).map(async (movie: Movie) => ({
+                        ...movie,
+                        title: await getEngTitle(movie),
+                    })),
+                );
+                setSim(resolved);
             });
         }
     }, [id]);
@@ -66,7 +73,10 @@ export function Detail() {
 
     useEffect(() => {
         if (!id) return;
-        fetchDetail(id).then((data) => setMovie(data));
+        fetchDetail(id).then(async (data) => {
+            const resolvedTitle = await getEngTitle(data);
+            setMovie({ ...data, title: resolvedTitle });
+        });
     }, [id]);
 
     // 스트리밍 플랫폼

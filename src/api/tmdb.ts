@@ -80,6 +80,7 @@ export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
         .map<Movie>((item) => ({
             id: item.id,
             title: item.title,
+            original_title: item.original_title || item.title,
             poster_path: item.poster_path || "",
             vote_average: item.vote_average || 0,
             release_date: item.release_date || "",
@@ -237,5 +238,21 @@ export const fetchMainPageMovies = async (category: string, page = 1) => {
         `${BASE_URL}${endpoint}?language=ko-KR&page=${page}`,
         options,
     );
+    return res.json();
+};
+
+// 한국어 표기 없는 영화 모두 영어로 변환
+export const fetchMovieEnglish = async (movieId: number) => {
+    const res = await fetch(`${BASE_URL}/movie/${movieId}?language=en-US`, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    return res.json();
+};
+
+// 한국어 표기 없는 배우 영어로 변환
+export const fetchActorDetailEnglish = async (actorId: number) => {
+    const res = await fetch(`${BASE_URL}/person/${actorId}?language=en-US`, {
+        headers: { Authorization: `Bearer ${TOKEN}` },
+    });
     return res.json();
 };

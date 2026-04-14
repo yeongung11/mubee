@@ -20,6 +20,7 @@ export interface Movie {
         name: string;
     }>;
     character: string;
+    original_title: string;
 }
 
 export interface MovieWithCredits extends Movie {
@@ -57,6 +58,7 @@ export interface MultiSearchItem {
     place_of_birth: string;
     birthday: string;
     character: string;
+    original_title?: string;
 }
 
 export interface MultiSearchResult {
@@ -155,4 +157,9 @@ export const GENRE_NAMES: Record<number, string> = {
     10768: "전쟁 다큐멘터리",
 };
 
+export interface movieTitle {
+    id: number;
+    title: string;
 
+    poster_path: string;
+}

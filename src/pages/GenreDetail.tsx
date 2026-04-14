@@ -5,6 +5,7 @@ import { useRating } from "../utils/useRating";
 import type { Movie } from "@/types/movie";
 import { GENRE_NAMES } from "@/types/movie";
 import { useNavigate } from "react-router-dom";
+import { getEngTitle } from "../utils/movieTitle";
 
 export default function GenreDetail() {
     const navigate = useNavigate();
@@ -25,8 +26,14 @@ export default function GenreDetail() {
         setPage(1);
         setMovies([]);
         fetchMovieGenre(id, 1)
-            .then((data) => {
-                setMovies(data.results || []);
+            .then(async (data) => {
+                const resolved = await Promise.all(
+                    (data.results || []).map(async (movie: Movie) => {
+                        const title = await getEngTitle(movie);
+                        return { ...movie, title };
+                    }),
+                );
+                setMovies(resolved);
                 setMore(data.total_pages > 1);
             })
             .finally(() => setLoading(false));

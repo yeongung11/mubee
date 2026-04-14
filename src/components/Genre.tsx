@@ -3,6 +3,7 @@ import { fetchGenre, fetchMovieGenre } from "@/api/tmdb";
 import type { Movie, GenreType } from "@/types/movie";
 import { useRating } from "../utils/useRating";
 import { useNavigate } from "react-router-dom";
+import { getEngTitle } from "../utils/movieTitle";
 
 export default function Genre() {
     const navigate = useNavigate();
@@ -20,8 +21,14 @@ export default function Genre() {
     // 장르 선택
     useEffect(() => {
         if (selectedGenre) {
-            fetchMovieGenre(selectedGenre.id).then((data) => {
-                setMovies(data.results);
+            fetchMovieGenre(selectedGenre.id).then(async (data) => {
+                const resolved = await Promise.all(
+                    (data.results || []).map(async (movie: Movie) => ({
+                        ...movie,
+                        title: await getEngTitle(movie),
+                    })),
+                );
+                setMovies(resolved);
                 setPage(1);
             });
         }

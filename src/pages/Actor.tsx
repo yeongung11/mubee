@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useEffectEvent } from "react";
 import { fetchActorDetail, fetchActorMovies } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
+import { getEngTitle, getEngName } from "@/utils/movieTitle";
 
 export function Actor() {
     const navigate = useNavigate();
@@ -21,13 +22,25 @@ export function Actor() {
             fetchActorMovies(Number(actorId)),
         ])
             .then(([actorData, moviesData]) => {
-                // console.log("Actor:", actorData);
-                // console.log("Movies:", moviesData);
-                setActor(actorData);
-                setMovies(moviesData);
+                // 배우 이름 변환
+                getEngName(actorData.id, actorData.name).then(
+                    (resolvedName) => {
+                        setActor({ ...actorData, name: resolvedName });
+                    },
+                );
+
+                // 영화 제목 변환
+                Promise.all(
+                    moviesData.map(async (movie: Movie) => ({
+                        ...movie,
+                        title: await getEngTitle(movie),
+                    })),
+                ).then((resolvedMovies) => {
+                    setMovies(resolvedMovies);
+                    setLoading(false);
+                });
             })
-            .catch((err) => console.error("Actor 로드 실패:", err))
-            .finally(() => setLoading(false));
+            .catch((err) => console.error("Actor 로드 실패:", err));
     });
 
     useEffect(() => {
