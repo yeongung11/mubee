@@ -59,29 +59,38 @@ export default function Genre() {
                 {/* 드롭다운 */}
                 <div className="flex flex-wrap justify-center gap-4 mb-16 max-w-4xl mx-auto">
                     {genres.slice(0, 12).map((genre) => (
-                        <div key={genre.id} className="flex items-center gap-1">
-                            <button
-                                onClick={() => setSelectedGenre(genre)}
-                                className={`px-6 py-3 rounded-xl font-bold text-lg transition-all shadow-lg border-2
-        min-w-[120px] flex-1 sm:flex-none
-        ${
-            selectedGenre?.id === genre.id
-                ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/50 border-blue-400"
-                : "bg-white/90 hover:bg-white text-gray-800 hover:shadow-xl hover:-translate-y-1 border-gray-200"
-        }`}
-                            >
-                                {genre.name}
-                            </button>
-
-                            <button
-                                onClick={() => navigate(`/genre/${genre.id}`)}
-                                className="text-gray-400 hover:text-blue-500 text-xl font-bold px-1"
-                            >
-                                ›
-                            </button>
-                        </div>
+                        <button
+                            key={genre.id}
+                            onClick={() => setSelectedGenre(genre)}
+                            className={`px-6 py-3 rounded-xl font-bold text-lg transition-all shadow-lg border-2
+      min-w-[120px] flex-1 sm:flex-none
+      ${
+          selectedGenre?.id === genre.id
+              ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/50 border-blue-400"
+              : "bg-white/90 hover:bg-white text-gray-800 hover:shadow-xl hover:-translate-y-1 border-gray-200"
+      }`}
+                        >
+                            {genre.name}
+                        </button>
                     ))}
                 </div>
+
+                {selectedGenre && movies.length > 0 && (
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold text-gray-800">
+                            "{selectedGenre.name}" 영화
+                        </h2>
+
+                        <button
+                            onClick={() =>
+                                navigate(`/genre/${selectedGenre.id}`)
+                            }
+                            className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                        >
+                            더보기
+                        </button>
+                    </div>
+                )}
 
                 {/* 영화 그리드 */}
                 {movies.length > 0 ? (

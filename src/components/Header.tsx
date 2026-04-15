@@ -63,7 +63,7 @@ export function Header({ className }: HeaderProps) {
             {/* 오른쪽: 검색창 */}
             <div className="relative max-w-md w-full">
                 <input
-                    className="w-full bg-gray-800 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
+                    className="w-full bg-black-1600 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
                     type="text"
                     placeholder="영화 검색"
                     onChange={(e) => {
@@ -99,11 +99,11 @@ export function Header({ className }: HeaderProps) {
                                 >
                                     <img
                                         src={`https://image.tmdb.org/t/p/w92${imagePath}`}
-                                        className="w-10 h-14 object-cover rounded flex-shrink-0 bg-gray-200"
+                                        className="w-10 h-14 object-cover rounded flex-shrink-0 bg-gray-200 "
                                         alt={title}
                                     />
                                     <div className="min-w-0 flex-1">
-                                        <p className="font-medium text-sm truncate">
+                                        <p className="font-medium text-sm truncate text-black">
                                             {title}
                                         </p>
                                         {isMovie && (

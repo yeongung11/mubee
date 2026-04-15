@@ -85,12 +85,17 @@ export function Detail() {
         fetchWatchProvider(movie.id).then(setProvider);
     }, [movie?.id]);
 
+    // 감독/출연
     const movieWithCredits = movie ? (movie as MovieWithCredits) : null;
-    const currentCasts =
-        movieWithCredits?.credits?.cast?.slice(
-            castIdx,
-            castIdx + castPageSize,
-        ) || [];
+    const director = movieWithCredits?.credits?.crew?.find(
+        (person) =>
+            person.job === "Director" || person.department === "Directing",
+    );
+    const displayPeople = director
+        ? [director, ...(movieWithCredits?.credits?.cast || [])]
+        : movieWithCredits?.credits?.cast || [];
+
+    const currentCasts = displayPeople.slice(castIdx, castIdx + castPageSize);
 
     const handleCastPrev = useCallback(() => {
         setCastIdx(Math.max(0, castIdx - castPageSize));
@@ -104,15 +109,26 @@ export function Detail() {
 
     if (!movie)
         return (
-            <div className="flex items-center justify-center">로딩중...</div>
+            <div className="flex min-h-screen items-center justify-center">
+                로딩중...
+            </div>
         );
 
     return (
         <div className="relative">
-            <img
-                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                className="w-full h-240 object-cover"
-            />
+            {movie.backdrop_path ? (
+                <img
+                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                    className="w-full h-240 object-cover"
+                />
+            ) : (
+                <div className="w-full h-240 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                    <span className="text-3xl font-bold text-gray-300">
+                        {movie.title}
+                    </span>
+                </div>
+            )}
+
             <div className="absolute top-150 left-3 ml-5">
                 <h1 className="text-5xl text-amber-50">{movie.title}</h1>
                 <p className="text-2xl text-amber-50 mt-7">
@@ -244,17 +260,17 @@ export function Detail() {
 
                 {/* 그리드 */}
                 <div className=" grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
-                    {currentCasts.map((actor, index) => (
+                    {currentCasts.map((person, index) => (
                         <Link
-                            to={`/actor/${actor.id}`}
-                            key={actor.id ?? index}
+                            to={`/actor/${person.id}`}
+                            key={person.id ?? index}
                             className="group flex items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
                         >
                             <div className="flex-shrink-0 w-16 h-20 rounded-lg overflow-hidden shadow-md group-hover:scale-105 transition-transform">
-                                {actor.profile_path ? (
+                                {person.profile_path ? (
                                     <img
-                                        src={`https://image.tmdb.org/t/p/w92${actor.profile_path}`}
-                                        alt={actor.name}
+                                        src={`https://image.tmdb.org/t/p/w92${person.profile_path}`}
+                                        alt={person.name}
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
@@ -267,10 +283,12 @@ export function Detail() {
                             </div>
                             <div className="min-w-0 flex-1">
                                 <p className="font-bold  text-sm truncate">
-                                    {actor.name}
+                                    {person.name}
                                 </p>
                                 <p className="text-gray-400 text-xs line-clamp-2 leading-tight mt-3">
-                                    출연 | {actor.character || "출연"}
+                                    {"character" in person
+                                        ? `출연 | ${person.character || "출연"}`
+                                        : `제작 | ${person.job || "감독"}`}
                                 </p>
                             </div>
                         </Link>
@@ -314,7 +332,7 @@ export function Detail() {
                                 <img
                                     src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
                                     alt={movie.title}
-                                    className="w-full rounded-xl shadow-lg"
+                                    className="w-full h-full rounded-xl shadow-lg"
                                 />
                                 <p className="text-sm font-semibold mt-2 line-clamp-1">
                                     {movie.title}
@@ -325,7 +343,7 @@ export function Detail() {
                 </div>
             )}
             {/* 리뷰 */}
-            <div className="mx-auto px-6 pb-12 mt-12">
+            <div className="mx-auto px-6 pb-12 mt-20">
                 <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
                     리뷰 ({reviews.length}+)
                 </h2>

@@ -58,16 +58,26 @@ export function Actor() {
     return (
         <div className="px-20">
             <div className="mt-30  mb-8">
-                <img
-                    className="mb-8"
-                    src={`https://image.tmdb.org/t/p/w185${
-                        actor.profile_path || ""
-                    }`}
-                    alt={actor.name}
-                />
+                {actor.profile_path ? (
+                    <img
+                        className="mb-8 w-46 h-64 rounded-xl object-cover"
+                        src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
+                        alt={actor.name}
+                    />
+                ) : (
+                    <div className="mb-8 w-46 h-64 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <span className="text-gray-400 font-medium">
+                            No Image
+                        </span>
+                    </div>
+                )}
                 <div className="text-3xl mb-8">{actor.name}</div>
-                <p className="font-bold">{actor.birthday}</p>
-                <p className="font-bold">{actor.place_of_birth}</p>
+                <p className="font-bold">
+                    {actor.birthday || "생년월일 정보 없음"}
+                </p>
+                <p className="font-bold">
+                    {actor.place_of_birth || "출생년도 정보 없음"}
+                </p>
                 {/* <p>{actor.biography}</p> */}
                 {/* <div>
                     출연 {actor.known_for_department} • {movies.length} 편
@@ -84,33 +94,49 @@ export function Actor() {
                 </div>
                 <div className="w-full h-px bg-gray-300 mb-4" />
 
-                {movies.slice(0, 14).map((movie) => (
-                    <div key={movie.id}>
-                        <div className="grid grid-cols-[2fr_1fr_1fr] items-center gap-4 mb-4 px-2">
-                            {/* 제목 (이미지 + 텍스트) */}
-                            <div className="flex items-center gap-4">
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w92${
-                                        movie.poster_path || ""
-                                    }`}
-                                    onClick={() =>
-                                        navigate(`/movie/${movie.id}`)
-                                    }
-                                    alt={movie.title}
-                                    className="w-36 h-48 cursor-pointer rounded"
-                                />
-                                <p>{movie.title}</p>
+                {movies.slice(0, 14).map((movie) => {
+                    const year = movie.release_date
+                        ? movie.release_date.split("-")[0]
+                        : "미정";
+
+                    return (
+                        <div key={movie.id}>
+                            <div className="grid grid-cols-[2fr_1fr_1fr] items-center gap-4 mb-4 px-2">
+                                {/* 제목 (연도 + 이미지 + 텍스트) */}
+                                <div className="flex items-center gap-4">
+                                    <span className="text-sm text-gray-400 min-w-[50px]">
+                                        {year}
+                                    </span>
+
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w92${
+                                            movie.poster_path || ""
+                                        }`}
+                                        onClick={() =>
+                                            navigate(`/movie/${movie.id}`)
+                                        }
+                                        alt={movie.title}
+                                        className="w-36 h-48 cursor-pointer rounded"
+                                    />
+
+                                    <p>{movie.title}</p>
+                                </div>
+
+                                {/* 역할 */}
+                                <p className="text-gray-400">
+                                    {movie.character}
+                                </p>
+
+                                {/* 별점 */}
+                                <p className="text-yellow-400">
+                                    ⭐ {convertFive(movie.vote_average)}
+                                </p>
                             </div>
-                            {/* 역할 */}
-                            <p className="text-gray-400">{movie.character}</p>
-                            {/* 별점 */}
-                            <p className="text-yellow-400">
-                                ⭐ {convertFive(movie.vote_average)}
-                            </p>
+
+                            <div className="w-full h-px bg-gray-300 mb-4" />
                         </div>
-                        <div className="w-full h-px bg-gray-300 mb-4" />
-                    </div>
-                ))}
+                    );
+                })}
             </section>
         </div>
     );

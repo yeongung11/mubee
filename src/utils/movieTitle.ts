@@ -16,7 +16,8 @@ export async function getEngName(
     actorId: number,
     name: string,
 ): Promise<string> {
-    if (!/[\u0400-\u04FF\u0600-\u06FF]/.test(name)) return name;
+    if (!/[\u0400-\u04FF\u0600-\u06FF\u3040-\u30FF\u4E00-\u9FFF]/.test(name))
+        return name;
     try {
         const data = await fetchActorDetailEnglish(actorId);
         return data.name || name;

@@ -36,6 +36,7 @@ export interface MovieWithCredits extends Movie {
             id: number;
             name: string;
             job: string;
+            department?: string;
             profile_path: string;
         }>;
     };
@@ -81,6 +82,7 @@ export interface Actor {
     biography?: string;
     place_of_birth: string;
     birthday: string;
+    also_known_as?: string[];
 }
 
 export interface Credits {
