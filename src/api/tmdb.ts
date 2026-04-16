@@ -223,7 +223,10 @@ export const fetchStillCut = async (movieId: number) => {
 };
 
 // 메인 화면 페이지 더보기
-export const fetchMainPageMovies = async (category: string, page = 1) => {
+export const fetchMainPageMovies = async (
+    category: string,
+    page: number = 1,
+) => {
     const endpoints: Record<string, string> = {
         popular: `/movie/popular`,
         now_playing: `/movie/now_playing`,

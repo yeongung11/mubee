@@ -45,16 +45,16 @@ export function HeroBanner() {
                 alt={hero.title}
             />
               {/* 타이틀, 별점, 장르 */}
-              <div className="absolute top-1/2 left-12 gap-3 text-amber-50 flex flex-col ">
-                <span className="text-3xl block font-bold text-white mb-4
+              <div className="absolute top-1/3 left-50 gap-3 text-amber-50 flex flex-col ">
+                <span className="text-5xl block font-bold text-white mb-4
             drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
             drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
             drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]">오늘 트렌드 {index + 1} 위</span>
-                <h2 className="text-2xl block font-bold text-white mb-4
+                <h2 className="text-4xl block font-bold text-white mb-4
             drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
             drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
             drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]">{hero.title}</h2>
-                <span className="text-lg block font-bold text-white mb-4
+                <span className="text-xl block font-bold text-white mb-4
             drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
             drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
             drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]">

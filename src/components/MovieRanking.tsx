@@ -60,7 +60,11 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     // -----------------------------------------------
     return (
         <div className="max-w-6xl mx-auto p-8 mt-15 relative">
-            <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
+            <div className="flex justify-between">
+                <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
+                <Link to="/movies?category=popular">더보기</Link>
+            </div>
+
             <MovieGrid
                 movies={currentMovies}
                 renderBadge={(movie) => {
@@ -79,7 +83,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                     );
                 }}
             />
-            <Link to="/movies?category=popular">더보기</Link>
+
             <div className="flex items-center justify-center mt-7 gap-5 ">
                 <Buttons
                     direction="left"

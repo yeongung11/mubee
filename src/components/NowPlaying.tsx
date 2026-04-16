@@ -19,8 +19,11 @@ export function NowPlaying({ movies }: { movies: Movie[] }) {
 
     return (
         <div className="relative max-w-6xl mx-auto p-8 py-10">
-            <h2 className="text-2xl font-bold mb-6"> 현재 상영중</h2>
-            <Link to="/movies?category=now_playing"> 더보기→</Link>
+            <div className="flex justify-between">
+                <h2 className="text-2xl font-bold mb-6"> 현재 상영중</h2>
+                <Link to="/movies?category=now_playing"> 더보기</Link>
+            </div>
+
             <MovieGrid movies={current} />
 
             {movies.length > moviePages && (
