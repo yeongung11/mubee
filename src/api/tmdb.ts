@@ -105,11 +105,11 @@ export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
         .map<Actor>((item) => ({
             id: item.id,
             name: item.name,
-            profile_path: item.poster_path || "",
+            profile_path: item.profile_path,
             known_for_department: "Acting",
             biography: "",
-            place_of_birth: item.place_of_birth || "",
-            birthday: item.birthday || "",
+            place_of_birth: item.place_of_birth,
+            birthday: item.birthday,
         }));
 
     return [...movies, ...actors];

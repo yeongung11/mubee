@@ -16,8 +16,6 @@ export function Header({ className }: HeaderProps) {
         const timeoutId = setTimeout(async () => {
             if (query.length > 2) {
                 const results = await searchMovies(query);
-                console.log("🔍 검색결과:", results);
-                console.log("첫 번째:", results[0]);
                 setSearchResults(results.slice(0, 4));
             } else {
                 setSearchResults([]);
@@ -97,11 +95,20 @@ export function Header({ className }: HeaderProps) {
                                     key={result.id}
                                     className="flex gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors"
                                 >
-                                    <img
-                                        src={`https://image.tmdb.org/t/p/w92${imagePath}`}
-                                        className="w-10 h-14 object-cover rounded flex-shrink-0 bg-gray-200 "
-                                        alt={title}
-                                    />
+                                    {imagePath ? (
+                                        <img
+                                            src={`https://image.tmdb.org/t/p/w92${imagePath}`}
+                                            className="w-12 h-16 object-cover rounded flex-shrink-0 bg-gray-200 "
+                                            alt={title}
+                                        />
+                                    ) : (
+                                        <div className="w-12 h-16 rounded flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
+                                            <span className="text-gray-400 text-xs font-medium">
+                                                No Image
+                                            </span>
+                                        </div>
+                                    )}
+
                                     <div className="min-w-0 flex-1">
                                         <p className="font-medium text-sm truncate text-black">
                                             {title}
