@@ -47,13 +47,59 @@ export function Actor() {
         loadActorData();
     }, [actorId]);
 
+    // if (loading)
+    //     return (
+    //         <div className="flex items-center justify-center min-h-screen">
+    //             로딩중...
+    //         </div>
+    //     );
+
     if (loading)
         return (
-            <div className="flex items-center justify-center align-middle">
-                로딩중...
+            <div className="animate-pulse px-20">
+                {/* 프로필 영역 */}
+                <div className="mt-30 mb-8 flex flex-col gap-4">
+                    <div className="w-46 h-64 bg-gray-300 rounded-xl" />{" "}
+                    {/* 프로필 이미지 */}
+                    <div className="h-8 bg-gray-300 rounded w-40" />{" "}
+                    {/* 이름 */}
+                    <div className="h-4 bg-gray-300 rounded w-32" />{" "}
+                    {/* 생년월일 */}
+                    <div className="h-4 bg-gray-300 rounded w-48" />{" "}
+                    {/* 출생지 */}
+                </div>
+                <div className="w-full h-px bg-gray-300 my-4" />
+                {/* 출연작 목록 */}
+                <div className="h-6 bg-gray-300 rounded w-20 mb-8" />{" "}
+                {/* "출연작" 제목 */}
+                {Array.from({ length: 5 }).map((_, i) => (
+                    <div
+                        key={i}
+                        className="grid grid-cols-[2fr_1fr_1fr] items-center gap-4 mb-4 px-2"
+                    >
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-4 bg-gray-300 rounded" />{" "}
+                            {/* 연도 */}
+                            <div className="w-36 h-48 bg-gray-300 rounded" />{" "}
+                            {/* 포스터 */}
+                            <div className="h-4 bg-gray-300 rounded w-32" />{" "}
+                            {/* 제목 */}
+                        </div>
+                        <div className="h-4 bg-gray-300 rounded w-20" />{" "}
+                        {/* 역할 */}
+                        <div className="h-4 bg-gray-300 rounded w-12" />{" "}
+                        {/* 별점 */}
+                    </div>
+                ))}
             </div>
         );
-    if (!actor) return <div>배우 정보 없음</div>;
+
+    if (!actor)
+        return (
+            <div className="flex justify-center items-center">
+                배우 정보 없음
+            </div>
+        );
 
     return (
         <div className="px-20">
@@ -78,10 +124,6 @@ export function Actor() {
                 <p className="font-bold">
                     {actor.place_of_birth || "출생년도 정보 없음"}
                 </p>
-                {/* <p>{actor.biography}</p> */}
-                {/* <div>
-                    출연 {actor.known_for_department} • {movies.length} 편
-                </div> */}
             </div>
             <div className="w-full h-px bg-gray-300 my-4" />
             <section>
@@ -107,17 +149,24 @@ export function Actor() {
                                     <span className="text-sm text-gray-400 min-w-[50px]">
                                         {year}
                                     </span>
-
-                                    <img
-                                        src={`https://image.tmdb.org/t/p/w92${
-                                            movie.poster_path || ""
-                                        }`}
-                                        onClick={() =>
-                                            navigate(`/movie/${movie.id}`)
-                                        }
-                                        alt={movie.title}
-                                        className="w-36 h-48 cursor-pointer rounded"
-                                    />
+                                    {movie.poster_path ? (
+                                        <img
+                                            src={`https://image.tmdb.org/t/p/w92${
+                                                movie.poster_path || ""
+                                            }`}
+                                            onClick={() =>
+                                                navigate(`/movie/${movie.id}`)
+                                            }
+                                            alt={movie.title}
+                                            className="w-36 h-48 cursor-pointer rounded"
+                                        />
+                                    ) : (
+                                        <div className="mb-8 w-36 h-48 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                                            <span className="text-gray-400 font-medium">
+                                                No Image
+                                            </span>
+                                        </div>
+                                    )}
 
                                     <p>{movie.title}</p>
                                 </div>

@@ -11,6 +11,8 @@ import {
     fetchWatchProvider,
     fetchReview,
     fetchSimilar,
+    fetchByGenre,
+    fetchRecommendations,
 } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 import { useFavoritesStore } from "../store/favorite";
@@ -29,21 +31,52 @@ export function Detail() {
     const { convertFive } = useRating();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
     const [sim, setSim] = useState<Movie[]>([]);
+    const [simName, setSimName] = useState<
+        "similar" | "recommendations" | "genre"
+    >("similar");
 
-    // 유사한 영화
+    // 유사한 영화, 추천 영화, 장르 기반 추천 영화
     useEffect(() => {
-        if (id) {
-            fetchSimilar(Number(id)).then(async (data) => {
-                const resolved = await Promise.all(
-                    data.results.slice(0, 6).map(async (movie: Movie) => ({
-                        ...movie,
-                        title: await getEngTitle(movie),
-                    })),
-                );
-                setSim(resolved);
-            });
-        }
-    }, [id]);
+        if (!id) return;
+
+        const loadSimilar = async () => {
+            // similar 호출
+            const similarData = await fetchSimilar(Number(id));
+            let results = similarData.results.slice(0, 6);
+
+            if (results.length > 0) {
+                setSimName("similar");
+            }
+
+            // similar 없으면 recommendations 호출
+            if (results.length === 0) {
+                const recData = await fetchRecommendations(Number(id)); // tmdb.ts에 추가 필요
+                results = recData.results.slice(0, 6);
+                if (results.length > 0) {
+                    setSimName("recommendations");
+                }
+            }
+
+            // 같은 장르 영화 호출
+            if (results.length === 0 && movie?.genres?.[0]?.id) {
+                const genreData = await fetchByGenre(movie.genres[0].id); // tmdb.ts에 추가 필요
+                results = genreData.results.slice(0, 6);
+                if (results.length > 0) {
+                    setSimName("genre");
+                }
+            }
+
+            const resolved = await Promise.all(
+                results.map(async (m: Movie) => ({
+                    ...m,
+                    title: await getEngTitle(m),
+                })),
+            );
+            setSim(resolved);
+        };
+
+        loadSimilar();
+    }, [id, movie?.genres]);
 
     // 리뷰
     useEffect(() => {
@@ -107,10 +140,129 @@ export function Detail() {
         setCastIdx(Math.min(maxIndex, castIdx + castPageSize));
     }, [castIdx, castPageSize, movieWithCredits?.credits?.cast?.length]);
 
+    // 로딩 스켈레톤 ui
     if (!movie)
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                로딩중...
+            <div className="animate-pulse relative">
+                {/* 백드롭 이미지 */}
+                <div className="w-full h-240 bg-gray-300" />
+
+                {/* 제목/장르/국가/러닝타임 */}
+                <div className="absolute top-150 left-3 ml-5 flex flex-col gap-5">
+                    <div className="h-10 bg-gray-300 rounded w-80" />{" "}
+                    {/* 제목 */}
+                    <div className="h-6 bg-gray-300 rounded w-60" />{" "}
+                    {/* 장르 */}
+                    <div className="h-6 bg-gray-300 rounded w-40" />{" "}
+                    {/* 국가 */}
+                    <div className="h-6 bg-gray-300 rounded w-48" />{" "}
+                    {/* 러닝타임 */}
+                </div>
+
+                {/* 포스터 + 평점 영역 */}
+                <div className="px-6 mx-auto mt-10 mb-12 max-w-6xl">
+                    <div className="flex flex-col gap-6">
+                        <div className="flex items-center justify-between">
+                            {/* 포스터 */}
+                            <div className="w-44 h-64 bg-gray-300 rounded-xl" />
+
+                            {/* 평점들 */}
+                            <div className="flex items-center space-x-5 mr-50">
+                                {/* 별 5개 */}
+                                <div className="flex space-x-2">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className="w-12 h-12 bg-gray-300 rounded-full"
+                                        />
+                                    ))}
+                                </div>
+                                <div className="h-8 bg-gray-300 rounded w-28" />{" "}
+                                {/* 나의 평가 */}
+                                <div className="h-8 bg-gray-300 rounded w-24" />{" "}
+                                {/* 평균 */}
+                                <div className="w-10 h-10 bg-gray-300 rounded-full" />{" "}
+                                {/* 좋아요 */}
+                            </div>
+                        </div>
+
+                        {/* 줄거리 */}
+                        <div className="pt-4 pb-8 border-t border-white/20 flex flex-col gap-3">
+                            <div className="h-4 bg-gray-300 rounded w-full" />
+                            <div className="h-4 bg-gray-300 rounded w-full" />
+                            <div className="h-4 bg-gray-300 rounded w-3/4" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* 출연/제작 */}
+                <div className="mt-16 mx-auto px-6 pb-20">
+                    <div className="h-8 bg-gray-300 rounded w-32 mb-8" />{" "}
+                    {/* 섹션 제목 */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+                        {Array.from({ length: 10 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
+                            >
+                                <div className="w-16 h-20 bg-gray-300 rounded-lg flex-shrink-0" />{" "}
+                                {/* 프로필 */}
+                                <div className="flex flex-col gap-2 flex-1">
+                                    <div className="h-3 bg-gray-300 rounded w-full" />{" "}
+                                    {/* 이름 */}
+                                    <div className="h-3 bg-gray-300 rounded w-3/4" />{" "}
+                                    {/* 역할 */}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 유사한 영화 */}
+                <div className="px-6 mb-10">
+                    <div className="h-8 bg-gray-300 rounded w-64 mb-8" />{" "}
+                    {/* 섹션 제목 */}
+                    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
+                        {Array.from({ length: 6 }).map((_, i) => (
+                            <div key={i} className="flex flex-col gap-2">
+                                <div className="w-full aspect-[2/3] bg-gray-300 rounded-xl" />{" "}
+                                {/* 포스터 */}
+                                <div className="h-3 bg-gray-300 rounded w-full" />{" "}
+                                {/* 제목 */}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 리뷰 */}
+                <div className="mx-auto px-6 pb-12 mt-20">
+                    <div className="h-8 bg-gray-300 rounded w-32 mb-8" />{" "}
+                    {/* 섹션 제목 */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {Array.from({ length: 3 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="p-6 bg-white/10 rounded-2xl border border-white/20"
+                            >
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-gray-300 rounded-full" />{" "}
+                                    {/* 아바타 */}
+                                    <div className="flex flex-col gap-2">
+                                        <div className="h-4 bg-gray-300 rounded w-24" />{" "}
+                                        {/* 이름 */}
+                                        <div className="h-3 bg-gray-300 rounded w-16" />{" "}
+                                        {/* 날짜 */}
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <div className="h-3 bg-gray-300 rounded w-full" />
+                                    <div className="h-3 bg-gray-300 rounded w-full" />
+                                    <div className="h-3 bg-gray-300 rounded w-2/3" />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         );
 
@@ -203,11 +355,11 @@ export function Detail() {
                             </div>
                             <button
                                 onClick={() => toggleFavorite(movie)}
-                                className={
+                                className={`w-10 h-10 flex items-center justify-center text-2xl ${
                                     isFavorite(movie.id)
                                         ? "favorite active"
                                         : "favorite"
-                                }
+                                }`}
                             >
                                 {isFavorite(movie.id) ? "❤️" : "♡"}
                             </button>
@@ -320,7 +472,12 @@ export function Detail() {
             {sim.length > 0 && (
                 <div className="px-6 mb-10">
                     <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
-                        "{movie.title}"와 유사한 영화
+                        {simName === "similar" &&
+                            `"${movie.title}"와 유사한 영화`}
+                        {simName === "recommendations" &&
+                            `"${movie.title}"의 추천 영화`}
+                        {simName === "genre" &&
+                            `"${movie.title}"의 장르 기반 추천 영화`}
                     </h2>
                     <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
                         {sim.map((movie) => (
@@ -329,11 +486,20 @@ export function Detail() {
                                 onClick={() => navigate(`/movie/${movie.id}`)}
                                 className="cursor-pointer transition-all duration-300"
                             >
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-full h-full rounded-xl shadow-lg"
-                                />
+                                {movie.poster_path ? (
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-full h-full rounded-xl shadow-lg"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full rounded flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
+                                        <span className="text-gray-400 text-xl font-medium">
+                                            No Image
+                                        </span>
+                                    </div>
+                                )}
+
                                 <p className="text-sm font-semibold mt-2 line-clamp-1">
                                     {movie.title}
                                 </p>

@@ -189,6 +189,24 @@ export const fetchSimilar = async (movieId: number) => {
     return res.json();
 };
 
+// 추천 영화
+export const fetchRecommendations = async (movieId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/movie/${movieId}/recommendations?language=ko-KR`,
+        options,
+    );
+    return res.json();
+};
+
+// 장르 기반 추천 영화
+export const fetchByGenre = async (genreId: number) => {
+    const res = await fetch(
+        `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&language=ko-KR`,
+        options,
+    );
+    return res.json();
+};
+
 // 평점 높은 작품
 export const fetchTopRate = async () => {
     const res = await fetch(
