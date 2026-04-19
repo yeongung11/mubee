@@ -47,13 +47,8 @@ export function Actor() {
         loadActorData();
     }, [actorId]);
 
-    // if (loading)
-    //     return (
-    //         <div className="flex items-center justify-center min-h-screen">
-    //             로딩중...
-    //         </div>
-    //     );
-
+   
+// 로딩
     if (loading)
         return (
             <div className="animate-pulse px-20">

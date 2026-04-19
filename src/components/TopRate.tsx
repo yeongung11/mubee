@@ -18,7 +18,7 @@ export function TopRate({ movies }: { movies: Movie[] }) {
     }, [index, movies.length, moviePages]);
 
     return (
-        <div className="relative max-w-6xl mx-auto p-8 py-10">
+        <div className="relative max-w-8xl mx-auto p-8 py-10">
             <div className="flex justify-between">
                 <h2 className="text-2xl font-bold mb-6">평점 높은 작품</h2>
                 <Link to="/movies?category=top_rated">더보기</Link>

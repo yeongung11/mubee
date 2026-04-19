@@ -24,14 +24,14 @@ function MovieCard({
     }, [movie.id]);
 
     return (
-        <li className="relative w-48 group">
+        <li className="relative group">
             <Link to={`/movie/${movie.id}`}>
                 <img
-                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                    className="w-full h-80 object-cover rounded mb-2 group-hover:scale-[1.02] transition-transform shadow-lg"
+                    src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                    className="w-full aspect-[2/3] object-cover rounded mb-2 group-hover:scale-[1.02] transition-transform shadow-lg"
                     alt={displayTitle ?? movie.title}
                 />
-                <h3 className="font-bold text-sm truncate">
+                <h3 className="font-bold text-xl truncate">
                     {displayTitle ?? (
                         <span className="block h-4 w-24 bg-gray-300 rounded animate-pulse" />
                     )}
@@ -60,7 +60,7 @@ export function MovieGrid({
 }: MovieGridProps) {
     const { convertFive } = useRating();
     return (
-        <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {movies.map((movie, index) => (
                 <MovieCard
                     key={movie.id}

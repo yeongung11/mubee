@@ -44,7 +44,7 @@ export function Upcoming({ movies }: UpcomingProps) {
 
     // -----------------------------------------------
     return (
-        <div className="max-w-6xl mx-auto p-8 relative">
+        <div className="max-w-8xl mx-auto p-8 relative">
             <div className="flex justify-between">
                 <h1 className="text-3xl font-bold mb-8">공개 예정작</h1>
                 <Link to="/movies?category=upcoming">더보기</Link>

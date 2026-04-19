@@ -277,3 +277,29 @@ export const fetchActorDetailEnglish = async (actorId: number) => {
     });
     return res.json();
 };
+
+// 로고
+export const fetchMovieLogos = async (
+    movieId: number,
+): Promise<string | null> => {
+    const res = await fetch(
+        `${BASE_URL}/movie/${movieId}/images?include_image_language=en,ko,null`,
+        {
+            headers: { Authorization: `Bearer ${TOKEN}` },
+        },
+    );
+    const data = await res.json();
+    const logos = data.logos as {
+        file_path: string;
+        iso_639_1: string | null;
+    }[];
+
+    if (!logos || logos.length === 0) return null;
+
+    const preferred =
+        logos.find((l) => l.iso_639_1 === "ko") ??
+        logos.find((l) => l.iso_639_1 === "en") ??
+        logos[0];
+
+    return preferred.file_path;
+};
