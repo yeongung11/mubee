@@ -4,6 +4,7 @@ import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
 
+
 interface UpcomingProps {
     movies: Movie[];
 }
@@ -41,6 +42,7 @@ export function Upcoming({ movies }: UpcomingProps) {
             ),
         );
     }, [index, sortedFutureMovies.length, moviePages]);
+
 
     // -----------------------------------------------
     return (

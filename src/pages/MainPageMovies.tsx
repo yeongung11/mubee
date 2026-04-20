@@ -56,6 +56,39 @@ export function MainPageMovies() {
         return () => observer.disconnect();
     }, [hasMore, loading]);
 
+    // 첫 로딩용 스켈레톤
+    const renderInitialSkeleton = () => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 animate-pulse">
+            {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden">
+                    <div className="w-full aspect-[2/3] bg-gray-300 rounded-xl" />
+                    <div className="p-4">
+                        <div className="h-5 bg-gray-300 rounded w-3/4 mb-2" />
+                        <div className="h-5 bg-gray-300 rounded w-1/2" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+
+    // 추가 로딩용 스켈레톤
+    const renderLoadingSkeleton = () => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 mt-8 pb-12">
+            {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="rounded-2xl overflow-hidden animate-pulse"
+                >
+                    <div className="w-full aspect-[2/3] bg-gray-300 rounded-xl" />
+                    <div className="p-4">
+                        <div className="h-5 bg-gray-300 rounded w-3/4 mb-2" />
+                        <div className="h-5 bg-gray-300 rounded w-1/2" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+
     return (
         <div className="max-w-6xl mx-auto p-8 mt-12">
             <div className="flex gap-4 mb-8 overflow-x-auto pb-4">
@@ -75,12 +108,23 @@ export function MainPageMovies() {
                 ))}
             </div>
             <MovieGrid movies={movies} />
+            {/* 영화 그리드 */}
+            {movies.length === 0 && loading ? (
+                renderInitialSkeleton()
+            ) : (
+                <>
+                    <MovieGrid movies={movies} />
+                    {/* 추가 로딩 스켈레톤 */}
+                    {loading && renderLoadingSkeleton()}
+                </>
+            )}
+
+            {/* 로딩 상태 텍스트 */}
             <div
                 ref={observerRef}
-                className="py-8 text-center text-gray-400 text-sm"
+                className="py-12 text-center text-gray-400 text-sm"
             >
-                {loading && "불러오는 중..."}
-                {!hasMore && !loading && "모든 영화를 불러왔습니다 ✓"}
+                {!loading && !hasMore && "모든 영화를 불러왔습니다 ✓"}
             </div>
         </div>
     );

@@ -53,25 +53,26 @@ export function HeroBanner() {
             
               {/* 타이틀, 별점, 장르 */}
               <div className="absolute top-1/3 left-50 gap-8 text-amber-50 flex flex-col ">
-                <span className="text-5xl block font-bold text-white mb-4
-            drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
-            drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
-            drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]">오늘 트렌드 {index + 1} 위</span>
+                
                 {/* <h2 className="text-4xl block font-bold text-white mb-4
             drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
             drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
             drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]">{hero.title}</h2> */}
-            {logoPath ? (
+            
         <img
-            src={`https://image.tmdb.org/t/p/w500${logoPath}`}
+            src={`https://image.tmdb.org/t/p/w780${logoPath}`}
             alt={hero.title}
-            className="max-h-24 max-w-[320px] object-contain object-left"
+            className="max-h-48  object-contain object-left"
         />
-    ) : (
-        <h2 className="text-4xl font-bold text-white drop-shadow-lg">
+    
+        <h2 className="text-3xl font-bold text-white drop-shadow-lg">
             {hero.title}
         </h2>
-    )}
+    
+    <span className="text-3xl block font-bold text-white mb-4
+            drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
+            drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
+            drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]">오늘 트렌드 {index + 1} 위</span>
                 <span className="text-xl block font-bold text-white mb-4
             drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
             drop-shadow-[0_1px_3px_rgba(0,0,0,1)]

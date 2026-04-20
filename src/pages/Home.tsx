@@ -12,6 +12,7 @@ import { HeroBanner } from "../components/HeroBanner";
 import { TopRate } from "../components/TopRate";
 import { NowPlaying } from "../components/NowPlaying";
 import { MagazineSection } from "@/components/MagazineSection";
+import { HomeSkeleton } from "./Skeleton";
 
 export function Home() {
     const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
@@ -48,13 +49,7 @@ export function Home() {
         loadAllData();
     }, []);
 
-    if (loading)
-        return (
-            <div className="flex justify-center items-center min-h-screen">
-                {" "}
-                로딩중...
-            </div>
-        );
+    if (loading) return <HomeSkeleton />;
 
     return (
         <>
