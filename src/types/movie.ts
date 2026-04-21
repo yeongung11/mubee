@@ -83,6 +83,8 @@ export interface Actor {
     place_of_birth: string;
     birthday: string;
     also_known_as?: string[];
+    popularity?: number;
+    knownFor?: string | null;
 }
 
 export interface Credits {

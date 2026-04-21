@@ -20,7 +20,7 @@ export function NowPlaying({ movies }: { movies: Movie[] }) {
     return (
         <div className="relative max-w-8xl mx-auto p-8 py-10">
             <div className="flex justify-between">
-                <h2 className="text-2xl font-bold mb-6"> 극장 상영중</h2>
+                <h2 className="text-2xl font-bold mb-6"> 최신 개봉작</h2>
                 <Link to="/movies?category=now_playing"> 더보기</Link>
             </div>
 

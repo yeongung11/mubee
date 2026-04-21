@@ -44,7 +44,7 @@ export default function Genre() {
                 {/* 헤더 */}
                 <div className="text-center mb-16">
                     <h1 className="text-5xl lg:text-6xl font-black bg-clip-text text-black drop-shadow-2xl mb-6">
-                        🎬 카테고리별 영화
+                         카테고리별 영화
                     </h1>
 
                     {selectedGenre && !loading && (

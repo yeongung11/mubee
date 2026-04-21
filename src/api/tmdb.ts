@@ -303,3 +303,11 @@ export const fetchMovieLogos = async (
 
     return preferred.file_path;
 };
+
+export const fetchPopularPersons = async (page = 1) => {
+    const res = await fetch(
+        `${BASE_URL}/person/popular?language=ko-KR&page=${page}`,
+        options,
+    );
+    return res.json();
+};
