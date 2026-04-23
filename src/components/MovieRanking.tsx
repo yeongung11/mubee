@@ -1,5 +1,5 @@
 import type { Movie } from "../types/movie";
-import { useEffect, useState, useCallback, useEffectEvent } from "react";
+import { useState, useCallback } from "react";
 import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
@@ -9,36 +9,9 @@ interface MovieRankingProps {
 }
 
 export function MovieRanking({ movies }: MovieRankingProps) {
-    const [prevDailyRank, setPrevDailyRank] = useState<Record<number, number>>(
-        {},
-    );
     const [index, setIndex] = useState(0);
     const moviePages = 5;
     const currentMovies = movies.slice(index, index + moviePages);
-
-    // 초기 로드
-    const loadRanks = useEffectEvent(() => {
-        // setState 무한호출 방지
-        try {
-            const saved = localStorage.getItem("prevMovieRanks");
-            if (saved) {
-                setPrevDailyRank(JSON.parse(saved));
-            }
-        } catch {
-            console.warn("랭킹 로드 실패");
-        }
-    });
-
-    useEffect(() => {
-        loadRanks();
-    }, []);
-
-    // 현재 데이터 저장
-    useEffect(() => {
-        const currentRanks: Record<number, number> = {};
-        movies.forEach((m, i) => (currentRanks[m.id] = i + 1));
-        localStorage.setItem("prevMovieRanks", JSON.stringify(currentRanks));
-    }, [movies]);
 
     const handlePrev = useCallback(() => {
         setIndex(Math.max(0, index - moviePages));
@@ -47,15 +20,6 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     const handleNext = useCallback(() => {
         setIndex(Math.min(movies.length - moviePages, index + moviePages));
     }, [index, movies.length, moviePages]);
-
-    // 순위 등락 확인용 하드 코딩
-    // const PREV_RANKINGS: Record<number, number> = {
-    //     1290821: 5, // 1위 → 이전 5위 (↗)
-    //     680493: 2, // 2위 → 이전 2위 (-)
-    //     1159559: 1, // 3위 → 이전 1위 (↙)
-    //     799882: 7, // 4위 → 이전 7위 (↗)
-    //     1265609: 3, // 5위 → 이전 3위 (↙)
-    // };
 
     // -----------------------------------------------
     return (
@@ -70,15 +34,10 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                 renderBadge={(movie) => {
                     const overallRank =
                         movies.findIndex((m) => m.id === movie.id) + 1;
-                    const prevRank = prevDailyRank[movie.id];
-                    const rankChange = overallRank - prevRank;
 
                     return (
                         <div className="absolute top-2 left-2 w-14 h-12 sm:w-14 sm:h-8 bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center text-2xl sm:text-xl font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
                             {overallRank}
-                            {rankChange === 0 && <span>-</span>}
-                            {rankChange < 0 && <span>↗</span>}
-                            {rankChange > 0 && <span>↙</span>}
                         </div>
                     );
                 }}

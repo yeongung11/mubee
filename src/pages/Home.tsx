@@ -62,10 +62,10 @@ export function Home() {
             <HeroBanner />
             <MovieRanking movies={popularMovies} />
             <Upcoming movies={upcomingMovies} />
+            <PopularPersons persons={popularPersons} />
             <MagazineSection trendingMovies={popularMovies} />
             <TopRate movies={topRateMovies} />
             <NowPlaying movies={nowPlayingMovies} />
-            <PopularPersons persons={popularPersons} />
         </>
     );
 }

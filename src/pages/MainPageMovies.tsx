@@ -90,7 +90,7 @@ export function MainPageMovies() {
     );
 
     return (
-        <div className="max-w-6xl mx-auto p-8 mt-12">
+        <div className="max-w-8xl mx-auto p-8 mt-12">
             <div className="flex gap-4 mb-8 overflow-x-auto pb-4">
                 {Object.entries(categoryMap).map(([key, label]) => (
                     <button
