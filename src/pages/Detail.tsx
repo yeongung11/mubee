@@ -306,81 +306,108 @@ export function Detail() {
                     )}
                 </p>
             </div>
+
             {/* 포스터 및 평점, 설명 */}
-            <div className="px-6 mx-auto mt-10 mb-12 max-w-6xl">
-                <div className="flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
-                        {/* 포스터 */}
-                        <img
-                            src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                            className="w-44 h-64 object-cover rounded-xl shadow-2xl"
-                        />
-                        {/* 평점들 */}
-                        <div className="flex items-center space-x-5 mr-50">
+            <div className="px-20 mx-auto mt-20 mb-12 max-w-8xl">
+                <div className="flex flex-row gap-16 items-start">
+                    {/* 왼쪽: 포스터 */}
+                    <img
+                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        className="w-[350px] h-auto object-cover rounded-xl shadow-2xl flex-shrink-0"
+                    />
+
+                    {/* 오른쪽 전체 */}
+                    <div className="flex flex-col gap- flex-1 ">
+                        {/* 상단: 별점 + 예상평점 + 액션버튼 */}
+                        <div className="flex items-center gap-10 border-b border-white/10 pb-6 mt-10">
                             {/* 별점 */}
-                            <div className="flex items-center space-x-2">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <svg
-                                        key={star}
-                                        className={`w-12 h-12 cursor-pointer transition-all hover:scale-110 ${
-                                            hoverRating >= star ||
-                                            userRating >= star
-                                                ? "text-yellow-400 fill-current"
-                                                : "text-gray-400"
-                                        }`}
-                                        onClick={() => setRating(star)}
-                                        onMouseEnter={() =>
-                                            setHoverRating(star)
-                                        }
-                                        onMouseLeave={() => setHoverRating(0)}
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                    >
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                    </svg>
-                                ))}
-                            </div>
-                            {/* 내 평점 */}
-
-                            <p className="!text-3xl font-bold p-2 px-4 bg-gradient-to-r  text-black font-bold  text-lg min-w-[55px] text-center">
-                                나의 평가 {userRating}.0
-                            </p>
-
-                            {/* 평균 */}
-                            <div className="flex items-center gap-2">
-                                <span className="text-3xl font-bold ">
-                                    평균 {convertFive(movie.vote_average)}
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="flex items-center space-x-1">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <svg
+                                            key={star}
+                                            className={`w-18 h-18 cursor-pointer transition-all hover:scale-110 ${
+                                                hoverRating >= star ||
+                                                userRating >= star
+                                                    ? "text-yellow-400 fill-current"
+                                                    : "text-gray-400"
+                                            }`}
+                                            onClick={() => setRating(star)}
+                                            onMouseEnter={() =>
+                                                setHoverRating(star)
+                                            }
+                                            onMouseLeave={() =>
+                                                setHoverRating(0)
+                                            }
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                        >
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <span className="text-sm text-gray-400">
+                                    평가하기
                                 </span>
                             </div>
-                            <button
-                                onClick={() => toggleFavorite(movie)}
-                                className={`w-10 h-10 flex items-center justify-center text-2xl ${
-                                    isFavorite(movie.id)
-                                        ? "favorite active"
-                                        : "favorite"
-                                }`}
-                            >
-                                {isFavorite(movie.id) ? "❤️" : "♡"}
-                            </button>
-                        </div>
-                    </div>
 
-                    {/*  영화 내용 */}
-                    <div className="pt-4 pb-8 border-t border-white/20">
-                        {movie.overview ? (
-                            <p>{movie.overview}</p>
-                        ) : (
-                            <p className="text-gray-500">
-                                {movie.title}에 대한 상세 줄거리 정보가
-                                없습니다. 감독{" "}
-                                {movie.directors?.[0]?.name || "미상"}의{" "}
-                                {movie.genres[0]?.name || ""} 장르 작품입니다.
-                            </p>
-                        )}
+                            {/* 예상 별점 */}
+                            <div className="flex flex-col items-center gap-5">
+                                <span className="text-6xl font-bold text-pink-500">
+                                    {convertFive(movie.vote_average)}
+                                </span>
+                                <span className="text-sm text-gray-400">
+                                    예상 별점
+                                </span>
+                            </div>
+
+                            {/* 액션 버튼들 */}
+                            <div className="flex items-center gap-10 ml-40">
+                                <button
+                                    onClick={() => toggleFavorite(movie)}
+                                    className="flex flex-col items-center gap-1 text-gray-400 "
+                                >
+                                    <span className="text-2xl">
+                                        {isFavorite(movie.id) ? "❤️" : "＋"}
+                                    </span>
+                                    <span className="text-2xl">
+                                        {isFavorite(movie.id)
+                                            ? "찜완료"
+                                            : "보고싶어요"}
+                                    </span>
+                                </button>
+
+                                <button className="flex flex-col items-center gap-1 text-gray-400 ">
+                                    <span className="text-2xl">✏️</span>
+                                    <span className="text-2xl">코멘트</span>
+                                </button>
+
+                                <button className="flex flex-col items-center gap-1 text-gray-400">
+                                    <span className="text-2xl">👁️</span>
+                                    <span className="text-2xl">보는 중</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 줄거리 */}
+                        <div className="text-gray-700 leading-relaxed text-sm">
+                            {movie.overview ? (
+                                <p>{movie.overview}</p>
+                            ) : (
+                                <p className="text-gray-500">
+                                    {movie.title}에 대한 상세 줄거리 정보가
+                                    없습니다. 감독{" "}
+                                    {movie.directors?.[0]?.name || "미상"}의{" "}
+                                    {movie.genres[0]?.name || ""} 장르
+                                    작품입니다.
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
+
             {/* 스트리밍 플랫폼 */}
             {provider?.flatrate && (
                 <div className="pb-4 px-6">

@@ -47,8 +47,7 @@ export function Actor() {
         loadActorData();
     }, [actorId]);
 
-   
-// 로딩
+    // 로딩
     if (loading)
         return (
             <div className="animate-pulse px-20">
@@ -102,7 +101,7 @@ export function Actor() {
                 {actor.profile_path ? (
                     <img
                         className="mb-8 w-46 h-64 rounded-xl object-cover"
-                        src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
+                        src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`}
                         alt={actor.name}
                     />
                 ) : (
@@ -146,7 +145,7 @@ export function Actor() {
                                     </span>
                                     {movie.poster_path ? (
                                         <img
-                                            src={`https://image.tmdb.org/t/p/w92${
+                                            src={`https://image.tmdb.org/t/p/w185${
                                                 movie.poster_path || ""
                                             }`}
                                             onClick={() =>

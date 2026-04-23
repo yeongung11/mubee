@@ -14,29 +14,29 @@ export function MagazineSection({
 }) {
     const magazineArticles: MagazineArticle[] = [
         {
-            title: "요즘엔 무슨 영화? ",
+            title: trendingMovies[0].title,
             content: "대중이 선택한 컨텐츠...",
             backdrop: trendingMovies[0]?.backdrop_path
                 ? `https://image.tmdb.org/t/p/w1280${trendingMovies[0].backdrop_path}`
                 : "/static/fallback.jpg",
         },
         {
-            title: "새롭게 떠오르는 컨텐츠 🎞️",
+            title: trendingMovies[1].title,
             content: "요즘 넷플릭스 덕에 집에서 영화를 보지만...",
             backdrop: trendingMovies[1]?.backdrop_path
                 ? `https://image.tmdb.org/t/p/w1280${trendingMovies[1].backdrop_path}`
                 : "/static/fallback.jpg",
         },
         {
-            title: "새롭게 떠오르는 컨텐츠 🎞️",
+            title: trendingMovies[2].title,
             content: "요즘 넷플릭스 덕에 집에서 영화를 보지만...",
             backdrop: trendingMovies[2]?.backdrop_path
                 ? `https://image.tmdb.org/t/p/w1280${trendingMovies[2].backdrop_path}`
                 : "/static/fallback.jpg",
         },
         {
-            title: "새롭게 떠오르는 컨텐츠 🎞️",
-            content: "요즘 넷플릭스 덕에 집에서 영화를 보지만...",
+            title: trendingMovies[3].title,
+            content: "대중이 선택한 컨텐츠...",
             backdrop: trendingMovies[3]?.backdrop_path
                 ? `https://image.tmdb.org/t/p/w1280${trendingMovies[3].backdrop_path}`
                 : "/static/fallback.jpg",
@@ -89,14 +89,14 @@ function MagazineCard({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-neutral-500">
+                {/* <div className="flex items-center gap-4 text-sm text-neutral-500">
                     <span>ung</span>
                     <span>•</span>
                     <span>약 2시간 전</span>
                     <span className="ml-auto text-neutral-400 text-xs">
                         더보기 →
                     </span>
-                </div>
+                </div> */}
             </article>
         </Link>
     );
