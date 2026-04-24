@@ -363,15 +363,15 @@ export function Detail() {
                             </div>
 
                             {/* 액션 버튼들 */}
-                            <div className="flex items-center gap-10 ml-40">
+                            <div className="flex items-center gap-10 ml-40 ">
                                 <button
                                     onClick={() => toggleFavorite(movie)}
-                                    className="flex flex-col items-center gap-1 text-gray-400 "
+                                    className="flex flex-col items-center gap-1 w-20 text-gray-400 "
                                 >
                                     <span className="text-2xl">
                                         {isFavorite(movie.id) ? "❤️" : "＋"}
                                     </span>
-                                    <span className="text-2xl">
+                                    <span className="text-2xl whitespace-nowrap">
                                         {isFavorite(movie.id)
                                             ? "찜완료"
                                             : "보고싶어요"}
@@ -389,7 +389,7 @@ export function Detail() {
                                 </button>
                             </div>
                         </div>
-
+                        <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
                         {/* 줄거리 */}
                         <div className="text-gray-700 leading-relaxed text-sm">
                             {movie.overview ? (
@@ -409,7 +409,7 @@ export function Detail() {
             </div>
 
             {/* 스트리밍 플랫폼 */}
-            {provider?.flatrate && (
+            {provider?.flatrate && provider.flatrate.length > 0 ? (
                 <div className="pb-4 px-6">
                     <div className="w-full h-px bg-gray-300 mb-4" />
                     <p className="text-3xl font-bold ">스트리밍 플랫폼</p>
@@ -429,6 +429,17 @@ export function Detail() {
                         </div>
                     ))}
                     <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
+                </div>
+            ) : (
+                <div>
+                    <div className="pb-4 px-6">
+                        <div className="w-full h-px bg-gray-300 mb-4" />
+                        <p className="text-3xl font-bold">스트리밍 플랫폼</p>
+                        <p className="mt-6 text-gray-500 text-lg">
+                            스트리밍 플랫폼 정보가 없습니다.
+                        </p>
+                        <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
+                    </div>
                 </div>
             )}
             {/* 출연제작 */}

@@ -13,34 +13,34 @@ export function Actor() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const loadActorData = useEffectEvent(() => {
+    const loadActorData = useEffectEvent(async () => {
         if (!actorId) return;
 
         setLoading(true);
-        Promise.all([
-            fetchActorDetail(Number(actorId)),
-            fetchActorMovies(Number(actorId)),
-        ])
-            .then(([actorData, moviesData]) => {
-                // 배우 이름 변환
-                getEngName(actorData.id, actorData.name).then(
-                    (resolvedName) => {
-                        setActor({ ...actorData, name: resolvedName });
-                    },
-                );
 
-                // 영화 제목 변환
+        try {
+            const [actorData, moviesData] = await Promise.all([
+                fetchActorDetail(Number(actorId)),
+                fetchActorMovies(Number(actorId)),
+            ]);
+
+            const [resolvedName, resolvedMovies] = await Promise.all([
+                getEngName(actorData.id, actorData.name),
                 Promise.all(
                     moviesData.map(async (movie: Movie) => ({
                         ...movie,
                         title: await getEngTitle(movie),
                     })),
-                ).then((resolvedMovies) => {
-                    setMovies(resolvedMovies);
-                    setLoading(false);
-                });
-            })
-            .catch((err) => console.error("Actor 로드 실패:", err));
+                ),
+            ]);
+
+            setActor({ ...actorData, name: resolvedName });
+            setMovies(resolvedMovies);
+        } catch (err) {
+            console.error("Actor 로드 실패:", err);
+        } finally {
+            setLoading(false);
+        }
     });
 
     useEffect(() => {
