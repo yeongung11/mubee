@@ -95,42 +95,78 @@ export function Actor() {
             </div>
         );
 
+    const sortedMovies = [...movies].sort((a, b) => {
+        const dateA = new Date(a.release_date ?? "").getTime();
+        const dateB = new Date(b.release_date ?? "").getTime();
+        return dateB - dateA;
+    });
+
     return (
         <div className="px-20">
-            <div className="mt-30  mb-8">
-                {actor.profile_path ? (
-                    <img
-                        className="mb-8 w-46 h-64 rounded-xl object-cover"
-                        src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`}
-                        alt={actor.name}
-                    />
-                ) : (
-                    <div className="mb-8 w-46 h-64 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                        <span className="text-gray-400 font-medium">
-                            No Image
-                        </span>
+            <div className="flex gap-16 items-start mt-30 mb-12">
+                {/* 왼쪽: 프로필 */}
+                <div className="flex flex-col gap-4">
+                    {actor.profile_path ? (
+                        <img
+                            className="w-56 h-86 rounded-xl object-cover"
+                            src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`}
+                            alt={actor.name}
+                        />
+                    ) : (
+                        <div className="w-46 h-64 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <span className="text-gray-400 font-medium">
+                                No Image
+                            </span>
+                        </div>
+                    )}
+
+                    <div className="flex flex-col gap-2 mt-15">
+                        <div className="text-3xl">{actor.name}</div>
+                        <p className="font-bold">
+                            {actor.birthday || "생년월일 정보 없음"}
+                        </p>
+                        <p className="font-bold">
+                            {actor.place_of_birth || "출생지 정보 없음"}
+                        </p>
                     </div>
-                )}
-                <div className="text-3xl mb-8">{actor.name}</div>
-                <p className="font-bold">
-                    {actor.birthday || "생년월일 정보 없음"}
-                </p>
-                <p className="font-bold">
-                    {actor.place_of_birth || "출생년도 정보 없음"}
-                </p>
+                </div>
+
+                {/* 오른쪽: 대표 출연작 */}
+                <div className="flex-1">
+                    {/* <h2 className="text-2xl mb-6">대표 출연작</h2> */}
+                    <div className="flex gap-12 overflow-x-auto justify-center">
+                        {movies.slice(0, 3).map((movie) => (
+                            <div key={movie.id} className="min-w-[180px]">
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                                    alt={movie.title}
+                                    className="w-full rounded-lg"
+                                />
+                                <div className="mt-3">
+                                    <p>{movie.title}</p>
+                                    <p className="text-sm text-gray-500">
+                                        {movie.release_date?.slice(0, 4)}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
+
             <div className="w-full h-px bg-gray-300 my-4" />
+
             <section>
                 <h1 className="text-2xl mb-8">출연작</h1>
 
-                <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-400 text-sm mb-4 px-2">
+                <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-700 text-sm mb-4 px-2">
                     <span>제목</span>
                     <span>역할</span>
                     <span>평가</span>
                 </div>
                 <div className="w-full h-px bg-gray-300 mb-4" />
 
-                {movies.slice(0, 14).map((movie) => {
+                {sortedMovies.slice(0, 14).map((movie) => {
                     const year = movie.release_date
                         ? movie.release_date.split("-")[0]
                         : "미정";
@@ -140,7 +176,7 @@ export function Actor() {
                             <div className="grid grid-cols-[2fr_1fr_1fr] items-center gap-4 mb-4 px-2">
                                 {/* 제목 (연도 + 이미지 + 텍스트) */}
                                 <div className="flex items-center gap-4">
-                                    <span className="text-sm text-gray-400 min-w-[50px]">
+                                    <span className="text-sm text-gray-700 min-w-[50px]">
                                         {year}
                                     </span>
                                     {movie.poster_path ? (
@@ -156,7 +192,7 @@ export function Actor() {
                                         />
                                     ) : (
                                         <div className="mb-8 w-36 h-48 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                            <span className="text-gray-400 font-medium">
+                                            <span className="text-gray-700 font-medium">
                                                 No Image
                                             </span>
                                         </div>
@@ -166,12 +202,12 @@ export function Actor() {
                                 </div>
 
                                 {/* 역할 */}
-                                <p className="text-gray-400">
+                                <p className="text-gray-700">
                                     {movie.character}
                                 </p>
 
                                 {/* 별점 */}
-                                <p className="text-yellow-400">
+                                <p className="text-yellow-700">
                                     ⭐ {convertFive(movie.vote_average)}
                                 </p>
                             </div>
