@@ -137,16 +137,24 @@ export function Actor() {
                     <div className="flex gap-12 overflow-x-auto justify-center">
                         {movies.slice(0, 3).map((movie) => (
                             <div key={movie.id} className="min-w-[180px]">
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-full rounded-lg"
-                                />
+                                <div className="w-[260px] h-[380px] overflow-hidden rounded-lg">
+                                    <img
+                                        src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                                        alt={movie.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                                 <div className="mt-3">
                                     <p>{movie.title}</p>
-                                    <p className="text-sm text-gray-500">
-                                        {movie.release_date?.slice(0, 4)}
-                                    </p>
+                                    {movie.release_date ? (
+                                        <p className="text-sm text-gray-500">
+                                            {movie.release_date?.slice(0, 4)}
+                                        </p>
+                                    ) : (
+                                        <p className="text-sm text-gray-500">
+                                            미정
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         ))}
