@@ -12,6 +12,7 @@ export function Actor() {
     const [actor, setActor] = useState<Actor | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
+    const [moreMovie, setMoreMovie] = useState(14);
 
     const loadActorData = useEffectEvent(async () => {
         if (!actorId) return;
@@ -174,7 +175,7 @@ export function Actor() {
                 </div>
                 <div className="w-full h-px bg-gray-300 mb-4" />
 
-                {sortedMovies.slice(0, 14).map((movie) => {
+                {sortedMovies.slice(0, moreMovie).map((movie) => {
                     const year = movie.release_date
                         ? movie.release_date.split("-")[0]
                         : "미정";
@@ -182,7 +183,7 @@ export function Actor() {
                     return (
                         <div key={movie.id}>
                             <div className="grid grid-cols-[2fr_1fr_1fr] items-center gap-4 mb-4 px-2">
-                                {/* 제목 (연도 + 이미지 + 텍스트) */}
+                                {/* 제목  */}
                                 <div className="flex items-center gap-4">
                                     <span className="text-sm text-gray-700 min-w-[50px]">
                                         {year}
@@ -224,6 +225,15 @@ export function Actor() {
                         </div>
                     );
                 })}
+                {moreMovie < sortedMovies.length && (
+                    <button
+                        onClick={() => setMoreMovie((prev) => prev + 10)}
+                        className="w-full py-3 mt-2 mb-10 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                    >
+                        더보기
+                        {/* ({sortedMovies.length - moreMovie}개 남음) */}
+                    </button>
+                )}
             </section>
         </div>
     );
