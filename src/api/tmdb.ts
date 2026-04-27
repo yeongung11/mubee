@@ -1,6 +1,6 @@
+import type { Movie, MultiSearchItem, Actor } from "../types/movie";
 const BASE_URL = "https://api.themoviedb.org/3";
 const TOKEN = import.meta.env.VITE_TMDB_TOKEN;
-import type { Movie, MultiSearchItem, Actor } from "../types/movie";
 
 const options = {
     headers: {
@@ -13,7 +13,7 @@ export const fetchKoreanBoxOffice = async () => {
     const yesterday = new Date(Date.now() - 86400000);
     const targetDt = yesterday.toISOString().slice(0, 10).replace(/-/g, "");
     const res = await fetch(
-        `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${key}&targetDt=${targetDt}`,
+        `https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${key}&targetDt=${targetDt}`,
     );
     return res.json();
 };

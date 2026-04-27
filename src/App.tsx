@@ -21,7 +21,7 @@ function App() {
                             path="/genre/:genreId"
                             element={<GenreDetail />}
                         />
-                        <Route path="movies" element={<MainPageMovies />} />
+                        <Route path="/movies" element={<MainPageMovies />} />
                         <Route path="/actor/:actorId" element={<Actor />} />
                         <Route path="/favorites" element={<FavoritePage />} />
                     </Route>

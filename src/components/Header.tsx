@@ -12,11 +12,27 @@ export function Header({ className }: HeaderProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const location = useLocation();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         setSearchResults([]);
         setSearchQuery("");
     }, [location.pathname]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                containerRef.current &&
+                !containerRef.current.contains(e.target as Node)
+            ) {
+                setSearchResults([]);
+                setSearchQuery("");
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const handleSearch = useCallback((query: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -66,9 +82,9 @@ export function Header({ className }: HeaderProps) {
             </div>
 
             {/* 오른쪽: 검색창 */}
-            <div className="relative max-w-md w-full">
+            <div ref={containerRef} className="relative max-w-md w-full">
                 <input
-                    className="w-full bg-black-1600 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
+                    className="w-full bg-black-1600 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-100"
                     type="text"
                     placeholder="영화 검색"
                     value={searchQuery}

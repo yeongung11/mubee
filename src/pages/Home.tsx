@@ -13,7 +13,7 @@ import { HeroBanner } from "../components/HeroBanner";
 import { TopRate } from "../components/TopRate";
 import { NowPlaying } from "../components/NowPlaying";
 import { MagazineSection } from "@/components/MagazineSection";
-import { HomeSkeleton } from "./Skeleton";
+import { HomeSkeleton } from "../components/Skeleton";
 import { PopularPersons } from "@/components/PopularPersons";
 
 export function Home() {
