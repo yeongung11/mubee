@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Detail } from "./pages/Detail";
-// import { Header } from "./components/Header";
 import { Actor } from "./pages/Actor";
 import { FavoritePage } from "./pages/FavoritePage";
 import MainLayout from "./layouts/MainLayout";
@@ -13,8 +12,6 @@ import { MainPageMovies } from "./pages/MainPageMovies";
 function App() {
     return (
         <BrowserRouter>
-            {/* <div className="min-h-screen bg-gradient-to-r from-slate-100/80 to-slate-200/70"> */}
-            {/* <Header className="z-50 fixed top-0 w-full" /> */}
             <main>
                 <Routes>
                     <Route element={<MainLayout />}>
@@ -34,7 +31,6 @@ function App() {
                     </Route>
                 </Routes>
             </main>
-            {/* </div> */}
         </BrowserRouter>
     );
 }

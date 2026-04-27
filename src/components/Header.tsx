@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
 import type { Movie, Actor } from "../types/movie";
 
@@ -9,20 +9,27 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
     const [searchResults, setSearchResults] = useState<(Movie | Actor)[]>([]);
-    const [, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const location = useLocation();
 
-    const handleSearch = useCallback(async (query: string) => {
-        // 300ms 대기
-        const timeoutId = setTimeout(async () => {
-            if (query.length > 2) {
-                const results = await searchMovies(query);
-                setSearchResults(results.slice(0, 4));
-            } else {
-                setSearchResults([]);
-            }
-        }, 300);
+    useEffect(() => {
+        setSearchResults([]);
+        setSearchQuery("");
+    }, [location.pathname]);
 
-        return () => clearTimeout(timeoutId);
+    const handleSearch = useCallback((query: string) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+        if (query.length <= 2) {
+            setSearchResults([]);
+            return;
+        }
+
+        timeoutRef.current = setTimeout(async () => {
+            const results = await searchMovies(query);
+            setSearchResults(results.slice(0, 4));
+        }, 200);
     }, []);
 
     return (
@@ -64,14 +71,11 @@ export function Header({ className }: HeaderProps) {
                     className="w-full bg-black-1600 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
                     type="text"
                     placeholder="영화 검색"
+                    value={searchQuery}
                     onChange={(e) => {
                         const query = e.target.value;
                         setSearchQuery(query);
-                        if (query.length > 2) {
-                            handleSearch(query);
-                        } else {
-                            setSearchResults([]);
-                        }
+                        handleSearch(query);
                     }}
                 />
                 {searchResults.length > 0 && (
