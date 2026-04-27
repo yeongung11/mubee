@@ -62,9 +62,9 @@ export function MainPageMovies() {
             {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="rounded-2xl overflow-hidden">
                     <div className="w-full aspect-[2/3] bg-gray-300 rounded-xl" />
-                    <div className="p-4">
-                        <div className="h-5 bg-gray-300 rounded w-3/4 mb-2" />
-                        <div className="h-5 bg-gray-300 rounded w-1/2" />
+                    <div className="p-3">
+                        <div className="h-4 bg-gray-300 rounded w-3/4 mb-2" />
+                        <div className="h-4 bg-gray-300 rounded w-1/2" />
                     </div>
                 </div>
             ))}
@@ -73,8 +73,8 @@ export function MainPageMovies() {
 
     // 추가 로딩용 스켈레톤
     const renderLoadingSkeleton = () => (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 mt-8 pb-12">
-            {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  gap-6 mt-8 pb-12">
+            {Array.from({ length: 5 }).map((_, i) => (
                 <div
                     key={i}
                     className="rounded-2xl overflow-hidden animate-pulse"
@@ -107,7 +107,6 @@ export function MainPageMovies() {
                     </button>
                 ))}
             </div>
-            <MovieGrid movies={movies} />
             {/* 영화 그리드 */}
             {movies.length === 0 && loading ? (
                 renderInitialSkeleton()

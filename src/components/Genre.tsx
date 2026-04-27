@@ -34,6 +34,7 @@ export default function Genre() {
                 );
                 setMovies(resolved);
                 setPage(1);
+                setLoading(false);
             });
         }
     }, [selectedGenre]);
@@ -44,7 +45,7 @@ export default function Genre() {
                 {/* 헤더 */}
                 <div className="text-center mb-16">
                     <h1 className="text-5xl lg:text-6xl font-black bg-clip-text text-black drop-shadow-2xl mb-6">
-                         카테고리별 영화
+                        카테고리별 영화
                     </h1>
 
                     {selectedGenre && !loading && (
@@ -85,7 +86,7 @@ export default function Genre() {
                 {selectedGenre && movies.length > 0 && !loading && (
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold text-gray-800">
-                            "{selectedGenre.name}" 영화
+                            {selectedGenre.name} 장르 영화
                         </h2>
 
                         <button
