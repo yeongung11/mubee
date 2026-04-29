@@ -4,6 +4,7 @@ import type { Movie, GenreType } from "@/types/movie";
 import { useRating } from "../utils/useRating";
 import { useNavigate } from "react-router-dom";
 import { getEngTitle } from "../utils/movieTitle";
+import { MovieGrid } from "@/components/MovieGrid";
 
 export default function Genre() {
     const navigate = useNavigate();
@@ -25,17 +26,13 @@ export default function Genre() {
             setLoading(true);
             setMovies([]);
 
-            fetchMovieGenre(selectedGenre.id).then(async (data) => {
-                const resolved = await Promise.all(
-                    (data.results || []).map(async (movie: Movie) => ({
-                        ...movie,
-                        title: await getEngTitle(movie),
-                    })),
-                );
-                setMovies(resolved);
-                setPage(1);
-                setLoading(false);
-            });
+            fetchMovieGenre(selectedGenre.id)
+                .then(async (data) => {
+                    setMovies(data.results || []);
+                    setPage(1);
+                    setLoading(false);
+                })
+                .catch(() => setLoading(false));
         }
     }, [selectedGenre]);
 
@@ -109,31 +106,7 @@ export default function Genre() {
 
                 {/* 영화 그리드 */}
                 {movies.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
-                        {movies.map((movie) => (
-                            <div
-                                key={movie.id}
-                                onClick={() => navigate(`/movie/${movie.id}`)}
-                                className="group cursor-pointer rounded-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden"
-                            >
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-full h-72 lg:h-80 object-cover rounded-2xl group-hover:scale-[1.02] transition-all"
-                                />
-                                <div className="p-4 lg:p-5">
-                                    <h3 className="text-lg lg:text-xl line-clamp-2 text-gray-800 mb-2">
-                                        {movie.title}
-                                    </h3>
-                                    <div className="flex items-center text-sm text-yellow-500 font-semibold">
-                                        ⭐{" "}
-                                        {convertFive(movie.vote_average) ||
-                                            "N/A"}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <MovieGrid movies={movies} />
                 ) : selectedGenre && loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 animate-pulse">
                         {Array.from({ length: 10 }).map((_, i) => (
