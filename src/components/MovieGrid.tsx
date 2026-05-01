@@ -69,7 +69,7 @@ export function MovieGrid({
 }: MovieGridProps) {
     const { convertFive } = useRating();
     return (
-        <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 lg:gap-6">
             {movies.map((movie, index) => (
                 <MovieCard
                     key={movie.id}

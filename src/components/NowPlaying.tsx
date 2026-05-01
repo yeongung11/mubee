@@ -3,10 +3,11 @@ import { MovieGrid } from "./MovieGrid";
 import { useState, useCallback } from "react";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
+import { useMoviePages } from "../utils/useMoviePages";
 
 export function NowPlaying({ movies }: { movies: Movie[] }) {
     const [index, setIndex] = useState(0);
-    const moviePages = 5;
+    const moviePages = useMoviePages();
     const current = movies.slice(index, index + moviePages);
 
     const handlePrev = useCallback(() => {

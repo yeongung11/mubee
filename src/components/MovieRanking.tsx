@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
+import { useMoviePages } from "../utils/useMoviePages";
 
 interface MovieRankingProps {
     movies: Movie[];
@@ -10,7 +11,8 @@ interface MovieRankingProps {
 
 export function MovieRanking({ movies }: MovieRankingProps) {
     const [index, setIndex] = useState(0);
-    const moviePages = 5;
+    const moviePages = useMoviePages();
+
     const currentMovies = movies.slice(index, index + moviePages);
 
     const handlePrev = useCallback(() => {

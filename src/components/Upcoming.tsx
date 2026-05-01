@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo } from "react";
 import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
-
+import { useMoviePages } from "../utils/useMoviePages";
 
 interface UpcomingProps {
     movies: Movie[];
@@ -27,7 +27,7 @@ export function Upcoming({ movies }: UpcomingProps) {
     }, [futureMovies]);
 
     const [index, setIndex] = useState(0);
-    const moviePages = 5;
+    const moviePages = useMoviePages();
     const currentMovies = sortedFutureMovies.slice(index, index + moviePages);
 
     const handlePrev = useCallback(() => {
@@ -42,7 +42,6 @@ export function Upcoming({ movies }: UpcomingProps) {
             ),
         );
     }, [index, sortedFutureMovies.length, moviePages]);
-
 
     // -----------------------------------------------
     return (
