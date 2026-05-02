@@ -20,9 +20,9 @@ export default function Buttons({ direction, onClick, disabled }: ButtonProps) {
                         disabled:opacity-0 active:scale-95`}
         >
             {direction === "left" ? (
-                <ArrowLeftIcon className="w-6 h-6" />
+                <ArrowLeftIcon className="w-2 h-2 md:w-3 md:w-3 lg:w-6 lg:h-6" />
             ) : (
-                <ArrowRightIcon className="w-6 h-6" />
+                <ArrowRightIcon className="w-2 h-2 md:w-3 md:w-3 lg:w-6 lg:h-6" />
             )}
         </button>
     );

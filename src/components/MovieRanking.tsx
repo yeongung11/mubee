@@ -27,8 +27,15 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     return (
         <div className="max-w-8xl mx-auto p-8 mt-15 relative">
             <div className="flex justify-between">
-                <h1 className="text-3xl font-bold mb-8">Mubee HOT 랭킹</h1>
-                <Link to="/movies?category=popular">더보기</Link>
+                <h1 className="text-xl font-bold mb-8 md:2xl lg:text-3xl">
+                    Mubee HOT 랭킹
+                </h1>
+                <Link
+                    to="/movies?category=popular"
+                    className="text-sm md:2xl lg:text-3xl"
+                >
+                    더보기
+                </Link>
             </div>
 
             <MovieGrid
@@ -38,7 +45,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                         movies.findIndex((m) => m.id === movie.id) + 1;
 
                     return (
-                        <div className="absolute top-2 left-2 w-14 h-12 sm:w-14 sm:h-8 bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center text-2xl sm:text-xl font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
+                        <div className="absolute top-2 left-2 w-12 h-8 lg:w-14 lg:h-12 text-lg md:text-xl lg:text-2xl bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
                             {overallRank}
                         </div>
                     );

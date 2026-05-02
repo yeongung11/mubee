@@ -47,8 +47,15 @@ export function Upcoming({ movies }: UpcomingProps) {
     return (
         <div className="max-w-8xl mx-auto p-8 relative">
             <div className="flex justify-between">
-                <h1 className="text-3xl font-bold mb-8">공개 예정작</h1>
-                <Link to="/movies?category=upcoming">더보기</Link>
+                <h1 className="text-xl font-bold mb-8 md:2xl lg:text-3xl">
+                    공개 예정작
+                </h1>
+                <Link
+                    to="/movies?category=upcoming"
+                    className="text-sm md:2xl lg:text-3xl"
+                >
+                    더보기
+                </Link>
             </div>
 
             <MovieGrid
@@ -64,7 +71,7 @@ export function Upcoming({ movies }: UpcomingProps) {
                     );
 
                     return (
-                        <div className="absolute top-2 left-2 w-14 h-8 bg-gradient-to-r bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center text-base sm:text-base font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
+                        <div className="absolute top-2 left-2 w-12 h-8 lg:w-14 lg:h-12 text-sm md:text-xl lg:text-2xl bg-gradient-to-r bg-black/70 rounded-xl shadow-2xl border-2 border-white/50 flex items-center justify-center text-base font-bold text-amber-50 drop-shadow-xl z-10 gap-2">
                             D-{diffDays > 0 ? diffDays : "개봉"}
                         </div>
                     );

@@ -40,7 +40,7 @@ function MovieCard({
                     </div>
                 )}
 
-                <h3 className="font-bold text-xl truncate">
+                <h3 className="font-bold text-sm md:text-lg lg:text-xl truncate">
                     {displayTitle ?? (
                         <span className="block h-4 w-24 bg-gray-300 rounded animate-pulse" />
                     )}

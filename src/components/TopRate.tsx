@@ -21,8 +21,15 @@ export function TopRate({ movies }: { movies: Movie[] }) {
     return (
         <div className="relative max-w-8xl mx-auto p-8 py-10">
             <div className="flex justify-between">
-                <h2 className="text-2xl font-bold mb-6">평점 높은 작품</h2>
-                <Link to="/movies?category=top_rated">더보기</Link>
+                <h2 className="text-xl font-bold mb-8 md:2xl lg:text-3xl">
+                    평점 높은 작품
+                </h2>
+                <Link
+                    to="/movies?category=top_rated"
+                    className="text-sm md:2xl lg:text-3xl"
+                >
+                    더보기
+                </Link>
             </div>
 
             <MovieGrid movies={current} />

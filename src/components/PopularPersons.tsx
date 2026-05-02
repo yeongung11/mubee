@@ -2,19 +2,20 @@ import { useState, useCallback } from "react";
 import type { Actor } from "../types/movie";
 import Buttons from "../components/Buttons";
 import { PersonCard } from "../components/PersonCard";
+import { useMoviePages } from "../utils/useMoviePages";
 
 export function PopularPersons({ persons }: { persons: Actor[] }) {
     const [index, setIndex] = useState(0);
-    const personPages = 8;
+    const personPages = useMoviePages(4, 6, 8);
     const current = persons.slice(index, index + personPages);
 
     const handlePrev = useCallback(() => {
         setIndex(Math.max(0, index - personPages));
-    }, [index]);
+    }, [index, personPages]);
 
     const handleNext = useCallback(() => {
         setIndex(Math.min(persons.length - personPages, index + personPages));
-    }, [index, persons.length]);
+    }, [index, persons.length, personPages]);
 
     return (
         <div className="relative max-w-8xl mx-auto p-8 py-10">
