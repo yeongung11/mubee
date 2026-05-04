@@ -17,6 +17,7 @@ import {
 import { useRating } from "../utils/useRating";
 import { useFavoritesStore } from "../store/favorite";
 import { getEngTitle } from "../utils/movieTitle";
+import { useMoviePages } from "../utils/useMoviePages";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
@@ -27,13 +28,14 @@ export function Detail() {
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0); // hover
     const [castIdx, setCastIdx] = useState(0);
-    const castPageSize = 15;
+    const castPageSize = useMoviePages(4, 8, 10);
     const { convertFive } = useRating();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
     const [sim, setSim] = useState<Movie[]>([]);
     const [simName, setSimName] = useState<
         "similar" | "recommendations" | "genre"
     >("similar");
+    const simPageSize = useMoviePages(3, 4, 6);
 
     // 유사한 영화, 추천 영화, 장르 기반 추천 영화
     useEffect(() => {
@@ -267,7 +269,7 @@ export function Detail() {
         );
 
     return (
-        <div className="relative">
+        <div className="relative w-full h-[40vh] md:h-[450px] lg:h-[600px]">
             {movie.backdrop_path ? (
                 <img
                     src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
@@ -454,7 +456,7 @@ export function Detail() {
                         <Link
                             to={`/actor/${person.id}`}
                             key={person.id ?? index}
-                            className="group flex items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
+                            className="group flex flex-col md:flex-row items-center md:items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
                         >
                             <div className="flex-shrink-0 w-16 h-20 rounded-lg overflow-hidden shadow-md group-hover:scale-105 transition-transform">
                                 {person.profile_path ? (
@@ -471,8 +473,8 @@ export function Detail() {
                                     </div>
                                 )}
                             </div>
-                            <div className="min-w-0 flex-1">
-                                <p className="font-bold  text-sm truncate">
+                            <div className="min-w-0 w-full flex-1 text-center md:text-left">
+                                <p className="w-full min-h-[40px] font-bold text-sm text-center md:text-left break-words line-clamp-2">
                                     {person.name}
                                 </p>
                                 <p className="text-gray-400 text-xs line-clamp-2 leading-tight mt-3">
@@ -518,7 +520,7 @@ export function Detail() {
                             `"${movie.title}"의 장르 기반 추천 영화`}
                     </h2>
                     <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
-                        {sim.map((movie) => (
+                        {sim.slice(0, simPageSize).map((movie) => (
                             <div
                                 key={movie.id}
                                 onClick={() => navigate(`/movie/${movie.id}`)}

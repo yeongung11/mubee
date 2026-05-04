@@ -6,7 +6,7 @@ import { useMoviePages } from "../utils/useMoviePages";
 
 export function PopularPersons({ persons }: { persons: Actor[] }) {
     const [index, setIndex] = useState(0);
-    const personPages = useMoviePages(4, 6, 8);
+    const personPages = useMoviePages(2, 4, 8);
     const current = persons.slice(index, index + personPages);
 
     const handlePrev = useCallback(() => {
