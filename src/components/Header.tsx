@@ -51,7 +51,7 @@ export function Header({ className }: HeaderProps) {
     return (
         <>
             <div
-                className={`hidden flex items-center justify-between gap-3 px-4 py-4 lg:px-12 lg:flex
+                className={`hidden flex items-center justify-around gap-3 px-4 py-4 lg:px-12 lg:flex
     ${className || ""}`}
             >
                 {/* 왼쪽 묶음 */}
@@ -151,23 +151,23 @@ export function Header({ className }: HeaderProps) {
                 </div>
             </div>
             {/* 모바일 bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-700 bg-black px-4 py-2 lg:hidden">
-                <div className="flex items-center justify-around">
+            <nav className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-700 bg-black lg:hidden">
+                <div className="flex items-center">
                     <Link
                         to="/"
-                        className="text-sm hover:text-blue-400 transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-blue-400 transition text-amber-50"
                     >
                         홈
                     </Link>
                     <Link
                         to="/genre"
-                        className="text-sm hover:text-blue-400 transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-blue-400 transition text-amber-50"
                     >
                         카테고리
                     </Link>
                     <Link
                         to="/favorites"
-                        className="text-sm hover:text-blue-400 transition whitespace-nowrap text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-blue-400 transition text-amber-50"
                     >
                         찜한 영화
                     </Link>

@@ -273,7 +273,7 @@ export function Detail() {
             {movie.backdrop_path ? (
                 <img
                     src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                    className="w-full h-240 object-cover"
+                    className="w-full h-full object-cover"
                 />
             ) : (
                 <div className="w-full h-240 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
@@ -283,9 +283,11 @@ export function Detail() {
                 </div>
             )}
 
-            <div className="absolute top-150 left-3 ml-5">
-                <h1 className="text-5xl text-amber-50">{movie.title}</h1>
-                <p className="text-2xl text-amber-50 mt-7">
+            <div className="absolute top-38 left-4 md:top-40 md:left-6 lg:top-150 lg:left-3 lg:ml-5">
+                <h1 className="text-xl md:text-3xl lg:text-5xl text-white/90">
+                    {movie.title}
+                </h1>
+                <p className="text-sm md:text-xl lg:text-2xl text-white/90 mt-3 md:mt-4 lg:mt-7">
                     {movie.release_date
                         ? movie.release_date.split("-")[0]
                         : "미정"}{" "}
@@ -296,10 +298,10 @@ export function Detail() {
                         </span>
                     ))}
                 </p>
-                <p className="text-2xl text-amber-50 mt-7">
+                <p className="text-lg md:txex-xl lg:text-2xl text-white/90 mt-3 md:mt-4 lg:mt-7">
                     {movie.production_countries?.[0]?.name || "기타"}
                 </p>
-                <p className="text-2xl text-amber-50 mt-7">
+                <p className="text-lg md:text-xl lg:text-2xl text-white/90 mt-3 md:mt-4 lg:mt-7">
                     {movie.runtime}분{" • "}
                     {movie.adult ? (
                         <span>청소년 관람불가</span>
@@ -311,7 +313,7 @@ export function Detail() {
 
             {/* 포스터 및 평점, 설명 */}
             <div className="px-20 mx-auto mt-20 mb-12 max-w-8xl">
-                <div className="flex flex-row gap-16 items-start">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center lg:items-start">
                     {/* 왼쪽: 포스터 */}
                     <img
                         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -319,16 +321,16 @@ export function Detail() {
                     />
 
                     {/* 오른쪽 전체 */}
-                    <div className="flex flex-col gap- flex-1 ">
+                    <div className="flex flex-col flex-1 min-w-0 w-full">
                         {/* 상단: 별점 + 예상평점 + 액션버튼 */}
-                        <div className="flex items-center gap-10 border-b border-white/10 pb-6 mt-10">
+                        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10 border-b border-white/10 pb-6 mt-6 lg:mt-10">
                             {/* 별점 */}
                             <div className="flex flex-col items-center gap-2">
                                 <div className="flex items-center space-x-1">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <svg
                                             key={star}
-                                            className={`w-18 h-18 cursor-pointer transition-all hover:scale-110 ${
+                                            className={`w-10 h-10 lg:w-15 lg:h-15 cursor-pointer transition-all hover:scale-110 ${
                                                 hoverRating >= star ||
                                                 userRating >= star
                                                     ? "text-yellow-400 fill-current"
@@ -356,7 +358,7 @@ export function Detail() {
 
                             {/* 예상 별점 */}
                             <div className="flex flex-col items-center gap-5">
-                                <span className="text-6xl font-bold text-pink-500">
+                                <span className="text-4xl lg:text-6xl font-bold text-pink-500">
                                     {convertFive(movie.vote_average)}
                                 </span>
                                 <span className="text-sm text-gray-400">
@@ -365,15 +367,15 @@ export function Detail() {
                             </div>
 
                             {/* 액션 버튼들 */}
-                            <div className="flex items-center gap-10 ml-40 ">
+                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-5 lg:gap-10 w-full lg:ml-20">
                                 <button
                                     onClick={() => toggleFavorite(movie)}
                                     className="flex flex-col items-center gap-1 w-20 text-gray-400 "
                                 >
-                                    <span className="text-2xl">
+                                    <span className="text-lg lg:text-2xl">
                                         {isFavorite(movie.id) ? "❤️" : "＋"}
                                     </span>
-                                    <span className="text-2xl whitespace-nowrap">
+                                    <span className="text-sm lg:text-2xl whitespace-nowrap">
                                         {isFavorite(movie.id)
                                             ? "찜완료"
                                             : "보고싶어요"}
@@ -381,13 +383,21 @@ export function Detail() {
                                 </button>
 
                                 <button className="flex flex-col items-center gap-1 text-gray-400 ">
-                                    <span className="text-2xl">✏️</span>
-                                    <span className="text-2xl">코멘트</span>
+                                    <span className="text-lg lg:text-2xl">
+                                        ✏️
+                                    </span>
+                                    <span className="text-sm lg:text-2xl whitespace-nowrap">
+                                        코멘트
+                                    </span>
                                 </button>
 
                                 <button className="flex flex-col items-center gap-1 text-gray-400">
-                                    <span className="text-2xl">👁️</span>
-                                    <span className="text-2xl">보는 중</span>
+                                    <span className="text-lg lg:text-2xl">
+                                        👁️
+                                    </span>
+                                    <span className="text-sm lg:text-2xl whitespace-nowrap">
+                                        보는 중
+                                    </span>
                                 </button>
                             </div>
                         </div>
@@ -414,7 +424,9 @@ export function Detail() {
             {provider?.flatrate && provider.flatrate.length > 0 ? (
                 <div className="pb-4 px-6">
                     <div className="w-full h-px bg-gray-300 mb-4" />
-                    <p className="text-3xl font-bold ">스트리밍 플랫폼</p>
+                    <p className="text-lg md:text-2xl lg:text-3xl font-bold ">
+                        스트리밍 플랫폼
+                    </p>
                     {provider.flatrate.map((p) => (
                         <div
                             key={p.provider_id}
@@ -436,7 +448,9 @@ export function Detail() {
                 <div>
                     <div className="pb-4 px-6">
                         <div className="w-full h-px bg-gray-300 mb-4" />
-                        <p className="text-3xl font-bold">스트리밍 플랫폼</p>
+                        <p className="text-xl md:text-2xl lg:text-3xl font-bold">
+                            스트리밍 플랫폼
+                        </p>
                         <p className="mt-6 text-gray-500 text-lg">
                             스트리밍 플랫폼 정보가 없습니다.
                         </p>
@@ -446,7 +460,7 @@ export function Detail() {
             )}
             {/* 출연제작 */}
             <div className="mt-16 mx-auto px-6 pb-20 ">
-                <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
                     출연/제작
                 </h2>
 
@@ -511,7 +525,7 @@ export function Detail() {
             {/* 유사한 영화  */}
             {sim.length > 0 && (
                 <div className="px-6 mb-10">
-                    <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
                         {simName === "similar" &&
                             `"${movie.title}"와 유사한 영화`}
                         {simName === "recommendations" &&
@@ -550,7 +564,7 @@ export function Detail() {
             )}
             {/* 리뷰 */}
             <div className="mx-auto px-6 pb-12 mt-20">
-                <h2 className="text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
                     리뷰 ({reviews.length}+)
                 </h2>
                 {reviews.length > 0 ? (
@@ -588,11 +602,13 @@ export function Detail() {
                         <p className="text-xl">아직 등록된 리뷰가 없습니다.</p>
                     </div>
                 )}
-                <div className="text-center mt-8">
-                    <button className="px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
-                        모든 리뷰 보기
-                    </button>
-                </div>
+                {reviews.length > 0 && (
+                    <div className="text-center mt-8">
+                        <button className="px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
+                            모든 리뷰 보기
+                        </button>
+                    </div>
+                )}
 
                 <div className="w-full h-px bg-gray-300 mt-12" />
             </div>
