@@ -28,7 +28,7 @@ export function Detail() {
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0); // hover
     const [castIdx, setCastIdx] = useState(0);
-    const castPageSize = useMoviePages(4, 8, 10);
+    const castPageSize = 15;
     const { convertFive } = useRating();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
     const [sim, setSim] = useState<Movie[]>([]);
@@ -433,11 +433,11 @@ export function Detail() {
                             className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2 mt-8"
                         >
                             <img
-                                src={`https://image.tmdb.org/t/p/w45${p.logo_path}`}
+                                src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
                                 alt={p.provider_name}
                                 className="w-14 h-14 rounded-lg"
                             />
-                            <span className="text-xl font-medium">
+                            <span className="text-lg lg:text-xl font-medium">
                                 {p.provider_name}
                             </span>
                         </div>
@@ -458,6 +458,7 @@ export function Detail() {
                     </div>
                 </div>
             )}
+
             {/* 출연제작 */}
             <div className="mt-16 mx-auto px-6 pb-20 ">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
@@ -465,12 +466,15 @@ export function Detail() {
                 </h2>
 
                 {/* 그리드 */}
-                <div className=" grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+                <div
+                    className="flex gap-4 pb-4 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide 
+                lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
+                >
                     {currentCasts.map((person, index) => (
                         <Link
                             to={`/actor/${person.id}`}
                             key={person.id ?? index}
-                            className="group flex flex-col md:flex-row items-center md:items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer"
+                            className="group flex flex-col items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer min-w-[160px] snap-start"
                         >
                             <div className="flex-shrink-0 w-16 h-20 rounded-lg overflow-hidden shadow-md group-hover:scale-105 transition-transform">
                                 {person.profile_path ? (
@@ -501,11 +505,11 @@ export function Detail() {
                     ))}
                 </div>
 
-                <div className="flex items-center justify-center gap-4">
+                <div className="hidden lg:flex items-center justify-center gap-4">
                     <button
                         onClick={handleCastPrev}
                         disabled={castIdx === 0}
-                        className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold shadow-lg transition-all disabled:opacity-50 min-w-[80px]"
+                        className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold shadow-lg transition-all disabled:opacity-50 lg:min-w-20"
                     >
                         이전
                     </button>
@@ -516,12 +520,13 @@ export function Detail() {
                             castIdx + castPageSize >=
                             (movieWithCredits?.credits?.cast?.length || 0)
                         }
-                        className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold  transition-all disabled:opacity-50 min-w-[80px]"
+                        className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold  transition-all disabled:opacity-50 lg:min-w-20"
                     >
                         다음
                     </button>
                 </div>
             </div>
+
             {/* 유사한 영화  */}
             {sim.length > 0 && (
                 <div className="px-6 mb-10">
@@ -562,6 +567,7 @@ export function Detail() {
                     </div>
                 </div>
             )}
+
             {/* 리뷰 */}
             <div className="mx-auto px-6 pb-12 mt-20">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
