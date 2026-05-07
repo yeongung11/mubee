@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import { fetchGenre, fetchMovieGenre } from "@/api/tmdb";
 import type { Movie, GenreType } from "@/types/movie";
-import { useRating } from "../utils/useRating";
 import { useNavigate } from "react-router-dom";
-import { getEngTitle } from "../utils/movieTitle";
 import { MovieGrid } from "@/components/MovieGrid";
 
 export default function Genre() {
     const navigate = useNavigate();
-    const { convertFive } = useRating();
     const [genres, setGenres] = useState<GenreType[]>([]);
     const [selectedGenre, setSelectedGenre] = useState<GenreType | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
