@@ -44,9 +44,9 @@ export function MagazineSection({
     ];
 
     return (
-        <section className="max-w-8xl mx-auto py-16 px-4">
+        <section className="max-w-8xl mx-auto py-16 px-4 ml-4">
             {/* <h1 className="text-3xl text-semibold">지금 많이 보는 영화</h1> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex gap-6 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide md:grid md:grid-cols-2 md:overflow-visible md:snap-none">
                 {magazineArticles.map((article, idx) => (
                     <MagazineCard
                         key={idx}
@@ -67,10 +67,13 @@ function MagazineCard({
     id: number;
 }) {
     return (
-        <Link to={`/movie/${id}`} className="group cursor-pointer block">
+        <Link
+            to={`/movie/${id}`}
+            className="group cursor-pointer block min-w-[85vw] snap-start md:min-w-0"
+        >
             <article className="group cursor-pointer">
                 <div
-                    className="relative h-80 md:h-[450px] rounded-3xl overflow-hidden bg-gradient-to-br from-gray-900 via-neutral-800 to-black mb-6 transition-all duration-500 group-hover:scale-[1.02]"
+                    className="relative h-80 md:h-112.5 rounded-3xl overflow-hidden bg-linear-to-br from-gray-900 via-neutral-800 to-black mb-6 transition-all duration-500 group-hover:scale-[1.02]"
                     style={{
                         backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3)), url(${article.backdrop})`,
                         backgroundSize: "cover",
@@ -88,15 +91,6 @@ function MagazineCard({
                         </p>
                     </div>
                 </div>
-
-                {/* <div className="flex items-center gap-4 text-sm text-neutral-500">
-                    <span>ung</span>
-                    <span>•</span>
-                    <span>약 2시간 전</span>
-                    <span className="ml-auto text-neutral-400 text-xs">
-                        더보기 →
-                    </span>
-                </div> */}
             </article>
         </Link>
     );
