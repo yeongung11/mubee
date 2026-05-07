@@ -103,13 +103,13 @@ export function Actor() {
     });
 
     return (
-        <div className="px-20">
-            <div className="flex gap-16 items-start mt-30 mb-12">
+        <div className="px-4 md:px-10 lg:px-20">
+            <div className="flex flex-col items-center lg:flex-row lg:items-start gap-6 lg:gap-16 mt-10 lg:mt-30 mb-12">
                 {/* 왼쪽: 프로필 */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-row gap-4 lg:flex-col">
                     {actor.profile_path ? (
                         <img
-                            className="w-56 h-86 rounded-xl object-cover"
+                            className="w-24 h-36 lg:w-56 lg:h-86 rounded-xl object-cover"
                             src={`https://image.tmdb.org/t/p/w342${actor.profile_path}`}
                             alt={actor.name}
                         />
@@ -121,19 +121,21 @@ export function Actor() {
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-2 mt-15">
-                        <div className="text-3xl">{actor.name}</div>
-                        <p className="font-bold">
+                    <div className="flex flex-col gap-2 lg:mt-15">
+                        <div className="text-xl lg:text-3xl font-bold">
+                            {actor.name}
+                        </div>
+                        <p className="text-sm text-gray-500">
                             {actor.birthday || "생년월일 정보 없음"}
                         </p>
-                        <p className="font-bold">
+                        <p className="text-sm text-gray-500">
                             {actor.place_of_birth || "출생지 정보 없음"}
                         </p>
                     </div>
                 </div>
 
                 {/* 오른쪽: 대표 출연작 */}
-                <div className="flex-1">
+                <div className="flex-1 hidden lg:block">
                     {/* <h2 className="text-2xl mb-6">대표 출연작</h2> */}
                     <div className="flex gap-12 overflow-x-auto justify-center">
                         {movies.slice(0, 3).map((movie) => (
@@ -165,10 +167,11 @@ export function Actor() {
 
             <div className="w-full h-px bg-gray-300 my-4" />
 
+            {/* 배우 출연작 */}
             <section>
                 <h1 className="text-2xl mb-8">출연작</h1>
 
-                <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-700 text-sm mb-4 px-2">
+                <div className="hidden lg:block grid grid-cols-[2fr_1fr_1fr] text-gray-700 text-sm mb-4 px-2">
                     <span>제목</span>
                     <span>역할</span>
                     <span>평가</span>
@@ -182,41 +185,55 @@ export function Actor() {
 
                     return (
                         <div key={movie.id}>
-                            <div className="grid grid-cols-[2fr_1fr_1fr] items-center gap-4 mb-4 px-2">
-                                {/* 제목  */}
-                                <div className="flex items-center gap-4">
-                                    <span className="text-sm text-gray-700 min-w-[50px]">
-                                        {year}
-                                    </span>
+                            {/* 모바일: (포스터 | 정보) / 데스크탑: 기존 grid */}
+                            <div className="flex items-center gap-4 mb-4 px-2 lg:grid lg:grid-cols-[2fr_1fr_1fr]">
+                                {/* 포스터 */}
+                                <div className="flex items-center gap-4 flex-shrink-0">
                                     {movie.poster_path ? (
                                         <img
-                                            src={`https://image.tmdb.org/t/p/w185${
-                                                movie.poster_path || ""
-                                            }`}
+                                            src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
                                             onClick={() =>
                                                 navigate(`/movie/${movie.id}`)
                                             }
                                             alt={movie.title}
-                                            className="w-36 h-48 cursor-pointer rounded"
+                                            className="w-20 h-28 lg:w-36 lg:h-48 cursor-pointer rounded"
                                         />
                                     ) : (
-                                        <div className="mb-8 w-36 h-48 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                            <span className="text-gray-700 font-medium">
+                                        <div className="w-16 h-24 lg:w-36 lg:h-48 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                                            <span className="text-gray-700 text-xs font-medium">
                                                 No Image
                                             </span>
                                         </div>
                                     )}
-
-                                    <p>{movie.title}</p>
+                                    {/* 데스크탑에서만 제목 포스터 옆에 표시 */}
+                                    <div className="hidden lg:block">
+                                        <span className="text-sm text-gray-700">
+                                            {year}
+                                        </span>
+                                        <p className="mt-1">{movie.title}</p>
+                                    </div>
                                 </div>
 
-                                {/* 역할 */}
-                                <p className="text-gray-700">
+                                {/* 모바일에서만: 오른쪽 3열 정보 */}
+                                <div className="flex flex-col gap-2 flex-1 lg:hidden">
+                                    <p className="font-semibold text-sm line-clamp-2">
+                                        {movie.title}
+                                    </p>
+                                    <p className="text-xs text-gray-500">
+                                        {year}
+                                    </p>
+                                    <p className="text-xs text-yellow-600">
+                                        ⭐ {convertFive(movie.vote_average)}
+                                    </p>
+                                </div>
+
+                                {/* 데스크탑에서만: 역할 */}
+                                <p className="hidden lg:block text-gray-700">
                                     {movie.character}
                                 </p>
 
-                                {/* 별점 */}
-                                <p className="text-yellow-700">
+                                {/* 데스크탑에서만: 별점 */}
+                                <p className="hidden lg:block text-yellow-700">
                                     ⭐ {convertFive(movie.vote_average)}
                                 </p>
                             </div>
@@ -225,15 +242,6 @@ export function Actor() {
                         </div>
                     );
                 })}
-                {moreMovie < sortedMovies.length && (
-                    <button
-                        onClick={() => setMoreMovie((prev) => prev + 10)}
-                        className="w-full py-3 mt-2 mb-10 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-                    >
-                        더보기
-                        {/* ({sortedMovies.length - moreMovie}개 남음) */}
-                    </button>
-                )}
             </section>
         </div>
     );
