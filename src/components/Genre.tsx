@@ -41,7 +41,7 @@ export default function Genre() {
             <div className="max-w-7xl mx-auto">
                 {/* 헤더 */}
                 <div className="text-center mb-16">
-                    <h1 className="text-5xl lg:text-6xl font-black bg-clip-text text-black drop-shadow-2xl mb-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-black bg-clip-text text-black drop-shadow-2xl mb-6">
                         카테고리별 영화
                     </h1>
 
@@ -61,8 +61,8 @@ export default function Genre() {
                     )}
                 </div>
 
-                {/* 드롭다운 */}
-                <div className="flex flex-wrap justify-center gap-4 mb-16 max-w-4xl mx-auto">
+                {/* 카테고리 버튼 */}
+                <div className="hidden md:flex flex-wrap justify-center gap-4 mb-16 max-w-4xl mx-auto">
                     {genres.slice(0, 12).map((genre) => (
                         <button
                             key={genre.id}
@@ -78,6 +78,29 @@ export default function Genre() {
                             {genre.name}
                         </button>
                     ))}
+                </div>
+
+                {/* 모바일 드롭다운 */}
+                <div className="md:hidden mb-8">
+                    <select
+                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-800 font-bold text-base focus:border-blue-400 focus:outline-none"
+                        value={selectedGenre?.id ?? ""}
+                        onChange={(e) => {
+                            const found = genres.find(
+                                (g) => g.id === Number(e.target.value),
+                            );
+                            if (found) setSelectedGenre(found);
+                        }}
+                    >
+                        <option value="" disabled>
+                            장르를 선택하세요
+                        </option>
+                        {genres.slice(0, 12).map((genre) => (
+                            <option key={genre.id} value={genre.id}>
+                                {genre.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 {selectedGenre && movies.length > 0 && !loading && (

@@ -197,7 +197,7 @@ export function Actor() {
             <section>
                 <h1 className="text-2xl mb-8">출연작</h1>
 
-                <div className="hidden lg:block grid grid-cols-[2fr_1fr_1fr] text-gray-700 text-sm mb-4 px-2">
+                <div className="hidden lg:grid lg:grid-cols-[2fr_1fr_1fr] text-gray-700 text-sm mb-4 px-2">
                     <span>제목</span>
                     <span>역할</span>
                     <span>평가</span>
