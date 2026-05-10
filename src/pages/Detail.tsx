@@ -468,7 +468,7 @@ export function Detail() {
                 {/* 그리드 */}
                 <div
                     className="flex gap-4 pb-4 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide 
-                lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
+lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                 >
                     {currentCasts.map((person, index) => (
                         <Link
@@ -491,8 +491,8 @@ export function Detail() {
                                     </div>
                                 )}
                             </div>
-                            <div className="min-w-0 w-full flex-1 text-center md:text-left">
-                                <p className="w-full min-h-[40px] font-bold text-sm text-center md:text-left break-words line-clamp-2">
+                            <div className="min-w-0 w-full flex-1 text-center">
+                                <p className="w-full min-h-[40px] font-bold text-sm text-center break-words line-clamp-2">
                                     {person.name}
                                 </p>
                                 <p className="text-gray-400 text-xs line-clamp-2 leading-tight mt-3">
