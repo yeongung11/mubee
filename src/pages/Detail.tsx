@@ -36,6 +36,7 @@ export function Detail() {
         "similar" | "recommendations" | "genre"
     >("similar");
     const simPageSize = useMoviePages(3, 4, 6);
+    const [isWatching, setIsWatching] = useState(false);
 
     // 유사한 영화, 추천 영화, 장르 기반 추천 영화
     useEffect(() => {
@@ -391,9 +392,18 @@ export function Detail() {
                                     </span>
                                 </button>
 
-                                <button className="flex flex-col items-center gap-1 text-gray-400">
+                                <button
+                                    onClick={() =>
+                                        setIsWatching((prev) => !prev)
+                                    }
+                                    className={`flex flex-col items-center gap-1 transition-colors ${
+                                        isWatching
+                                            ? "text-blue-500"
+                                            : "text-gray-400"
+                                    }`}
+                                >
                                     <span className="text-lg lg:text-2xl">
-                                        👁️
+                                        {isWatching ? "O" : "X"}
                                     </span>
                                     <span className="text-sm lg:text-2xl whitespace-nowrap">
                                         보는 중
