@@ -15,7 +15,7 @@ export default function DeatilLayout() {
     }, []);
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-[#f3f4f6]">
             <Header
                 className={`fixed top-0 z-50 w-full transition-all duration-300 ${
                     isWhite
