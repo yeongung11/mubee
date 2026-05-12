@@ -56,7 +56,7 @@ export function Actor() {
                 <div className="flex flex-col items-center lg:flex-row lg:items-start gap-6 lg:gap-16 mt-10 lg:mt-30 mb-12">
                     {/* 왼쪽: 프로필 */}
                     <div className="flex flex-row gap-4 lg:flex-col">
-                        <div className="w-24 h-36 lg:w-56 lg:h-86 bg-gray-300 rounded-xl flex-shrink-0" />
+                        <div className="w-24 h-36 lg:w-56 lg:h-86 bg-gray-300 rounded-xl shrink-0" />
                         {/* 이름/생년월일/출생지 */}
                         <div className="flex flex-col gap-2 lg:mt-15">
                             <div className="h-6 bg-gray-300 rounded w-32 lg:w-40" />
@@ -68,8 +68,8 @@ export function Actor() {
                     {/* 오른쪽: 대표 출연작 ) */}
                     <div className="hidden lg:flex flex-1 gap-12 justify-center">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="min-w-[180px]">
-                                <div className="w-[260px] h-[380px] bg-gray-300 rounded-lg" />
+                            <div key={i} className="min-w-45">
+                                <div className="w-65 h-95 bg-gray-300 rounded-lg" />
                                 <div className="mt-3 flex flex-col gap-2">
                                     <div className="h-4 bg-gray-300 rounded w-40" />
                                     <div className="h-3 bg-gray-300 rounded w-16" />
@@ -90,7 +90,7 @@ export function Actor() {
                         {/* 포스터 정보  */}
                         <div className="flex items-center gap-4 mb-4 lg:grid lg:grid-cols-[2fr_1fr_1fr]">
                             {/* 포스터 */}
-                            <div className="flex items-center gap-4 flex-shrink-0">
+                            <div className="flex items-center gap-4 shrink-0">
                                 <div className="w-20 h-28 lg:w-36 lg:h-48 bg-gray-300 rounded" />
                                 {/* 포스터 옆 제목 */}
                                 <div className="hidden lg:flex flex-col gap-2">
@@ -140,7 +140,7 @@ export function Actor() {
                             alt={actor.name}
                         />
                     ) : (
-                        <div className="w-46 h-64 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <div className="w-46 h-64 rounded-xl bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
                             <span className="text-gray-400 font-medium">
                                 No Image
                             </span>
@@ -162,11 +162,10 @@ export function Actor() {
 
                 {/* 오른쪽: 대표 출연작 */}
                 <div className="flex-1 hidden lg:block">
-                    {/* <h2 className="text-2xl mb-6">대표 출연작</h2> */}
                     <div className="flex gap-12 overflow-x-auto justify-center">
                         {movies.slice(0, 3).map((movie) => (
-                            <div key={movie.id} className="min-w-[180px]">
-                                <div className="w-[260px] h-[380px] overflow-hidden rounded-lg">
+                            <div key={movie.id} className="min-w-45">
+                                <div className="w-65 h-95 overflow-hidden rounded-lg">
                                     <img
                                         src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
                                         alt={movie.title}
@@ -214,7 +213,7 @@ export function Actor() {
                             {/* 모바일: (포스터 | 정보) / 데스크탑: 기존 grid */}
                             <div className="flex items-center gap-4 mb-4 px-2 lg:grid lg:grid-cols-[2fr_1fr_1fr]">
                                 {/* 포스터 */}
-                                <div className="flex items-center gap-4 flex-shrink-0">
+                                <div className="flex items-center gap-4 shrink-0">
                                     {movie.poster_path ? (
                                         <img
                                             src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
@@ -225,13 +224,13 @@ export function Actor() {
                                             className="w-20 h-28 lg:w-36 lg:h-48 cursor-pointer rounded"
                                         />
                                     ) : (
-                                        <div className="w-16 h-24 lg:w-36 lg:h-48 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                            <span className="text-gray-700 text-xs font-medium">
+                                        <div className="w-20 h-28 lg:w-36 lg:h-48 rounded-xl bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                                            <span className="text-gray-200 text-xs font-medium">
                                                 No Image
                                             </span>
                                         </div>
                                     )}
-                                    {/* 데스크탑에서만 제목 포스터 옆에 표시 */}
+                                    {/* 데스크탑 제목 포스터 옆에 표시 */}
                                     <div className="hidden lg:block">
                                         <span className="text-sm text-gray-700">
                                             {year}
@@ -240,7 +239,7 @@ export function Actor() {
                                     </div>
                                 </div>
 
-                                {/* 모바일에서만: 오른쪽 3열 정보 */}
+                                {/* 모바일 오른쪽 3열 정보 */}
                                 <div className="flex flex-col gap-2 flex-1 lg:hidden">
                                     <p className="font-semibold text-sm line-clamp-2">
                                         {movie.title}
@@ -253,12 +252,12 @@ export function Actor() {
                                     </p>
                                 </div>
 
-                                {/* 데스크탑에서만: 역할 */}
+                                {/* 데스크탑 역할 */}
                                 <p className="hidden lg:block text-gray-700">
                                     {movie.character}
                                 </p>
 
-                                {/* 데스크탑에서만: 별점 */}
+                                {/* 데스크탑 별점 */}
                                 <p className="hidden lg:block text-yellow-700">
                                     ⭐ {convertFive(movie.vote_average)}
                                 </p>
