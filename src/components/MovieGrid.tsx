@@ -21,7 +21,9 @@ function MovieCard({
     const [noImage, setNoImage] = useState(false);
 
     useEffect(() => {
+        setDisplayTitle(movie.title);
         getEngTitle(movie).then(setDisplayTitle); // 여기서만 async 호출
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [movie.id]);
 
     return (
@@ -30,12 +32,12 @@ function MovieCard({
                 {!noImage && movie.poster_path ? (
                     <img
                         src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                        className="w-full aspect-[2/3] object-cover rounded mb-2 group-hover:scale-[1.02] transition-transform shadow-lg"
+                        className="w-full aspect-2/3 object-cover rounded mb-2 group-hover:scale-[1.02] transition-transform shadow-lg"
                         alt={displayTitle ?? movie.title}
                         onError={() => setNoImage(true)}
                     />
                 ) : (
-                    <div className="w-full aspect-[2/3] rounded mb-2 bg-gray-800 flex items-center justify-center">
+                    <div className="w-full aspect-2/3 rounded mb-2 bg-gray-800 flex items-center justify-center">
                         <span className="text-gray-500 text-sm">No Image</span>
                     </div>
                 )}
