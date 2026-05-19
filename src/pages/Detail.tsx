@@ -208,7 +208,7 @@ export function Detail() {
                                 key={i}
                                 className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
                             >
-                                <div className="w-16 h-20 bg-gray-300 rounded-lg flex-shrink-0" />{" "}
+                                <div className="w-16 h-20 bg-gray-300 rounded-lg shrink-0" />{" "}
                                 {/* 프로필 */}
                                 <div className="flex flex-col gap-2 flex-1">
                                     <div className="h-3 bg-gray-300 rounded w-full" />{" "}
@@ -228,7 +228,7 @@ export function Detail() {
                     <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
                         {Array.from({ length: 6 }).map((_, i) => (
                             <div key={i} className="flex flex-col gap-2">
-                                <div className="w-full aspect-[2/3] bg-gray-300 rounded-xl" />{" "}
+                                <div className="w-full aspect-2/3 bg-gray-300 rounded-xl" />{" "}
                                 {/* 포스터 */}
                                 <div className="h-3 bg-gray-300 rounded w-full" />{" "}
                                 {/* 제목 */}
@@ -279,7 +279,7 @@ export function Detail() {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <div className="w-full h-240 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                    <div className="w-full h-240 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
                         <span className="text-3xl font-bold text-gray-300">
                             {movie.title}
                         </span>
@@ -321,7 +321,7 @@ export function Detail() {
                     <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center lg:items-start">
                         <img
                             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                            className="w-[350px] h-auto object-cover rounded-xl shadow-2xl flex-shrink-0"
+                            className="w-87.5 h-auto object-cover rounded-xl shadow-2xl shrink-0"
                         />
 
                         <div className="flex flex-col flex-1 min-w-0 w-full">
@@ -482,9 +482,9 @@ lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                             <Link
                                 to={`/actor/${person.id}`}
                                 key={person.id ?? index}
-                                className="group flex flex-col items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer min-w-[160px] snap-start"
+                                className="group flex flex-col items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer min-w-40 snap-start"
                             >
-                                <div className="flex-shrink-0 w-16 h-20 rounded-lg overflow-hidden shadow-md group-hover:scale-105 transition-transform">
+                                <div className="shrink-0 w-16 h-20 rounded-lg overflow-hidden shadow-md group-hover:scale-105 transition-transform">
                                     {person.profile_path ? (
                                         <img
                                             src={`https://image.tmdb.org/t/p/w92${person.profile_path}`}
@@ -492,7 +492,7 @@ lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                                        <div className="w-full h-full bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
                                             <span className="text-xs text-gray-400 font-medium">
                                                 No Image
                                             </span>
@@ -500,7 +500,7 @@ lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                                     )}
                                 </div>
                                 <div className="min-w-0 w-full flex-1 text-center">
-                                    <p className="w-full min-h-[40px] font-bold text-sm text-center break-words line-clamp-2">
+                                    <p className="w-full min-h-10 font-bold text-sm text-center wrap-break-words line-clamp-2">
                                         {person.name}
                                     </p>
                                     <p className="text-gray-400 text-xs line-clamp-2 leading-tight mt-3">
@@ -566,7 +566,7 @@ lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                                             className="w-full h-full rounded-xl shadow-lg"
                                         />
                                     ) : (
-                                        <div className="w-full h-full rounded flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
+                                        <div className="w-full h-full rounded shrink-0 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
                                             <span className="text-gray-400 text-xl font-medium">
                                                 No Image
                                             </span>
@@ -597,7 +597,7 @@ lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                                     className="p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all"
                                 >
                                     <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-sm text-white">
+                                        <div className="w-12 h-12 bg-linear-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-sm text-white">
                                             {review.author
                                                 .slice(0, 3)
                                                 .toUpperCase()}
@@ -628,7 +628,7 @@ lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
                     )}
                     {reviews.length > 0 && (
                         <div className="text-center mt-8">
-                            <button className="px-8 py-3 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
+                            <button className="px-8 py-3 bg-linear-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
                                 모든 리뷰 보기
                             </button>
                         </div>

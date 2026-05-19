@@ -119,11 +119,11 @@ export function Header({ className }: HeaderProps) {
                                         {imagePath ? (
                                             <img
                                                 src={`https://image.tmdb.org/t/p/w92${imagePath}`}
-                                                className="w-12 h-16 object-cover rounded flex-shrink-0 bg-gray-200 "
+                                                className="w-12 h-16 object-cover rounded shrink-0 bg-gray-200 "
                                                 alt={title}
                                             />
                                         ) : (
-                                            <div className="w-12 h-16 rounded flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
+                                            <div className="w-12 h-16 rounded shrink-0 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
                                                 <span className="text-gray-400 text-xs font-medium">
                                                     No Image
                                                 </span>
