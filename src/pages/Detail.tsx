@@ -1,4 +1,4 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback, useEffectEvent } from "react";
 import type {
     Movie,
@@ -18,10 +18,16 @@ import { useRating } from "../utils/useRating";
 import { useFavoritesStore } from "../store/favorite";
 import { getEngTitle } from "../utils/movieTitle";
 import { useMoviePages } from "../utils/useMoviePages";
+import { DetailHeroBanner } from "../components/Detail/DetailHeroBanner";
+import { DetailPosterRating } from "@/components/Detail/DetailPosterRating";
+import { DetailStreamingPlatform } from "@/components/Detail/DetailStreamingPlatform";
+import { DetailCast } from "@/components/Detail/DetailCast";
+import { DetailSimilar } from "@/components/Detail/DetailSimilar";
+import { DetailReviews } from "@/components/Detail/DetailReview";
+import { DetailSkeleton } from "../components/Detail/DetailSkeleton";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [provider, setProvider] = useState<WatchProviderResult | null>(null);
     const [movie, setMovie] = useState<Movie | null>(null);
@@ -144,499 +150,39 @@ export function Detail() {
     }, [castIdx, castPageSize, movieWithCredits?.credits?.cast?.length]);
 
     // 로딩 스켈레톤 ui
-    if (!movie)
-        return (
-            <div className="animate-pulse relative">
-                {/* 백드롭 이미지 */}
-                <div className="w-full h-240 bg-gray-300" />
-
-                {/* 제목/장르/국가/러닝타임 */}
-                <div className="absolute top-150 left-3 ml-5 flex flex-col gap-5">
-                    <div className="h-10 bg-gray-300 rounded w-80" />{" "}
-                    {/* 제목 */}
-                    <div className="h-6 bg-gray-300 rounded w-60" />{" "}
-                    {/* 장르 */}
-                    <div className="h-6 bg-gray-300 rounded w-40" />{" "}
-                    {/* 국가 */}
-                    <div className="h-6 bg-gray-300 rounded w-48" />{" "}
-                    {/* 러닝타임 */}
-                </div>
-
-                {/* 포스터 + 평점 영역 */}
-                <div className="px-6 mx-auto mt-10 mb-12 max-w-6xl">
-                    <div className="flex flex-col gap-6">
-                        <div className="flex items-center justify-between">
-                            {/* 포스터 */}
-                            <div className="w-44 h-64 bg-gray-300 rounded-xl" />
-
-                            {/* 평점들 */}
-                            <div className="flex items-center space-x-5 mr-50">
-                                {/* 별 5개 */}
-                                <div className="flex space-x-2">
-                                    {Array.from({ length: 5 }).map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className="w-12 h-12 bg-gray-300 rounded-full"
-                                        />
-                                    ))}
-                                </div>
-                                <div className="h-8 bg-gray-300 rounded w-28" />{" "}
-                                {/* 나의 평가 */}
-                                <div className="h-8 bg-gray-300 rounded w-24" />{" "}
-                                {/* 평균 */}
-                                <div className="w-10 h-10 bg-gray-300 rounded-full" />{" "}
-                                {/* 좋아요 */}
-                            </div>
-                        </div>
-
-                        {/* 줄거리 */}
-                        <div className="pt-4 pb-8 border-t border-white/20 flex flex-col gap-3">
-                            <div className="h-4 bg-gray-300 rounded w-full" />
-                            <div className="h-4 bg-gray-300 rounded w-full" />
-                            <div className="h-4 bg-gray-300 rounded w-3/4" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* 출연/제작 */}
-                <div className="mt-16 mx-auto px-6 pb-20">
-                    <div className="h-8 bg-gray-300 rounded w-32 mb-8" />{" "}
-                    {/* 섹션 제목 */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
-                        {Array.from({ length: 10 }).map((_, i) => (
-                            <div
-                                key={i}
-                                className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
-                            >
-                                <div className="w-16 h-20 bg-gray-300 rounded-lg shrink-0" />{" "}
-                                {/* 프로필 */}
-                                <div className="flex flex-col gap-2 flex-1">
-                                    <div className="h-3 bg-gray-300 rounded w-full" />{" "}
-                                    {/* 이름 */}
-                                    <div className="h-3 bg-gray-300 rounded w-3/4" />{" "}
-                                    {/* 역할 */}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* 유사한 영화 */}
-                <div className="px-6 mb-10">
-                    <div className="h-8 bg-gray-300 rounded w-64 mb-8" />{" "}
-                    {/* 섹션 제목 */}
-                    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
-                        {Array.from({ length: 6 }).map((_, i) => (
-                            <div key={i} className="flex flex-col gap-2">
-                                <div className="w-full aspect-2/3 bg-gray-300 rounded-xl" />{" "}
-                                {/* 포스터 */}
-                                <div className="h-3 bg-gray-300 rounded w-full" />{" "}
-                                {/* 제목 */}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* 리뷰 */}
-                <div className="mx-auto px-6 pb-12 mt-20">
-                    <div className="h-8 bg-gray-300 rounded w-32 mb-8" />{" "}
-                    {/* 섹션 제목 */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {Array.from({ length: 3 }).map((_, i) => (
-                            <div
-                                key={i}
-                                className="p-6 bg-white/10 rounded-2xl border border-white/20"
-                            >
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-12 h-12 bg-gray-300 rounded-full" />{" "}
-                                    {/* 아바타 */}
-                                    <div className="flex flex-col gap-2">
-                                        <div className="h-4 bg-gray-300 rounded w-24" />{" "}
-                                        {/* 이름 */}
-                                        <div className="h-3 bg-gray-300 rounded w-16" />{" "}
-                                        {/* 날짜 */}
-                                    </div>
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <div className="h-3 bg-gray-300 rounded w-full" />
-                                    <div className="h-3 bg-gray-300 rounded w-full" />
-                                    <div className="h-3 bg-gray-300 rounded w-2/3" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        );
+    if (!movie) return <DetailSkeleton />;
 
     return (
         <div className="bg-[#f3f4f6] min-h-screen">
-            {/* 히어로 배너 */}
-            <section className="relative w-full h-[40vh] md:h-112.5 lg:h-150">
-                {movie.backdrop_path ? (
-                    <img
-                        src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                        className="w-full h-full object-cover"
-                    />
-                ) : (
-                    <div className="w-full h-240 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                        <span className="text-3xl font-bold text-gray-300">
-                            {movie.title}
-                        </span>
-                    </div>
-                )}
-
-                <div className="absolute bottom-8 left-4 md:bottom-10 md:left-6 lg:bottom-12 lg:left-8">
-                    <h1 className="text-xl md:text-3xl lg:text-5xl text-white/90">
-                        {movie.title}
-                    </h1>
-                    <p className="text-sm md:text-xl lg:text-2xl text-white/90 mt-3 md:mt-4 lg:mt-7">
-                        {movie.release_date
-                            ? movie.release_date.split("-")[0]
-                            : "미정"}{" "}
-                        {" • "}
-                        {movie.genres.slice(0, 3).map((genre) => (
-                            <span key={genre.id} className="">
-                                {genre.name}
-                            </span>
-                        ))}
-                    </p>
-                    <p className="text-lg md:txex-xl lg:text-2xl text-white/90 mt-3 md:mt-4 lg:mt-7">
-                        {movie.production_countries?.[0]?.name || "기타"}
-                    </p>
-                    <p className="text-lg md:text-xl lg:text-2xl text-white/90 mt-3 md:mt-4 lg:mt-7">
-                        {movie.runtime}분{" • "}
-                        {movie.adult ? (
-                            <span>청소년 관람불가</span>
-                        ) : (
-                            <span>전체 이용가</span>
-                        )}
-                    </p>
-                </div>
-            </section>
-
-            {/* 포스터 및 평점 */}
-            <section className="py-16 bg-white">
-                <div className="px-20 mx-auto max-w-8xl">
-                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center lg:items-start">
-                        <img
-                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                            className="w-87.5 h-auto object-cover rounded-xl shadow-2xl shrink-0"
-                        />
-
-                        <div className="flex flex-col flex-1 min-w-0 w-full">
-                            <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10 border-b border-white/10 pb-6 mt-6 lg:mt-10">
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="flex items-center space-x-1">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <svg
-                                                key={star}
-                                                className={`w-10 h-10 lg:w-15 lg:h-15 cursor-pointer transition-all hover:scale-110 ${
-                                                    hoverRating >= star ||
-                                                    userRating >= star
-                                                        ? "text-yellow-400 fill-current"
-                                                        : "text-gray-400"
-                                                }`}
-                                                onClick={() => setRating(star)}
-                                                onMouseEnter={() =>
-                                                    setHoverRating(star)
-                                                }
-                                                onMouseLeave={() =>
-                                                    setHoverRating(0)
-                                                }
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                            >
-                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                            </svg>
-                                        ))}
-                                    </div>
-                                    <span className="text-sm text-gray-400">
-                                        평가하기
-                                    </span>
-                                </div>
-
-                                <div className="flex flex-col items-center gap-5">
-                                    <span className="text-4xl lg:text-6xl font-bold text-pink-500">
-                                        {convertFive(movie.vote_average)}
-                                    </span>
-                                    <span className="text-sm text-gray-400">
-                                        예상 별점
-                                    </span>
-                                </div>
-
-                                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-5 lg:gap-10 w-full lg:ml-20">
-                                    <button
-                                        onClick={() => toggleFavorite(movie)}
-                                        className="flex flex-col items-center gap-1 w-20 text-gray-400 "
-                                    >
-                                        <span className="text-lg lg:text-2xl">
-                                            {isFavorite(movie.id) ? "❤️" : "＋"}
-                                        </span>
-                                        <span className="text-sm lg:text-2xl whitespace-nowrap">
-                                            {isFavorite(movie.id)
-                                                ? "찜완료"
-                                                : "보고싶어요"}
-                                        </span>
-                                    </button>
-
-                                    <button className="flex flex-col items-center gap-1 text-gray-400 ">
-                                        <span className="text-lg lg:text-2xl">
-                                            ...
-                                        </span>
-                                        <span className="text-sm lg:text-2xl whitespace-nowrap">
-                                            코멘트
-                                        </span>
-                                    </button>
-
-                                    <button
-                                        onClick={() =>
-                                            setIsWatching((prev) => !prev)
-                                        }
-                                        className={`flex flex-col items-center gap-1 transition-colors ${
-                                            isWatching
-                                                ? "text-blue-500"
-                                                : "text-gray-400"
-                                        }`}
-                                    >
-                                        <span className="text-lg lg:text-2xl">
-                                            {isWatching ? "O" : "X"}
-                                        </span>
-                                        <span className="text-sm lg:text-2xl whitespace-nowrap">
-                                            보는 중
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
-                            <div className="text-gray-700 leading-relaxed text-sm">
-                                {movie.overview ? (
-                                    <p>{movie.overview}</p>
-                                ) : (
-                                    <p className="text-gray-500">
-                                        {movie.title}에 대한 상세 줄거리 정보가
-                                        없습니다. 감독{" "}
-                                        {movie.directors?.[0]?.name || "미상"}의{" "}
-                                        {movie.genres[0]?.name || ""} 장르
-                                        작품입니다.
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 스트리밍 플랫폼 */}
-            <section className="py-12 bg-gray-50">
-                {provider?.flatrate && provider.flatrate.length > 0 ? (
-                    <div className="px-6 max-w-6xl mx-auto">
-                        <div className="w-full h-px bg-gray-300 mb-4" />
-                        <p className="text-lg md:text-2xl lg:text-3xl font-bold ">
-                            스트리밍 플랫폼
-                        </p>
-                        {provider.flatrate.map((p) => (
-                            <div
-                                key={p.provider_id}
-                                className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2 mt-8"
-                            >
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w92${p.logo_path}`}
-                                    alt={p.provider_name}
-                                    className="w-14 h-14 rounded-lg"
-                                />
-                                <span className="text-lg lg:text-xl font-medium">
-                                    {p.provider_name}
-                                </span>
-                            </div>
-                        ))}
-                        <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
-                    </div>
-                ) : (
-                    <div className="px-6 max-w-6xl mx-auto">
-                        <div className="w-full h-px bg-gray-300 mb-4" />
-                        <p className="text-xl md:text-2xl lg:text-3xl font-bold">
-                            스트리밍 플랫폼
-                        </p>
-                        <p className="mt-6 text-gray-500 text-lg">
-                            스트리밍 플랫폼 정보가 없습니다.
-                        </p>
-                        <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
-                    </div>
-                )}
-            </section>
-
-            {/* 출연제작 */}
-            <section className="py-20 bg-white">
-                <div className="mx-auto px-6 max-w-6xl pb-20">
-                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
-                        출연/제작
-                    </h2>
-
-                    <div
-                        className="flex gap-4 pb-4 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide 
-lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
-                    >
-                        {currentCasts.map((person, index) => (
-                            <Link
-                                to={`/actor/${person.id}`}
-                                key={person.id ?? index}
-                                className="group flex flex-col items-center gap-3 p-3 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10 transition-all border border-white/10 hover:border-white/20 cursor-pointer min-w-40 snap-start"
-                            >
-                                <div className="shrink-0 w-16 h-20 rounded-lg overflow-hidden shadow-md group-hover:scale-105 transition-transform">
-                                    {person.profile_path ? (
-                                        <img
-                                            src={`https://image.tmdb.org/t/p/w92${person.profile_path}`}
-                                            alt={person.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                            <span className="text-xs text-gray-400 font-medium">
-                                                No Image
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="min-w-0 w-full flex-1 text-center">
-                                    <p className="w-full min-h-10 font-bold text-sm text-center wrap-break-words line-clamp-2">
-                                        {person.name}
-                                    </p>
-                                    <p className="text-gray-400 text-xs line-clamp-2 leading-tight mt-3">
-                                        {"character" in person
-                                            ? `출연 | ${
-                                                  person.character || "출연"
-                                              }`
-                                            : `제작 | ${person.job || "감독"}`}
-                                    </p>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-
-                    <div className="hidden lg:flex items-center justify-center gap-4">
-                        <button
-                            onClick={handleCastPrev}
-                            disabled={castIdx === 0}
-                            className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold shadow-lg transition-all disabled:opacity-50 lg:min-w-20"
-                        >
-                            이전
-                        </button>
-
-                        <button
-                            onClick={handleCastNext}
-                            disabled={
-                                castIdx + castPageSize >=
-                                (movieWithCredits?.credits?.cast?.length || 0)
-                            }
-                            className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold  transition-all disabled:opacity-50 lg:min-w-20"
-                        >
-                            다음
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            {/* 유사한 영화  */}
-            {sim.length > 0 && (
-                <section className="py-16 bg-gray-50">
-                    <div className="px-6 max-w-8xl mx-auto mb-10">
-                        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
-                            {simName === "similar" &&
-                                `"${movie.title}"와 유사한 영화`}
-                            {simName === "recommendations" &&
-                                `"${movie.title}"의 추천 영화`}
-                            {simName === "genre" &&
-                                `"${movie.title}"의 장르 기반 추천 영화`}
-                        </h2>
-                        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
-                            {sim.slice(0, simPageSize).map((movie) => (
-                                <div
-                                    key={movie.id}
-                                    onClick={() =>
-                                        navigate(`/movie/${movie.id}`)
-                                    }
-                                    className="cursor-pointer transition-all duration-300"
-                                >
-                                    {movie.poster_path ? (
-                                        <img
-                                            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                            alt={movie.title}
-                                            className="w-full h-full rounded-xl shadow-lg"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full rounded shrink-0 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
-                                            <span className="text-gray-400 text-xl font-medium">
-                                                No Image
-                                            </span>
-                                        </div>
-                                    )}
-
-                                    <p className="text-sm font-semibold mt-2 line-clamp-1">
-                                        {movie.title}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* 리뷰  */}
-            <section className="py-20 bg-white">
-                <div className="mx-auto px-6 max-w-6xl pb-12">
-                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left flex items-center gap-3">
-                        리뷰 ({reviews.length}+)
-                    </h2>
-                    {reviews.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {reviews.map((review) => (
-                                <div
-                                    key={review.id}
-                                    className="p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/20 transition-all"
-                                >
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-12 h-12 bg-linear-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-sm text-white">
-                                            {review.author
-                                                .slice(0, 3)
-                                                .toUpperCase()}
-                                        </div>
-                                        <div>
-                                            <h4 className="font-semibold text-xl  truncate">
-                                                {review.author}
-                                            </h4>
-                                            <p className=" text-sm">
-                                                {new Date(
-                                                    review.created_at,
-                                                ).toLocaleDateString("ko-KR")}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <p className="text-lg leading-7  line-clamp-4">
-                                        {review.content}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div>
-                            <p className="text-xl">
-                                아직 등록된 리뷰가 없습니다.
-                            </p>
-                        </div>
-                    )}
-                    {reviews.length > 0 && (
-                        <div className="text-center mt-8">
-                            <button className="px-8 py-3 bg-linear-to-r from-gray-500 to-gray-500 text-white font-bold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg">
-                                모든 리뷰 보기
-                            </button>
-                        </div>
-                    )}
-
-                    <div className="w-full h-px bg-gray-300 mt-12" />
-                </div>
-            </section>
+            <DetailHeroBanner movie={movie} />
+            <DetailPosterRating
+                movie={movie}
+                userRating={userRating}
+                hoverRating={hoverRating}
+                setRating={setRating}
+                setHoverRating={setHoverRating}
+                isFavorite={isFavorite(movie.id)}
+                toggleFavorite={() => toggleFavorite(movie)}
+                isWatching={isWatching}
+                setIsWatching={() => setIsWatching((prev) => !prev)}
+                convertFive={convertFive}
+            />
+            <DetailStreamingPlatform provider={provider} />
+            <DetailCast
+                currentCasts={currentCasts}
+                castIdx={castIdx}
+                handleCastPrev={handleCastPrev}
+                handleCastNext={handleCastNext}
+                totalCastLength={movieWithCredits?.credits?.cast?.length || 0}
+                castPageSize={castPageSize}
+            />
+            <DetailSimilar
+                sim={sim}
+                simName={simName}
+                simPageSize={simPageSize}
+                movieTitle={movie.title}
+            />
+            <DetailReviews reviews={reviews} />
         </div>
     );
 }

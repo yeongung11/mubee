@@ -167,3 +167,19 @@ export interface movieTitle {
 
     poster_path: string;
 }
+
+export type CastMember = {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string | null;
+    known_for_department: string;
+};
+
+export type CrewMember = {
+    id: number;
+    name: string;
+    job: string;
+    department?: string;
+    profile_path: string;
+};
