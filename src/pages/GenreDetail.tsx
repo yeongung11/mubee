@@ -44,15 +44,20 @@ export default function GenreDetail() {
         if (genreId) onFetch(Number(genreId));
     }, [genreId]);
 
-    // 무한 스크롤
     const loadMore = useCallback(async () => {
         if (loading || !more || !genreId) return;
 
         setLoading(true);
         const nextPage = page + 1;
         fetchMovieGenre(Number(genreId), nextPage)
-            .then((data) => {
-                setMovies((prev) => [...prev, ...(data.results || [])]);
+            .then(async (data) => {
+                const resolved = await Promise.all(
+                    (data.results || []).map(async (movie: Movie) => {
+                        const title = await getEngTitle(movie);
+                        return { ...movie, title };
+                    }),
+                );
+                setMovies((prev) => [...prev, ...resolved]);
                 setPage(nextPage);
                 setMore(nextPage < data.total_pages);
             })
@@ -116,66 +121,35 @@ export default function GenreDetail() {
             {movies.length === 0 && loading ? (
                 renderSkeletonCards(10)
             ) : (
-                <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
-                        {movies.map((movie: Movie) => (
-                            <div
-                                key={movie.id}
-                                onClick={() => navigate(`/movie/${movie.id}`)}
-                                className="group cursor-pointer hover:scale-105 transition-all duration-300"
-                            >
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                                    alt={movie.title}
-                                    className="w-full h-72 lg:h-80 object-cover rounded-2xl shadow-lg group-hover:shadow-2xl group-hover:scale-[1.02] transition-all"
-                                />
-                                <div className="p-4 mt-3">
-                                    <h3 className="font-bold text-lg line-clamp-2 text-gray-800">
-                                        {movie.title}
-                                    </h3>
-                                    <div className="flex items-center mt-2 text-sm">
-                                        <span className="text-yellow-500 font-semibold mr-1">
-                                            ⭐
-                                        </span>
-                                        <span>
-                                            {convertFive(movie.vote_average)}
-                                        </span>
-                                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
+                    {movies.map((movie: Movie) => (
+                        <div
+                            key={movie.id}
+                            onClick={() => navigate(`/movie/${movie.id}`)}
+                            className="group cursor-pointer hover:scale-105 transition-all duration-300"
+                        >
+                            <img
+                                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                                alt={movie.title}
+                                className="w-full h-72 lg:h-80 object-cover rounded-2xl shadow-lg group-hover:shadow-2xl group-hover:scale-[1.02] transition-all"
+                            />
+                            <div className="p-4 mt-3">
+                                <h3 className="font-bold text-lg line-clamp-2 text-gray-800">
+                                    {movie.title}
+                                </h3>
+                                <div className="flex items-center mt-2 text-sm">
+                                    <span className="text-yellow-500 font-semibold mr-1">
+                                        ⭐
+                                    </span>
+                                    <span>
+                                        {convertFive(movie.vote_average)}
+                                    </span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </>
-            )}
-
-            {/* 그리드 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
-                {movies.map((movie: Movie) => (
-                    <div
-                        key={movie.id}
-                        onClick={() => navigate(`/movie/${movie.id}`)}
-                        className="group cursor-pointer hover:scale-105 transition-all duration-300"
-                    >
-                        <img
-                            src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                            alt={movie.title}
-                            className="w-full h-72 lg:h-80 object-cover rounded-2xl shadow-lg 
-                      group-hover:shadow-2xl group-hover:scale-[1.02] transition-all"
-                        />
-                        <div className="p-4 mt-3">
-                            <h3 className="font-bold text-lg line-clamp-2 text-gray-800">
-                                {movie.title}
-                            </h3>
-                            <div className="flex items-center mt-2 text-sm">
-                                <span className="text-yellow-500 font-semibold mr-1">
-                                    ⭐
-                                </span>
-                                <span>{convertFive(movie.vote_average)}</span>
-                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
 
             {/* 추가 로딩 */}
             {loading && movies.length > 0 && (
