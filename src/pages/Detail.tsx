@@ -45,12 +45,16 @@ export function Detail() {
     const [isWatching, setIsWatching] = useState(false);
 
     // 유사한 영화, 추천 영화, 장르 기반 추천 영화
+
+    const movieId = movie?.id;
+    const movieGenreId = movie?.genres?.[0]?.id;
+
     useEffect(() => {
-        if (!id) return;
+        if (!movieId) return;
 
         const loadSimilar = async () => {
             // similar 호출
-            const similarData = await fetchSimilar(Number(id));
+            const similarData = await fetchSimilar(movieId);
             let results = similarData.results.slice(0, 6);
 
             if (results.length > 0) {
@@ -59,7 +63,7 @@ export function Detail() {
 
             // similar 없으면 recommendations 호출
             if (results.length === 0) {
-                const recData = await fetchRecommendations(Number(id)); // tmdb.ts에 추가 필요
+                const recData = await fetchRecommendations(movieId); // tmdb.ts에 추가 필요
                 results = recData.results.slice(0, 6);
                 if (results.length > 0) {
                     setSimName("recommendations");
@@ -67,8 +71,8 @@ export function Detail() {
             }
 
             // 같은 장르 영화 호출
-            if (results.length === 0 && movie?.genres?.[0]?.id) {
-                const genreData = await fetchByGenre(movie.genres[0].id); // tmdb.ts에 추가 필요
+            if (results.length === 0 && movieGenreId) {
+                const genreData = await fetchByGenre(movieGenreId); // tmdb.ts에 추가 필요
                 results = genreData.results.slice(0, 6);
                 if (results.length > 0) {
                     setSimName("genre");
@@ -85,7 +89,7 @@ export function Detail() {
         };
 
         loadSimilar();
-    }, [id, movie?.genres]);
+    }, [movieId, movieGenreId]);
 
     // 리뷰
     useEffect(() => {
