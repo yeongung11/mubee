@@ -48,21 +48,25 @@ export default function GenreDetail() {
         if (loading || !more || !genreId) return;
 
         setLoading(true);
-        const nextPage = page + 1;
-        fetchMovieGenre(Number(genreId), nextPage)
-            .then(async (data) => {
-                const resolved = await Promise.all(
-                    (data.results || []).map(async (movie: Movie) => {
-                        const title = await getEngTitle(movie);
-                        return { ...movie, title };
-                    }),
-                );
-                setMovies((prev) => [...prev, ...resolved]);
-                setPage(nextPage);
-                setMore(nextPage < data.total_pages);
-            })
-            .finally(() => setLoading(false));
-    }, [genreId, page, loading, more]);
+
+        setPage((prev) => {
+            const nextPage = prev + 1;
+
+            fetchMovieGenre(Number(genreId), nextPage)
+                .then(async (data) => {
+                    const resolved = await Promise.all(
+                        (data.results || []).map(async (movie: Movie) => ({
+                            ...movie,
+                            title: await getEngTitle(movie),
+                        })),
+                    );
+                    setMovies((prev) => [...prev, ...resolved]);
+                    setMore(nextPage < data.total_pages);
+                })
+                .finally(() => setLoading(false));
+            return nextPage;
+        });
+    }, [genreId, loading, more]);
 
     // 스크롤 감지
     useEffect(() => {

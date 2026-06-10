@@ -45,7 +45,6 @@ export function Detail() {
     const [isWatching, setIsWatching] = useState(false);
 
     // 유사한 영화, 추천 영화, 장르 기반 추천 영화
-
     const movieId = movie?.id;
     const movieGenreId = movie?.genres?.[0]?.id;
 
