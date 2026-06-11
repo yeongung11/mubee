@@ -27,12 +27,14 @@ export default function GenreDetail() {
     const genreName = genreId ? GENRE_NAMES[Number(genreId)] || "영화" : "장르";
 
     // 로딩
-    const onFetch = useEffectEvent((id: number) => {
+    useEffect(() => {
+        if (!genreId) return;
+
         setLoading(true);
         pageRef.current = 1;
         setMovies([]);
 
-        fetchMovieGenre(id, 1)
+        fetchMovieGenre(Number(genreId), 1)
             .then(async (data) => {
                 const resolved = await Promise.all(
                     (data.results || []).map(async (movie: Movie) => {
@@ -44,10 +46,6 @@ export default function GenreDetail() {
                 setMore(data.total_pages > 1);
             })
             .finally(() => setLoading(false));
-    });
-
-    useEffect(() => {
-        if (genreId) onFetch(Number(genreId));
     }, [genreId]);
 
     const loadMore = useCallback(async () => {

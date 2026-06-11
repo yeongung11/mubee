@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useCallback, useEffectEvent } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type {
     Movie,
     MovieWithCredits,
@@ -98,15 +98,11 @@ export function Detail() {
         });
     }, [movie?.id]);
 
-    const loadRating = useEffectEvent(() => {
+    useEffect(() => {
         if (movie?.id) {
             const saved = localStorage.getItem(`rating_${movie.id}`);
             setUserRating(saved ? parseInt(saved) : 0);
         }
-    });
-
-    useEffect(() => {
-        loadRating();
     }, [movie?.id]);
 
     const setRating = (rating: number) => {
