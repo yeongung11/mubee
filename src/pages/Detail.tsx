@@ -143,14 +143,14 @@ export function Detail() {
     const currentCasts = displayPeople.slice(castIdx, castIdx + castPageSize);
 
     const handleCastPrev = useCallback(() => {
-        setCastIdx(Math.max(0, castIdx - castPageSize));
-    }, [castIdx, castPageSize]);
+        setCastIdx((prev) => Math.max(0, prev - castPageSize));
+    }, [castPageSize]);
 
     const handleCastNext = useCallback(() => {
         const maxIndex =
             (movieWithCredits?.credits?.cast?.length || 0) - castPageSize;
-        setCastIdx(Math.min(maxIndex, castIdx + castPageSize));
-    }, [castIdx, castPageSize, movieWithCredits?.credits?.cast?.length]);
+        setCastIdx((prev) => Math.min(maxIndex, prev + castPageSize));
+    }, [castPageSize, movieWithCredits?.credits?.cast?.length]);
 
     // 로딩 스켈레톤 ui
     if (!movie) return <DetailSkeleton />;
