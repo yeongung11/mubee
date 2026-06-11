@@ -1,5 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useEffectEvent, useState, useCallback } from "react";
+import {
+    useEffect,
+    useEffectEvent,
+    useState,
+    useCallback,
+    useRef,
+} from "react";
 import { fetchMovieGenre } from "@/api/tmdb";
 import { useRating } from "../utils/useRating";
 import type { Movie } from "@/types/movie";
@@ -14,7 +20,7 @@ export default function GenreDetail() {
     const { convertFive } = useRating();
 
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [page, setPage] = useState(1);
+    const pageRef = useRef(1);
     const [loading, setLoading] = useState(false);
     const [more, setMore] = useState(true);
 
@@ -23,7 +29,7 @@ export default function GenreDetail() {
     // 로딩
     const onFetch = useEffectEvent((id: number) => {
         setLoading(true);
-        setPage(1);
+        pageRef.current = 1;
         setMovies([]);
 
         fetchMovieGenre(id, 1)
@@ -48,24 +54,22 @@ export default function GenreDetail() {
         if (loading || !more || !genreId) return;
 
         setLoading(true);
+        const nextPage = pageRef.current + 1;
 
-        setPage((prev) => {
-            const nextPage = prev + 1;
-
-            fetchMovieGenre(Number(genreId), nextPage)
-                .then(async (data) => {
-                    const resolved = await Promise.all(
-                        (data.results || []).map(async (movie: Movie) => ({
-                            ...movie,
-                            title: await getEngTitle(movie),
-                        })),
-                    );
-                    setMovies((prev) => [...prev, ...resolved]);
-                    setMore(nextPage < data.total_pages);
-                })
-                .finally(() => setLoading(false));
-            return nextPage;
-        });
+        fetchMovieGenre(Number(genreId), nextPage)
+            .then(async (data) => {
+                const resolved = await Promise.all(
+                    (data.results || []).map(async (movie: Movie) => ({
+                        ...movie,
+                        title: await getEngTitle(movie),
+                    })),
+                );
+                setMovies((prev) => [...prev, ...resolved]);
+                pageRef.current = nextPage;
+                setMore(nextPage < data.total_pages);
+            })
+            .finally(() => setLoading(false));
+        return nextPage;
     }, [genreId, loading, more]);
 
     // 스크롤 감지
