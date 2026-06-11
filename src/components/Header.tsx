@@ -34,8 +34,11 @@ export function Header({ className }: HeaderProps) {
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const abortRef = useRef<AbortController | null>(null);
+
     const handleSearch = useCallback((query: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (abortRef.current) abortRef.current.abort();
 
         if (query.length <= 2) {
             setSearchResults([]);
@@ -43,8 +46,15 @@ export function Header({ className }: HeaderProps) {
         }
 
         timeoutRef.current = setTimeout(async () => {
-            const results = await searchMovies(query);
-            setSearchResults(results.slice(0, 4));
+            abortRef.current = new AbortController();
+            try {
+                const results = await searchMovies(query);
+                setSearchResults(results.slice(0, 4));
+            } catch (e) {
+                if ((e as Error).name != "AbortError") {
+                    console.error(e);
+                }
+            }
         }, 200);
     }, []);
 

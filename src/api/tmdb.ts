@@ -63,12 +63,15 @@ export const fetchDetail = async (id: string) => {
 };
 
 // 검색
-export async function searchMovies(query: string): Promise<(Movie | Actor)[]> {
+export async function searchMovies(
+    query: string,
+    signal?: AbortSignal,
+): Promise<(Movie | Actor)[]> {
     const res = await fetch(
         `${BASE_URL}/search/multi?query=${encodeURIComponent(
             query,
         )}&language=ko-KR`,
-        options,
+        { ...options, signal },
     );
     const data: { results: MultiSearchItem[] } = await res.json();
 
