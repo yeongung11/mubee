@@ -17,7 +17,7 @@ export function useMoviePages(mobile = 2, tablet = 3, desktop = 5) {
         updatePages();
         window.addEventListener("resize", updatePages);
         return () => window.removeEventListener("resize", updatePages);
-    }, []);
+    }, [mobile, tablet, desktop]);
 
     return moviePages;
 }

@@ -1,11 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-    useEffect,
-    useEffectEvent,
-    useState,
-    useCallback,
-    useRef,
-} from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { fetchMovieGenre } from "@/api/tmdb";
 import { useRating } from "../utils/useRating";
 import type { Movie } from "@/types/movie";

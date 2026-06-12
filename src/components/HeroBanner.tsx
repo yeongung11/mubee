@@ -57,7 +57,7 @@ export function HeroBanner() {
             {/* 타이틀, 별점, 장르 */}
             <div className="absolute top-8 left-4 gap-1 md:top-1/4 md:left-10 md:gap-5 lg:top-1/3 lg:left-50 lg:gap-8 text-amber-50 flex flex-col">
 
-                {logoPath ? (
+                {/* {logoPath ? (
                     <img
                         src={`https://image.tmdb.org/t/p/w780${logoPath}`}
                         alt={hero.title}
@@ -73,7 +73,19 @@ export function HeroBanner() {
                     <h2 className="text-lg md:text-3xl lg:text-5xl font-bold text-white drop-shadow-lg">
                         {hero.title}
                     </h2>
-                )}
+                )} */}
+
+                {logoPath ? (
+    <img
+        src={`https://image.tmdb.org/t/p/w780${logoPath}`}
+        alt={hero.title}
+        className="max-h-16 md:max-h-32 lg:max-h-48 object-contain object-left block"
+    />
+) : (
+    <h2 className="text-lg md:text-3xl lg:text-5xl font-bold text-white drop-shadow-lg">
+        {hero.title}
+    </h2>
+)}
 
                 <h2 className="text-base md:text-2xl lg:text-3xl font-bold text-white drop-shadow-lg">
                     {hero.title}
