@@ -20,7 +20,6 @@ export default function GenreDetail() {
 
     const genreName = genreId ? GENRE_NAMES[Number(genreId)] || "영화" : "장르";
 
-    const pageRef = useRef(1);
     const sentinelRef = useRef<HTMLDivElement>(null);
 
     // 로딩
