@@ -1,6 +1,6 @@
 import type { Actor, Movie } from "../types/movie";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState, useEffectEvent } from "react";
+import { useEffect, useState } from "react";
 import { fetchActorDetail, fetchActorMovies } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 import { getEngTitle, getEngName } from "@/utils/movieTitle";
@@ -14,38 +14,38 @@ export function Actor() {
     const [loading, setLoading] = useState(true);
     const [moreMovie, setMoreMovie] = useState(14);
 
-    const loadActorData = useEffectEvent(async () => {
+    useEffect(() => {
         if (!actorId) return;
 
         setLoading(true);
 
-        try {
-            const [actorData, moviesData] = await Promise.all([
-                fetchActorDetail(Number(actorId)),
-                fetchActorMovies(Number(actorId)),
-            ]);
+        const load = async () => {
+            try {
+                const [actorData, moviesData] = await Promise.all([
+                    fetchActorDetail(Number(actorId)),
+                    fetchActorMovies(Number(actorId)),
+                ]);
 
-            const [resolvedName, resolvedMovies] = await Promise.all([
-                getEngName(actorData.id, actorData.name),
-                Promise.all(
-                    moviesData.map(async (movie: Movie) => ({
-                        ...movie,
-                        title: await getEngTitle(movie),
-                    })),
-                ),
-            ]);
+                const [resolvedName, resolvedMovies] = await Promise.all([
+                    getEngName(actorData.id, actorData.name),
+                    Promise.all(
+                        moviesData.map(async (movie: Movie) => ({
+                            ...movie,
+                            title: await getEngTitle(movie),
+                        })),
+                    ),
+                ]);
 
-            setActor({ ...actorData, name: resolvedName });
-            setMovies(resolvedMovies);
-        } catch (err) {
-            console.error("Actor 로드 실패:", err);
-        } finally {
-            setLoading(false);
-        }
-    });
+                setActor({ ...actorData, name: resolvedName });
+                setMovies(resolvedMovies);
+            } catch (err) {
+                console.error("Actor 로드 실패:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    useEffect(() => {
-        loadActorData();
+        load();
     }, [actorId]);
 
     // 로딩

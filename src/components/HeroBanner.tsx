@@ -11,12 +11,12 @@ export function HeroBanner() {
     const [index, setIndex] = useState(0);
     const [logoPath, setLogoPath] = useState<string | null>(null);
     const [isPaused, setIsPaused] = useState(false);
-    const [wideLogo, setWideLogo] = useState(false);
+    // const [wideLogo, setWideLogo] = useState(false);
     
 
     useEffect(() => {
     if (!movie.length) return;
-    setWideLogo(false);
+    // setWideLogo(false);
     fetchMovieLogos(movie[index].id).then(setLogoPath);
 }, [index, movie])
 
