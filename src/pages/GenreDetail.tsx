@@ -16,6 +16,7 @@ export default function GenreDetail() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const pageRef = useRef(1);
     const [loading, setLoading] = useState(false);
+    const loadingRef = useRef(false);
     const [more, setMore] = useState(true);
 
     const genreName = genreId ? GENRE_NAMES[Number(genreId)] || "영화" : "장르";
@@ -26,6 +27,7 @@ export default function GenreDetail() {
     useEffect(() => {
         if (!genreId) return;
 
+        loadingRef.current = true;
         setLoading(true);
         pageRef.current = 1;
         setMovies([]);
@@ -41,11 +43,14 @@ export default function GenreDetail() {
                 setMovies(resolved);
                 setMore(data.total_pages > 1);
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                loadingRef.current = false;
+                setLoading(false);
+            });
     }, [genreId]);
 
     const loadMore = useCallback(async () => {
-        if (loading || !more || !genreId) return;
+        if (loadingRef.current || !more || !genreId) return;
 
         setLoading(true);
         const nextPage = pageRef.current + 1;
@@ -62,9 +67,12 @@ export default function GenreDetail() {
                 pageRef.current = nextPage;
                 setMore(nextPage < data.total_pages);
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                loadingRef.current = false;
+                setLoading(false);
+            });
         return nextPage;
-    }, [genreId, loading, more]);
+    }, [genreId, more]);
 
     // 스크롤 감지
     useEffect(() => {
