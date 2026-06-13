@@ -20,6 +20,9 @@ export default function GenreDetail() {
 
     const genreName = genreId ? GENRE_NAMES[Number(genreId)] || "영화" : "장르";
 
+    const pageRef = useRef(1);
+    const sentinelRef = useRef<HTMLDivElement>(null);
+
     // 로딩
     useEffect(() => {
         if (!genreId) return;
@@ -76,11 +79,10 @@ export default function GenreDetail() {
             { threshold: 0.1 },
         );
 
-        const sentinel = document.querySelector("#sentinel");
-        if (sentinel) observer.observe(sentinel);
+        if (sentinelRef.current) observer.observe(sentinelRef.current);
 
         return () => observer.disconnect();
-    }, [loadMore]);
+    }, [loadMore, more]);
 
     const renderSkeletonCards = (count: number) => (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 animate-pulse">
@@ -156,7 +158,7 @@ export default function GenreDetail() {
                 <div className="mt-10">{renderSkeletonCards(5)}</div>
             )}
 
-            <div id="sentinel" className="h-20" />
+            <div ref={sentinelRef} className="h-20" />
         </div>
     );
 }
