@@ -1,0 +1,85 @@
+import { useEffect, useRef, useState, useCallback } from "react";
+import type { Movie } from "@/types/movie";
+import { getEngTitle } from "./movieTitle";
+
+interface FetchFn {
+    (id: number, page: number): Promise<{
+        results: Movie[];
+        total_pages: number;
+    }>;
+}
+
+export function useInfiScrolls(id: number | null, fetchFn: FetchFn) {
+    const [movies, setMovies] = useState<Movie[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [more, setMore] = useState(true);
+    const pageRef = useRef(1);
+    const loadingRef = useRef(false);
+    const sentinelRef = useRef<HTMLDivElement>(null);
+
+    // 초기 로딩
+    useEffect(() => {
+        if (!id) return;
+        loadingRef.current = true;
+        setLoading(true);
+        pageRef.current = 1;
+        setMovies([]);
+
+        fetchFn(id, 1)
+            .then(async (data) => {
+                const resolved = await Promise.all(
+                    (data.results || []).map(async (movie: Movie) => ({
+                        ...movie,
+                        title: await getEngTitle(movie),
+                    })),
+                );
+                setMovies(resolved);
+                setMore(data.total_pages > 1);
+            })
+            .finally(() => {
+                loadingRef.current = false;
+                setLoading(false);
+            });
+    }, [id, fetchFn]);
+
+    // 추가 로딩
+    const loadMore = useCallback(async () => {
+        if (loadingRef.current || !more || !id) return;
+
+        loadingRef.current = true;
+        setLoading(true);
+        const nextPage = pageRef.current + 1;
+
+        fetchFn(id, nextPage)
+            .then(async (data) => {
+                const resolved = await Promise.all(
+                    (data.results || []).map(async (movie: Movie) => ({
+                        ...movie,
+                        title: await getEngTitle(movie),
+                    })),
+                );
+                setMovies((prev) => [...prev, ...resolved]);
+                pageRef.current = nextPage;
+                setMore(nextPage < data.total_pages);
+            })
+            .finally(() => {
+                loadingRef.current = false;
+                setLoading(false);
+            });
+    }, [id, more, fetchFn]);
+
+    // 스크롤 감지
+    useEffect(() => {
+        if (!more) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) loadMore();
+            },
+            { threshold: 0.1 },
+        );
+        if (sentinelRef.current) observer.observe(sentinelRef.current);
+        return () => observer.disconnect();
+    }, [loadMore, more, fetchFn]);
+
+    return { movies, loading, sentinelRef };
+}

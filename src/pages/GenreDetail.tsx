@@ -1,95 +1,20 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState, useCallback, useRef } from "react";
 import { fetchMovieGenre } from "@/api/tmdb";
+import { useInfiScrolls } from "@/utils/useInfiScrolls";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRating } from "../utils/useRating";
 import type { Movie } from "@/types/movie";
 import { GENRE_NAMES } from "@/types/movie";
-import { useNavigate } from "react-router-dom";
-import { getEngTitle } from "../utils/movieTitle";
 
 export default function GenreDetail() {
     const navigate = useNavigate();
-    const params = useParams();
-    const genreId = params.genreId as string;
+    const { genreId } = useParams();
     const { convertFive } = useRating();
-
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const pageRef = useRef(1);
-    const [loading, setLoading] = useState(false);
-    const loadingRef = useRef(false);
-    const [more, setMore] = useState(true);
-
     const genreName = genreId ? GENRE_NAMES[Number(genreId)] || "영화" : "장르";
-
-    const sentinelRef = useRef<HTMLDivElement>(null);
-
-    // 로딩
-    useEffect(() => {
-        if (!genreId) return;
-
-        loadingRef.current = true;
-        setLoading(true);
-        pageRef.current = 1;
-        setMovies([]);
-
-        fetchMovieGenre(Number(genreId), 1)
-            .then(async (data) => {
-                const resolved = await Promise.all(
-                    (data.results || []).map(async (movie: Movie) => {
-                        const title = await getEngTitle(movie);
-                        return { ...movie, title };
-                    }),
-                );
-                setMovies(resolved);
-                setMore(data.total_pages > 1);
-            })
-            .finally(() => {
-                loadingRef.current = false;
-                setLoading(false);
-            });
-    }, [genreId]);
-
-    const loadMore = useCallback(async () => {
-        if (loadingRef.current || !more || !genreId) return;
-
-        setLoading(true);
-        const nextPage = pageRef.current + 1;
-
-        fetchMovieGenre(Number(genreId), nextPage)
-            .then(async (data) => {
-                const resolved = await Promise.all(
-                    (data.results || []).map(async (movie: Movie) => ({
-                        ...movie,
-                        title: await getEngTitle(movie),
-                    })),
-                );
-                setMovies((prev) => [...prev, ...resolved]);
-                pageRef.current = nextPage;
-                setMore(nextPage < data.total_pages);
-            })
-            .finally(() => {
-                loadingRef.current = false;
-                setLoading(false);
-            });
-        return nextPage;
-    }, [genreId, more]);
-
-    // 스크롤 감지
-    useEffect(() => {
-        if (!more) return;
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    loadMore();
-                }
-            },
-            { threshold: 0.1 },
-        );
-
-        if (sentinelRef.current) observer.observe(sentinelRef.current);
-
-        return () => observer.disconnect();
-    }, [loadMore, more]);
+    const { movies, loading, sentinelRef } = useInfiScrolls(
+        genreId ? Number(genreId) : null,
+        fetchMovieGenre,
+    );
 
     const renderSkeletonCards = (count: number) => (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 animate-pulse">
