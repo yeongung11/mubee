@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
 import type { Movie, Actor } from "../types/movie";
 
@@ -12,6 +12,7 @@ export function Header({ className }: HeaderProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const location = useLocation();
+    const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -103,6 +104,15 @@ export function Header({ className }: HeaderProps) {
                             const query = e.target.value;
                             setSearchQuery(query);
                             handleSearch(query);
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && searchQuery.trim()) {
+                                navigate(
+                                    `/search?q=${encodeURIComponent(
+                                        searchQuery.trim(),
+                                    )}`,
+                                );
+                            }
                         }}
                     />
                     {searchResults.length > 0 && (
