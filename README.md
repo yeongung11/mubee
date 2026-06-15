@@ -1,6 +1,10 @@
 # mubee
 
-영화 검색 및 목록 관리 앱입니다.
+TMDB 기반의 영화 검색 및 목록 관리 앱입니다.
+
+## 배포링크
+
+-   mubee-clwolc2ph-yeongung11s-projects.vercel.app
 
 ## 기술스택
 
@@ -9,16 +13,17 @@
 -   Tailwind CSS
 -   Vite
 -   React Router
--   Zustand(예정)
+-   Zustand
 -   TMDB API
 -   KOBIS API
 
 ## 기능
 
--   영화 검색 및 조회 [O]
--   영화 상세 페이지 [O]
--   찜한 영화 생성 [O]
--   찜한 영화 페이지 [O]
+-   영화 제목, 배우 검색
+-   영화 상세 페이지(줄거리, 평점, 출연진, 리뷰)
+-   배우 상세 페이지(배우 대표작, 배우 정보)
+-   카테고리별 영화
+-   찜한 영화 추가/삭제
 
 ## 시작하기
 
