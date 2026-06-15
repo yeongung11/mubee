@@ -14,10 +14,12 @@ export function Header({ className }: HeaderProps) {
     const location = useLocation();
     const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement>(null);
+    const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
     useEffect(() => {
         setSearchResults([]);
         setSearchQuery("");
+        setMobileSearchOpen(false);
     }, [location.pathname]);
 
     useEffect(() => {
@@ -191,7 +193,98 @@ export function Header({ className }: HeaderProps) {
                     >
                         찜한 영화
                     </Link>
+                    <button
+                        className="flex-1 text-center text-sm py-3 text-amber-50"
+                        onClick={() => setMobileSearchOpen((prev) => !prev)}
+                    >
+                        검색
+                    </button>
                 </div>
+
+                {/* 검색창 */}
+                {mobileSearchOpen && (
+                    <div
+                        ref={containerRef}
+                        className="px-4 py-3 border-t border-gray-700 bg-black"
+                    >
+                        <input
+                            autoFocus
+                            className="w-full bg-gray-900 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
+                            type="text"
+                            placeholder="검색"
+                            value={searchQuery}
+                            onChange={(e) => {
+                                const query = e.target.value;
+                                setSearchQuery(query);
+                                handleSearch(query);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && searchQuery.trim()) {
+                                    navigate(
+                                        `/search?q=${encodeURIComponent(
+                                            searchQuery.trim(),
+                                        )}`,
+                                    );
+                                    setMobileSearchOpen(false);
+                                }
+                            }}
+                        />
+                        {searchResults.length > 0 && (
+                            <div className="absolute bottom-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mb-1 max-h-64 overflow-auto z-50 border">
+                                {searchResults.map((result) => {
+                                    const isMovie = "poster_path" in result;
+                                    const title = isMovie
+                                        ? (result as Movie).title
+                                        : (result as Actor).name;
+                                    const imagePath = isMovie
+                                        ? (result as Movie).poster_path || ""
+                                        : (result as Actor).profile_path || "";
+                                    return (
+                                        <Link
+                                            to={
+                                                isMovie
+                                                    ? `/movie/${result.id}`
+                                                    : `/actor/${result.id}`
+                                            }
+                                            key={result.id}
+                                            className="flex gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors"
+                                            onClick={() =>
+                                                setMobileSearchOpen(false)
+                                            }
+                                        >
+                                            {imagePath ? (
+                                                <img
+                                                    src={`https://image.tmdb.org/t/p/w92${imagePath}`}
+                                                    className="w-12 h-16 object-cover rounded shrink-0 bg-gray-200"
+                                                    alt={title}
+                                                />
+                                            ) : (
+                                                <div className="w-12 h-16 rounded shrink-0 bg-gray-800 flex items-center justify-center">
+                                                    <span className="text-gray-400 text-xs">
+                                                        No Image
+                                                    </span>
+                                                </div>
+                                            )}
+                                            <div className="min-w-0 flex-1">
+                                                <p className="font-medium text-sm truncate text-black">
+                                                    {title}
+                                                </p>
+                                                {isMovie && (
+                                                    <p className="text-xs text-gray-500">
+                                                        {(result as Movie).release_date?.slice(
+                                                            0,
+                                                            4,
+                                                        )}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                )}
             </nav>
         </>
     );
