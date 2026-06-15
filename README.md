@@ -4,7 +4,13 @@ TMDB 기반의 영화 검색 및 목록 관리 앱입니다.
 
 ## 배포링크
 
--   mubee-clwolc2ph-yeongung11s-projects.vercel.app
+-   [mubee](https://mubee-clwolc2ph-yeongung11s-projects.vercel.app)
+
+## 스크린샷
+
+-   ![홈 화면](https://github.com/user-attachments/assets/bcf8ab1d-d564-4671-9476-fa7130698b22)
+
+-   ![상세 페이지](https://github.com/user-attachments/assets/5ccc3fc7-94eb-4de5-9b05-f08e916db887)
 
 ## 기술스택
 
@@ -34,7 +40,7 @@ npm install
 npm run dev
 ```
 
-트러블 슈팅
+## 트러블 슈팅
 
 ### 1
 
