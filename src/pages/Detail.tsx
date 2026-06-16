@@ -25,6 +25,7 @@ import { DetailCast } from "@/components/Detail/DetailCast";
 import { DetailSimilar } from "@/components/Detail/DetailSimilar";
 import { DetailReviews } from "@/components/Detail/DetailReview";
 import { DetailSkeleton } from "../components/Detail/DetailSkeleton";
+import { useRecentViewStore } from "@/store/recent";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
@@ -43,6 +44,7 @@ export function Detail() {
     >("similar");
     const simPageSize = useMoviePages(3, 4, 6);
     const [isWatching, setIsWatching] = useState(false);
+    const { addRecentView } = useRecentViewStore();
 
     // 유사한 영화, 추천 영화, 장르 기반 추천 영화
     const movieId = movie?.id;
@@ -116,7 +118,9 @@ export function Detail() {
         if (!id) return;
         fetchDetail(id).then(async (data) => {
             const resolvedTitle = await getEngTitle(data);
+            const resolvedMovie = { ...data, title: resolvedTitle };
             setMovie({ ...data, title: resolvedTitle });
+            addRecentView(resolvedMovie);
         });
     }, [id]);
 

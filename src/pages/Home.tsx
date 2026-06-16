@@ -15,6 +15,8 @@ import { NowPlaying } from "../components/NowPlaying";
 import { MagazineSection } from "@/components/MagazineSection";
 import { HomeSkeleton } from "../components/Skeleton";
 import { PopularPersons } from "@/components/PopularPersons";
+import { useRecentViewStore } from "../store/recent";
+import { RecentView } from "../components/RecentView";
 
 export function Home() {
     const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
@@ -23,6 +25,7 @@ export function Home() {
     const [nowPlayingMovies, setNowPlayingMovies] = useState<Movie[]>([]);
     const [popularPersons, setPopularPersons] = useState<Actor[]>([]);
     const [loading, setLoading] = useState(true);
+    const { recentView } = useRecentViewStore();
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -60,6 +63,7 @@ export function Home() {
     return (
         <>
             <HeroBanner />
+            {recentView.length > 0 && <RecentView movies={recentView} />}
             <MovieRanking movies={popularMovies} />
             <Upcoming movies={upcomingMovies} />
             <PopularPersons persons={popularPersons} />
