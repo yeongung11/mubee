@@ -11,11 +11,12 @@ import GenreDetail from "./pages/GenreDetail";
 import { MainPageMovies } from "./pages/MainPageMovies";
 import SearchPage from "./pages/SearchPage";
 import ErrorBoundary from "./components/ErrorBoundary";
+import NoPages from "./pages/NoPages";
 
 function AnimatedRoutes() {
     const location = useLocation();
 
-    return(
+    return (
         <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
                 <Route element={<MainLayout />}>
@@ -30,6 +31,7 @@ function AnimatedRoutes() {
                 <Route element={<DetailLayout />}>
                     <Route path="/movie/:id" element={<Detail />} />
                 </Route>
+                <Route path="*" element={<NoPages />} />
             </Routes>
         </AnimatePresence>
     );
