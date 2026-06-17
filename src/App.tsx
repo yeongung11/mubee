@@ -9,31 +9,40 @@ import Genre from "./components/Genre";
 import GenreDetail from "./pages/GenreDetail";
 import { MainPageMovies } from "./pages/MainPageMovies";
 import SearchPage from "./pages/SearchPage";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
     return (
-        <BrowserRouter>
-            <main>
-                <Routes>
-                    <Route element={<MainLayout />}>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/genre" element={<Genre />} />
-                        <Route
-                            path="/genre/:genreId"
-                            element={<GenreDetail />}
-                        />
-                        <Route path="/movies" element={<MainPageMovies />} />
-                        <Route path="/actor/:actorId" element={<Actor />} />
-                        <Route path="/favorites" element={<FavoritePage />} />
-                        <Route path="/search" element={<SearchPage />} />
-                    </Route>
+        <ErrorBoundary>
+            <BrowserRouter>
+                <main>
+                    <Routes>
+                        <Route element={<MainLayout />}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/genre" element={<Genre />} />
+                            <Route
+                                path="/genre/:genreId"
+                                element={<GenreDetail />}
+                            />
+                            <Route
+                                path="/movies"
+                                element={<MainPageMovies />}
+                            />
+                            <Route path="/actor/:actorId" element={<Actor />} />
+                            <Route
+                                path="/favorites"
+                                element={<FavoritePage />}
+                            />
+                            <Route path="/search" element={<SearchPage />} />
+                        </Route>
 
-                    <Route element={<DetailLayout />}>
-                        <Route path="/movie/:id" element={<Detail />} />
-                    </Route>
-                </Routes>
-            </main>
-        </BrowserRouter>
+                        <Route element={<DetailLayout />}>
+                            <Route path="/movie/:id" element={<Detail />} />
+                        </Route>
+                    </Routes>
+                </main>
+            </BrowserRouter>
+        </ErrorBoundary>
     );
 }
 
