@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/Header";
+import PageTransition from "../components/PageTransition";
 
 export default function DeatilLayout() {
     const [isWhite, setIsWhite] = useState(true);
@@ -23,9 +24,9 @@ export default function DeatilLayout() {
                         : "text-black bg-white/90 shadow-lg"
                 }`}
             />
-            <main className="pt-0">
+            <PageTransition>
                 <Outlet />
-            </main>
+            </PageTransition>
         </div>
     );
 }
