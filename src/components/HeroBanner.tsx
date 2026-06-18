@@ -87,9 +87,7 @@ export function HeroBanner() {
     </h2>
 )}
 
-                <h2 className="text-base md:text-2xl lg:text-3xl font-bold text-white drop-shadow-lg">
-                    {hero.title}
-                </h2>
+               
 
                 <span className="text-base  md:text-2xl lg:text-3xl lg:mb-4 block font-bold text-white
                     drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
