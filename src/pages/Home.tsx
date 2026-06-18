@@ -26,6 +26,7 @@ export function Home() {
     const [popularPersons, setPopularPersons] = useState<Actor[]>([]);
     const [loading, setLoading] = useState(true);
     const { recentView } = useRecentViewStore();
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -51,6 +52,7 @@ export function Home() {
                 setPopularPersons(personsRes.results);
             } catch (error) {
                 console.error(error);
+                setError(true);
             } finally {
                 setLoading(false);
             }
@@ -59,6 +61,19 @@ export function Home() {
     }, []);
 
     if (loading) return <HomeSkeleton />;
+
+    if (error)
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white gap-4">
+                <p className="text-xl">데이터 로딩 실패</p>
+                <button
+                    className="px-6 py-2 bg-white text-black rounded-full font-semibold"
+                    onClick={() => window.location.reload()}
+                >
+                    다시 시도
+                </button>
+            </div>
+        );
 
     return (
         <>
