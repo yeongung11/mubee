@@ -4,7 +4,7 @@ import PageTransition from "../components/PageTransition";
 
 export default function MainLayout() {
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-zinc-950">
             <Header className="fixed top-0 left-0 z-50 w-full text-white bg-black/30 shadow-lg" />
             <PageTransition>
                 <Outlet />
