@@ -71,25 +71,25 @@ export function Header({ className }: HeaderProps) {
                 <div className="flex items-center gap-4 md:gap-6 flex-wrap ">
                     <Link
                         to="/"
-                        className="text-2xl font-bold text-mubee-gold tracking-widest border-b-2 border-mubee-gold/40 pb-0.5"
+                        className="text-2xl font-bold text-mubee-burgundy tracking-widest border-b-2 border-mubee-burgundy/40 pb-0.5"
                     >
                         Mubee
                     </Link>
                     <Link
                         to="/"
-                        className="text-sm  hover:text-mubee-gold transition"
+                        className="text-sm  hover:text-mubee-burgundy transition"
                     >
                         홈
                     </Link>
                     <Link
                         to="/genre"
-                        className="text-sm  hover:text-mubee-gold transition"
+                        className="text-sm  hover:text-mubee-burgundy transition"
                     >
                         카테고리
                     </Link>
                     <Link
                         to="/favorites"
-                        className="text-sm  hover:text-mubee-gold transition whitespace-nowrap"
+                        className="text-sm  hover:text-mubee-burgundy transition whitespace-nowrap"
                     >
                         찜한 영화
                     </Link>
@@ -98,7 +98,7 @@ export function Header({ className }: HeaderProps) {
                 {/* 오른쪽: 검색창 */}
                 <div ref={containerRef} className="relative w-full lg:max-w-md">
                     <input
-                        className="w-full bg-black-1600 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-100"
+                        className="w-full bg-black-1600 text-black text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-mubee-burgundy transition placeholder-black-100"
                         type="text"
                         placeholder="영화 검색"
                         value={searchQuery}
@@ -173,28 +173,28 @@ export function Header({ className }: HeaderProps) {
                 </div>
             </div>
             {/* 모바일 bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-700 bg-black lg:hidden">
+            <nav className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-700 bg-white lg:hidden">
                 <div className="flex items-center">
                     <Link
                         to="/"
-                        className="flex-1 text-center text-sm py-3 hover:text-mubee-gold transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-mubee-burgundy transition text-gray-700"
                     >
                         홈
                     </Link>
                     <Link
                         to="/genre"
-                        className="flex-1 text-center text-sm py-3 hover:text-mubee-gold transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-mubee-burgundy transition text-gray-700"
                     >
                         카테고리
                     </Link>
                     <Link
                         to="/favorites"
-                        className="flex-1 text-center text-sm py-3 hover:text-mubee-gold transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-mubee-burgundy transition text-gray-700"
                     >
                         찜한 영화
                     </Link>
                     <button
-                        className="flex-1 text-center text-sm py-3 text-amber-50"
+                        className="flex-1 text-center text-sm py-3 text-gray-700"
                         onClick={() => setMobileSearchOpen((prev) => !prev)}
                     >
                         검색
@@ -205,11 +205,11 @@ export function Header({ className }: HeaderProps) {
                 {mobileSearchOpen && (
                     <div
                         ref={containerRef}
-                        className="px-4 py-3 border-t border-gray-700 bg-black"
+                        className="px-4 py-3 border-t border-gray-700 bg-white"
                     >
                         <input
                             autoFocus
-                            className="w-full bg-gray-900 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-blue-400 transition placeholder-gray-400"
+                            className="w-full bg-gray-900 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-mubee-burgundy transition placeholder-gray-400"
                             type="text"
                             placeholder="검색"
                             value={searchQuery}
