@@ -98,7 +98,7 @@ export function Header({ className }: HeaderProps) {
                 {/* 오른쪽: 검색창 */}
                 <div ref={containerRef} className="relative w-full lg:max-w-md">
                     <input
-                        className="w-full bg-black-1600 text-black text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-mubee-burgundy transition placeholder-black-100"
+                        className="w-full bg-black-1600 text-black text-sm px-4 py-2 rounded-full outline-none border border-gray-300 focus:border-mubee-burgundy transition placeholder-black-100"
                         type="text"
                         placeholder="영화 검색"
                         value={searchQuery}
@@ -173,7 +173,7 @@ export function Header({ className }: HeaderProps) {
                 </div>
             </div>
             {/* 모바일 bottom nav */}
-            <nav className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-700 bg-white lg:hidden">
+            <nav className="fixed bottom-0 left-0 z-50 w-full border-t border-gray-200 bg-white lg:hidden">
                 <div className="flex items-center">
                     <Link
                         to="/"
@@ -205,11 +205,11 @@ export function Header({ className }: HeaderProps) {
                 {mobileSearchOpen && (
                     <div
                         ref={containerRef}
-                        className="px-4 py-3 border-t border-gray-700 bg-white"
+                        className="px-4 py-3 border-t border-gray-200 bg-white"
                     >
                         <input
                             autoFocus
-                            className="w-full bg-gray-900 text-white text-sm px-4 py-2 rounded-full outline-none border border-gray-600 focus:border-mubee-burgundy transition placeholder-gray-400"
+                            className="w-full bg-gray-50 text-gray-900 text-sm px-4 py-2 rounded-full outline-none border border-gray-300 focus:border-mubee-burgundy transition placeholder-gray-400"
                             type="text"
                             placeholder="검색"
                             value={searchQuery}
