@@ -1,10 +1,11 @@
 # mubee
 
-TMDB 기반의 영화 검색 및 목록 관리 앱입니다.
+TMDB API 기반의 영화 검색 및 목록 관리 앱입니다.
+평소 구현하고 싶었던 디자인과 시그니처 컬러로 만든 프로젝트입니다.
 
 ## 배포링크
 
--   [mubee](https://mubee-clwolc2ph-yeongung11s-projects.vercel.app)
+-   [mubee](https://mubee.vercel.app/)
 
 ## 스크린샷
 
@@ -36,7 +37,7 @@ TMDB 기반의 영화 검색 및 목록 관리 앱입니다.
 프로젝트 루트에 `.env` 파일을 생성하고 입력
 
 ```env
-- VITE_TMDB_TOKEN=tmdb_api_key
+VITE_TMDB_TOKEN=tmdb_api_key
 ```
 
 ## 시작하기

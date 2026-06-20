@@ -71,25 +71,25 @@ export function Header({ className }: HeaderProps) {
                 <div className="flex items-center gap-4 md:gap-6 flex-wrap ">
                     <Link
                         to="/"
-                        className="text-2xl font-bold tracking-widest hover:text-blue-400 transition"
+                        className="text-2xl font-bold text-mubee-gold tracking-widest border-b-2 border-mubee-gold/40 pb-0.5"
                     >
                         Mubee
                     </Link>
                     <Link
                         to="/"
-                        className="text-sm hover:text-blue-400 transition"
+                        className="text-sm  hover:text-mubee-gold transition"
                     >
                         홈
                     </Link>
                     <Link
                         to="/genre"
-                        className="text-sm hover:text-blue-400 transition"
+                        className="text-sm  hover:text-mubee-gold transition"
                     >
                         카테고리
                     </Link>
                     <Link
                         to="/favorites"
-                        className="text-sm hover:text-blue-400 transition whitespace-nowrap"
+                        className="text-sm  hover:text-mubee-gold transition whitespace-nowrap"
                     >
                         찜한 영화
                     </Link>
@@ -177,19 +177,19 @@ export function Header({ className }: HeaderProps) {
                 <div className="flex items-center">
                     <Link
                         to="/"
-                        className="flex-1 text-center text-sm py-3 hover:text-blue-400 transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-mubee-gold transition text-amber-50"
                     >
                         홈
                     </Link>
                     <Link
                         to="/genre"
-                        className="flex-1 text-center text-sm py-3 hover:text-blue-400 transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-mubee-gold transition text-amber-50"
                     >
                         카테고리
                     </Link>
                     <Link
                         to="/favorites"
-                        className="flex-1 text-center text-sm py-3 hover:text-blue-400 transition text-amber-50"
+                        className="flex-1 text-center text-sm py-3 hover:text-mubee-gold transition text-amber-50"
                     >
                         찜한 영화
                     </Link>
