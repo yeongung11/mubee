@@ -10,7 +10,7 @@ export function DetailHeroBanner({ movie }: Props) {
             {movie.backdrop_path ? (
                 <img
                     src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-[center_10%]"
                 />
             ) : (
                 <div className="w-full h-240 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">

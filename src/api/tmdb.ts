@@ -230,12 +230,30 @@ export const fetchNowPlaying = async () => {
 };
 
 // 영화 트레일러(유튜브)
-export const fetchTrailer = async (movieId: number) => {
+export const fetchTrailer = async (movieId: number): Promise<string | null> => {
     const res = await fetch(
         `${BASE_URL}/movie/${movieId}/videos?language=ko-KR`,
         options,
     );
-    return res.json();
+    const data = await res.json();
+
+    let trailer = data.results?.find(
+        (v: { type: string; site: string }) =>
+            v.type === "Trailer" && v.site === "YouTube",
+    );
+
+    if (!trailer) {
+        const resEn = await fetch(
+            `${BASE_URL}/movie/${movieId}/videos?langugage=en-US`,
+            options,
+        );
+        const dataEn = await resEn.json();
+        trailer = dataEn.results?.find(
+            (v: { type: string; site: string }) =>
+                v.type === "Trailer" && v.site === "YouTube",
+        );
+    }
+    return trailer?.key ?? null;
 };
 
 // 스틸컷

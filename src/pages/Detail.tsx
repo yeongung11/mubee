@@ -13,6 +13,7 @@ import {
     fetchSimilar,
     fetchByGenre,
     fetchRecommendations,
+    fetchTrailer,
 } from "../api/tmdb";
 import { useRating } from "../utils/useRating";
 import { useFavoritesStore } from "../store/favorite";
@@ -26,6 +27,7 @@ import { DetailSimilar } from "@/components/Detail/DetailSimilar";
 import { DetailReviews } from "@/components/Detail/DetailReview";
 import { DetailSkeleton } from "../components/Detail/DetailSkeleton";
 import { useRecentViewStore } from "@/store/recent";
+import { DetailTrailer } from "@/components/Detail/DetailTrailer";
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
@@ -45,6 +47,12 @@ export function Detail() {
     const simPageSize = useMoviePages(3, 4, 6);
     const [isWatching, setIsWatching] = useState(false);
     const { addRecentView } = useRecentViewStore();
+    const [trailerKey, setTrailerKey] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!movie?.id) return;
+        fetchTrailer(movie.id).then(setTrailerKey);
+    }, [movie?.id]);
 
     // 유사한 영화, 추천 영화, 장르 기반 추천 영화
     const movieId = movie?.id;
@@ -158,6 +166,7 @@ export function Detail() {
     return (
         <div className="bg-[#f3f4f6] min-h-screen">
             <DetailHeroBanner movie={movie} />
+            {trailerKey && <DetailTrailer trailerKey={trailerKey} />}
             <DetailPosterRating
                 movie={movie}
                 userRating={userRating}

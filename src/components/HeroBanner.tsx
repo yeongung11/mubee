@@ -64,10 +64,10 @@ export function HeroBanner() {
         <Link to={`/movie/${hero.id}`} className="block h-full relative overflow-hidden">
             <img
                 src={`https://image.tmdb.org/t/p/original${hero.backdrop_path}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-[center_10%]"
                 alt={hero.title}
             />
-
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             {/* 타이틀, 별점, 장르 */}
             <div className="absolute top-8 left-4 gap-1 md:top-1/4 md:left-10 md:gap-5 lg:top-1/3 lg:left-50 lg:gap-8 text-amber-50 flex flex-col">
 
