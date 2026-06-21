@@ -30,12 +30,24 @@ function MovieCard({
         <li className="relative group">
             <Link to={`/movie/${movie.id}`}>
                 {!noImage && movie.poster_path ? (
-                    <img
-                        src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
-                        className="w-full aspect-2/3 object-cover rounded mb-2 group-hover:scale-[1.02] transition-transform shadow-lg"
-                        alt={displayTitle ?? movie.title}
-                        onError={() => setNoImage(true)}
-                    />
+                    <>
+                        <div className="relative mb-2">
+                            <img
+                                src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                                className="w-full aspect-2/3 object-cover rounded shadow-lg"
+                                alt={displayTitle ?? movie.title}
+                                onError={() => setNoImage(true)}
+                            />
+                            <div className="absolute inset-0  rounded bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                                <span className="text-white font-bold text-sm text-center px-2 leading-snug">
+                                    {displayTitle ?? movie.title}
+                                </span>
+                                <span className="text-mubee-burgundy font-bold text-sm">
+                                    ⭐ {convertFive(movie.vote_average)}
+                                </span>
+                            </div>
+                        </div>
+                    </>
                 ) : (
                     <div className="w-full aspect-2/3 rounded mb-2 bg-gray-800 flex items-center justify-center">
                         <span className="text-gray-500 text-sm">No Image</span>
