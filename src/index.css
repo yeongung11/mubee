@@ -8,13 +8,13 @@
 body {
     background-color: #fafaf8;
     color: #111111;
-    font-family: "DM Sans, sans-serif";
+    font-family: "DM Sans", sans-serif;
 }
 
 h1,
 h2,
 h3 {
-    font-family: "Playfair Display, serif";
+    font-family: "Playfair Display", serif;
 }
 
 /* 버건디 */

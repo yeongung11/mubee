@@ -27,7 +27,7 @@ export function MovieRanking({ movies }: MovieRankingProps) {
     return (
         <div className="max-w-8xl mx-auto p-8 mt-15 relative">
             <div className="flex justify-between">
-                <h1 className="text-xl font-bold mb-8 md:2xl lg:text-3xl  border-mubee-burgundy">
+                <h1 className="text-xl font-bold mb-8 md:2xl lg:text-3xl  text-mubee-burgundy">
                     Mubee 랭킹
                 </h1>
                 <Link

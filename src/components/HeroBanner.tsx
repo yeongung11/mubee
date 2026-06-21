@@ -11,14 +11,11 @@ export function HeroBanner() {
     const [index, setIndex] = useState(0);
     const [logoPath, setLogoPath] = useState<string | null>(null);
     const [isPaused, setIsPaused] = useState(false);
-    // const [wideLogo, setWideLogo] = useState(false);
+    const [progress, setProgress] = useState(0);
+    
     
 
-    useEffect(() => {
-    if (!movie.length) return;
-    // setWideLogo(false);
-    fetchMovieLogos(movie[index].id).then(setLogoPath);
-}, [index, movie])
+   
 
     // 자동 슬라이드
     const AUTO_SLIDE = 5000;
@@ -39,6 +36,23 @@ export function HeroBanner() {
         });
     }, []);
 
+    // 슬라이드 진행바
+     useEffect(() => {
+    if (isPaused) return;
+    setProgress(0);
+    const start = Date.now();
+    const id = setInterval(() => {
+        const elapsed = Date.now() - start;
+        setProgress(Math.min((elapsed / AUTO_SLIDE) * 100, 100));
+    }, 50);
+    return () => clearInterval(id);
+}, [index, isPaused]);
+
+    useEffect(() => {
+    if (!movie.length) return;
+    fetchMovieLogos(movie[index].id).then(setLogoPath);
+}, [index, movie])
+
     if (!movie.length) return null;
 
     const hero = movie[index];
@@ -57,23 +71,7 @@ export function HeroBanner() {
             {/* 타이틀, 별점, 장르 */}
             <div className="absolute top-8 left-4 gap-1 md:top-1/4 md:left-10 md:gap-5 lg:top-1/3 lg:left-50 lg:gap-8 text-amber-50 flex flex-col">
 
-                {/* {logoPath ? (
-                    <img
-                        src={`https://image.tmdb.org/t/p/w780${logoPath}`}
-                        alt={hero.title}
-                        className={`max-h-16 md:max-h-32 lg:max-h-48 object-contain object-left
-                        ${wideLogo ? "hidden" : "block"}`}
-                        onLoad={(e) => {
-                            const img = e.currentTarget;
-                            const ratio = img.naturalWidth / img.naturalHeight;
-                            setWideLogo(ratio > 5);
-                        }}
-                    />
-                ) : (
-                    <h2 className="text-lg md:text-3xl lg:text-5xl font-bold text-white drop-shadow-lg">
-                        {hero.title}
-                    </h2>
-                )} */}
+                
 
                 {logoPath ? (
     <img
@@ -109,6 +107,7 @@ export function HeroBanner() {
         <div>
             <Buttons direction="left" onClick={handlePrev} disabled={index === 0} />
             <Buttons direction="right" onClick={handleNext} disabled={index === movie.length - 1} />
+            
 
             {/* 일시정지 / 재생 버튼 */}
     <button
@@ -129,6 +128,12 @@ export function HeroBanner() {
         )}
     </button>
         </div>
+        <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white/20 z-10">
+    <div
+        className="h-full bg-mubee-burgundy transition-none"
+        style={{ width: `${progress}%` }}
+    />
+</div>
     </div>
 );
 }
