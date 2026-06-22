@@ -41,17 +41,17 @@ export function DetailSkeleton() {
 
             {/* 출연/제작 */}
             <div className="mt-16 mx-auto px-6 pb-20">
-                <div className="h-8 bg-gray-300 rounded w-32 mb-8" />
+                <div className="h-8 skeleton rounded w-32 mb-8" />
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
                     {Array.from({ length: 10 }).map((_, i) => (
                         <div
                             key={i}
                             className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10"
                         >
-                            <div className="w-16 h-20 bg-gray-300 rounded-lg shrink-0" />
+                            <div className="w-16 h-20 skeleton rounded-lg shrink-0" />
                             <div className="flex flex-col gap-2 flex-1">
-                                <div className="h-3 bg-gray-300 rounded w-full" />
-                                <div className="h-3 bg-gray-300 rounded w-3/4" />
+                                <div className="h-3 skeleton rounded w-full" />
+                                <div className="h-3 skeleton rounded w-3/4" />
                             </div>
                         </div>
                     ))}
@@ -60,12 +60,12 @@ export function DetailSkeleton() {
 
             {/* 유사한 영화 */}
             <div className="px-6 mb-10">
-                <div className="h-8 bg-gray-300 rounded w-64 mb-8" />
+                <div className="h-8 skeleton rounded w-64 mb-8" />
                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-8">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <div key={i} className="flex flex-col gap-2">
-                            <div className="w-full aspect-2/3 bg-gray-300 rounded-xl" />
-                            <div className="h-3 bg-gray-300 rounded w-full" />
+                            <div className="w-full aspect-2/3 skeleton rounded-xl" />
+                            <div className="h-3 skeleton rounded w-full" />
                         </div>
                     ))}
                 </div>
@@ -73,7 +73,7 @@ export function DetailSkeleton() {
 
             {/* 리뷰 */}
             <div className="mx-auto px-6 pb-12 mt-20">
-                <div className="h-8 bg-gray-300 rounded w-32 mb-8" />
+                <div className="h-8 skeleton rounded w-32 mb-8" />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {Array.from({ length: 3 }).map((_, i) => (
                         <div
@@ -81,16 +81,16 @@ export function DetailSkeleton() {
                             className="p-6 bg-white/10 rounded-2xl border border-white/20"
                         >
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="w-12 h-12 bg-gray-300 rounded-full" />
+                                <div className="w-12 h-12 skeleton rounded-full" />
                                 <div className="flex flex-col gap-2">
-                                    <div className="h-4 bg-gray-300 rounded w-24" />
-                                    <div className="h-3 bg-gray-300 rounded w-16" />
+                                    <div className="h-4 skeleton rounded w-24" />
+                                    <div className="h-3 skeleton rounded w-16" />
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <div className="h-3 bg-gray-300 rounded w-full" />
-                                <div className="h-3 bg-gray-300 rounded w-full" />
-                                <div className="h-3 bg-gray-300 rounded w-2/3" />
+                                <div className="h-3 skeleton rounded w-full" />
+                                <div className="h-3 skeleton rounded w-full" />
+                                <div className="h-3 skeleton rounded w-2/3" />
                             </div>
                         </div>
                     ))}
