@@ -15,6 +15,7 @@ export function Header({ className }: HeaderProps) {
     const navigate = useNavigate();
     const containerRef = useRef<HTMLDivElement>(null);
     const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setSearchResults([]);
@@ -45,18 +46,23 @@ export function Header({ className }: HeaderProps) {
 
         if (query.length <= 2) {
             setSearchResults([]);
+            setIsLoading(false);
             return;
         }
+
+        setIsLoading(true);
 
         timeoutRef.current = setTimeout(async () => {
             abortRef.current = new AbortController();
             try {
                 const results = await searchMovies(query);
-                setSearchResults(results.slice(0, 4));
+                setSearchResults(results.slice(0, 8));
             } catch (e) {
                 if ((e as Error).name != "AbortError") {
                     console.error(e);
                 }
+            } finally {
+                setIsLoading(false);
             }
         }, 200);
     }, []);
@@ -118,7 +124,7 @@ export function Header({ className }: HeaderProps) {
                         }}
                     />
                     {searchResults.length > 0 && (
-                        <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-64 overflow-auto z-50 border">
+                        <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-96 overflow-auto z-50 border">
                             {searchResults.map((result) => {
                                 const isMovie = "poster_path" in result;
                                 const title = isMovie
@@ -230,7 +236,7 @@ export function Header({ className }: HeaderProps) {
                             }}
                         />
                         {searchResults.length > 0 && (
-                            <div className="absolute bottom-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mb-1 max-h-64 overflow-auto z-50 border">
+                            <div className="absolute bottom-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mb-1 max-h-96 overflow-auto z-50 border">
                                 {searchResults.map((result) => {
                                     const isMovie = "poster_path" in result;
                                     const title = isMovie
