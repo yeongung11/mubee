@@ -5,6 +5,15 @@
     --color-mubee-burgundy: #8b1a1a;
 }
 
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
 body {
     background-color: #fafaf8;
     color: #111111;

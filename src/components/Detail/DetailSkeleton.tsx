@@ -1,40 +1,40 @@
 export function DetailSkeleton() {
     return (
-        <div className="animate-pulse relative">
+        <div className="relative">
             {/* 백드롭 이미지 */}
-            <div className="w-full h-240 bg-gray-300" />
+            <div className="w-full h-240 skeleton" />
 
             {/* 제목/장르/국가/러닝타임 */}
             <div className="absolute top-150 left-3 ml-5 flex flex-col gap-5">
-                <div className="h-10 bg-gray-300 rounded w-80" />
-                <div className="h-6 bg-gray-300 rounded w-60" />
-                <div className="h-6 bg-gray-300 rounded w-40" />
-                <div className="h-6 bg-gray-300 rounded w-48" />
+                <div className="h-10 skeleton rounded w-80" />
+                <div className="h-6 skeleton rounded w-60" />
+                <div className="h-6 skeleton rounded w-40" />
+                <div className="h-6 skeleton rounded w-48" />
             </div>
 
             {/* 포스터 + 평점 영역 */}
             <div className="px-6 mx-auto mt-10 mb-12 max-w-6xl">
                 <div className="flex flex-col gap-6">
                     <div className="flex items-center justify-between">
-                        <div className="w-44 h-64 bg-gray-300 rounded-xl" />
+                        <div className="w-44 h-64 skeleton rounded-xl" />
                         <div className="flex items-center space-x-5 mr-50">
                             <div className="flex space-x-2">
                                 {Array.from({ length: 5 }).map((_, i) => (
                                     <div
                                         key={i}
-                                        className="w-12 h-12 bg-gray-300 rounded-full"
+                                        className="w-12 h-12 skeleton rounded-full"
                                     />
                                 ))}
                             </div>
-                            <div className="h-8 bg-gray-300 rounded w-28" />
-                            <div className="h-8 bg-gray-300 rounded w-24" />
-                            <div className="w-10 h-10 bg-gray-300 rounded-full" />
+                            <div className="h-8 skeleton rounded w-28" />
+                            <div className="h-8 skeleton rounded w-24" />
+                            <div className="w-10 h-10 skeleton rounded-full" />
                         </div>
                     </div>
                     <div className="pt-4 pb-8 border-t border-white/20 flex flex-col gap-3">
-                        <div className="h-4 bg-gray-300 rounded w-full" />
-                        <div className="h-4 bg-gray-300 rounded w-full" />
-                        <div className="h-4 bg-gray-300 rounded w-3/4" />
+                        <div className="h-4 skeleton rounded w-full" />
+                        <div className="h-4 skeleton rounded w-full" />
+                        <div className="h-4 skeleton rounded w-3/4" />
                     </div>
                 </div>
             </div>
