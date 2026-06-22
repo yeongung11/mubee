@@ -16,6 +16,20 @@ export function Header({ className }: HeaderProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [recentSearches, setRecentSearches] = useState<string[]>([]);
+    const [isFocused, setIsFocused] = useState(false);
+
+    const saveSearch = (query: string) => {
+        setRecentSearches((prev) => {
+            const filtered = prev.filter((q) => q !== query);
+            return [query, ...filtered].slice(0, 5);
+        });
+    };
+
+    const handleNavigateSearch = (query: string) => {
+        saveSearch(query);
+        navigate(`/search?q=${encodeURIComponent(query)}`);
+    };
 
     useEffect(() => {
         setSearchResults([]);
@@ -31,6 +45,7 @@ export function Header({ className }: HeaderProps) {
             ) {
                 setSearchResults([]);
                 setSearchQuery("");
+                setIsFocused(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -66,6 +81,56 @@ export function Header({ className }: HeaderProps) {
             }
         }, 200);
     }, []);
+
+    const RecentDropdown = ({
+        position = "top",
+    }: {
+        position?: "top" | "bottom";
+    }) => (
+        <div
+            className={`absolute ${
+                position === "top" ? "top-full mt-1" : "bottom-full mb-1"
+            } left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl z-50 border`}
+        >
+            <div className="flex items-center justify-between px-3 pt-2 pb-1">
+                <p className="text-xs text-gray-400">최근 검색어</p>
+                <button
+                    className="text-xs text-gray-400 hover:text-red-400 transition"
+                    onClick={() => setRecentSearches([])}
+                >
+                    전체 삭제
+                </button>
+            </div>
+            {recentSearches.map((q) => (
+                <div
+                    key={q}
+                    className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                    <button
+                        className="flex items-center gap-2 text-sm text-gray-700 flex-1 text-left"
+                        onClick={() => {
+                            setSearchQuery(q);
+                            handleSearch(q);
+                            handleNavigateSearch(q);
+                        }}
+                    >
+                        <span className="text-gray-400 text-xs">🕐</span>
+                        {q}
+                    </button>
+                    <button
+                        className="text-gray-300 hover:text-red-400 transition text-xs ml-2"
+                        onClick={() =>
+                            setRecentSearches((prev) =>
+                                prev.filter((item) => item !== q),
+                            )
+                        }
+                    >
+                        ✕
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
 
     return (
         <>
@@ -115,13 +180,14 @@ export function Header({ className }: HeaderProps) {
                         }}
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && searchQuery.trim()) {
-                                navigate(
-                                    `/search?q=${encodeURIComponent(
-                                        searchQuery.trim(),
-                                    )}`,
-                                );
+                                handleNavigateSearch(searchQuery.trim());
+                                setMobileSearchOpen(false);
                             }
                         }}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() =>
+                            setTimeout(() => setIsFocused(false), 150)
+                        }
                     />
                     {searchResults.length > 0 && (
                         <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-96 overflow-auto z-50 border">
@@ -176,6 +242,12 @@ export function Header({ className }: HeaderProps) {
                             })}
                         </div>
                     )}
+                    {searchQuery === "" &&
+                        isFocused &&
+                        recentSearches.length > 0 &&
+                        searchResults.length === 0 && (
+                            <RecentDropdown position="top" />
+                        )}
                 </div>
             </div>
             {/* 모바일 bottom nav */}
@@ -226,14 +298,14 @@ export function Header({ className }: HeaderProps) {
                             }}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter" && searchQuery.trim()) {
-                                    navigate(
-                                        `/search?q=${encodeURIComponent(
-                                            searchQuery.trim(),
-                                        )}`,
-                                    );
+                                    handleNavigateSearch(searchQuery.trim());
                                     setMobileSearchOpen(false);
                                 }
                             }}
+                            onFocus={() => setIsFocused(true)}
+                            onBlur={() =>
+                                setTimeout(() => setIsFocused(false), 150)
+                            }
                         />
                         {searchResults.length > 0 && (
                             <div className="absolute bottom-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mb-1 max-h-96 overflow-auto z-50 border">
@@ -289,6 +361,12 @@ export function Header({ className }: HeaderProps) {
                                 })}
                             </div>
                         )}
+                        {searchQuery === "" &&
+                            isFocused &&
+                            recentSearches.length > 0 &&
+                            searchResults.length === 0 && (
+                                <RecentDropdown position="bottom" />
+                            )}
                     </div>
                 )}
             </nav>
