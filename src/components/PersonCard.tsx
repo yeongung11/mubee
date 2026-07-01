@@ -3,7 +3,7 @@ import type { Actor } from "../types/movie";
 import { Link } from "react-router-dom";
 import { getEngName } from "../utils/movieTitle";
 
-export function PersonCard({ person, rank }: { person: Actor; rank: number }) {
+export function PersonCard({ person, rank }: { person: Actor; rank?: number }) {
     const [dpName, setDpName] = useState(person.name);
 
     useEffect(() => {
@@ -14,9 +14,11 @@ export function PersonCard({ person, rank }: { person: Actor; rank: number }) {
         <div className="flex flex-col">
             <Link to={`/actor/${person.id}`}>
                 <div className="relative">
-                    <span className="absolute top-2 left-4 z-10 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded">
-                        {rank}
-                    </span>
+                    {rank !== undefined && (
+                        <span className="absolute top-2 left-4 z-10 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded">
+                            {rank}
+                        </span>
+                    )}
                     <div className="w-full h-62 rounded-xl overflow-hidden">
                         {person.profile_path ? (
                             <img

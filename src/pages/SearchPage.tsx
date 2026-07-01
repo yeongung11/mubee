@@ -128,12 +128,8 @@ export default function SearchPage() {
             {tab === "movie" && <MovieGrid movies={movies} />}
             {tab === "actor" && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                    {actors.map((actor, i) => (
-                        <PersonCard
-                            key={actor.id}
-                            person={actor}
-                            rank={i + 1}
-                        />
+                    {actors.map((actor) => (
+                        <PersonCard key={actor.id} person={actor} />
                     ))}
                 </div>
             )}
