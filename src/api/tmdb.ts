@@ -335,12 +335,13 @@ export const fetchPopularPersons = async (page = 1) => {
     return res.json();
 };
 
-// 배우 검색 페이지용
+// 배우 검색 페이지
 export const searchActorsByQuery = async (query: string, page = 1) => {
     const res = await fetch(
         `${BASE_URL}/search/person?query=${encodeURIComponent(
             query,
         )}&language=ko-KR&page=${page}`,
+        options,
     );
     return res.json();
 };
