@@ -27,7 +27,7 @@ export default function GenreDetail() {
     );
 
     return (
-        <div className="max-w-screen-xl mx-auto px-10 py-10 mt-16 min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-10 py-10 mt-16 min-h-screen">
             {/* 헤더 */}
             <div className="text-center mb-16">
                 <h1 className="text-3xl lg:text-5xl font-bold text-gray-800 mb-8 drop-shadow-lg">
@@ -36,7 +36,7 @@ export default function GenreDetail() {
                 {movies.length > 0 ? (
                     <p className="text-xl lg:text-2xl font-semibold text-gray-700">
                         총{" "}
-                        <span className="text-blue-600 font-bold">
+                        <span className="text-mubee-burgundy font-bold">
                             {movies.length}+
                         </span>
                         개의 영화
