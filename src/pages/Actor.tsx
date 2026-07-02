@@ -68,7 +68,7 @@ export function Actor() {
                     {/* 오른쪽: 대표 출연작 ) */}
                     <div className="hidden lg:flex flex-1 gap-12 justify-center">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="min-w-45">
+                            <div key={i} className="min-w-45 cursor-pointer">
                                 <div className="w-65 h-95 bg-gray-300 rounded-lg" />
                                 <div className="mt-3 flex flex-col gap-2">
                                     <div className="h-4 bg-gray-300 rounded w-40" />
@@ -164,7 +164,11 @@ export function Actor() {
                 <div className="flex-1 hidden lg:block">
                     <div className="flex gap-12 overflow-x-auto justify-center">
                         {movies.slice(0, 3).map((movie) => (
-                            <div key={movie.id} className="min-w-45">
+                            <div
+                                key={movie.id}
+                                className="min-w-45 cursor-pointer"
+                                onClick={() => navigate(`/movie/${movie.id}`)}
+                            >
                                 <div className="w-65 h-95 overflow-hidden rounded-lg">
                                     <img
                                         src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
@@ -213,13 +217,15 @@ export function Actor() {
                             {/* 모바일: (포스터 | 정보) / 데스크탑: 기존 grid */}
                             <div className="flex items-center gap-4 mb-4 px-2 lg:grid lg:grid-cols-[2fr_1fr_1fr]">
                                 {/* 포스터 */}
-                                <div className="flex items-center gap-4 shrink-0">
+                                <div
+                                    className="flex items-center gap-4 shrink-0"
+                                    onClick={() =>
+                                        navigate(`/movie/${movie.id}`)
+                                    }
+                                >
                                     {movie.poster_path ? (
                                         <img
                                             src={`https://image.tmdb.org/t/p/w185${movie.poster_path}`}
-                                            onClick={() =>
-                                                navigate(`/movie/${movie.id}`)
-                                            }
                                             alt={movie.title}
                                             className="w-20 h-28 lg:w-36 lg:h-48 cursor-pointer rounded"
                                         />

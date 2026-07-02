@@ -22,7 +22,7 @@ export function RecentView({ movies }: { movies: Movie[] }) {
     return (
         <div className="relative max-w-8xl mx-auto p-8 py-10">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold mb-8 md:2xl lg:text-3xl">
+                <h2 className="text-xl font-bold mb-8 md:2xl lg:text-3xl text-mubee-burgundy">
                     최근 본 영화
                 </h2>
                 <button
