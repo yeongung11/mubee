@@ -50,6 +50,13 @@ export function Detail() {
     const [trailerKey, setTrailerKey] = useState<string | null>(null);
 
     useEffect(() => {
+        if (movie?.id) {
+            const saved = localStorage.getItem(`watching_${movie.id}`);
+            setIsWatching(saved === "true");
+        }
+    }, [movie?.id]);
+
+    useEffect(() => {
         if (!movie?.id) return;
         fetchTrailer(movie.id).then(setTrailerKey);
     }, [movie?.id]);
@@ -130,7 +137,7 @@ export function Detail() {
             setMovie({ ...data, title: resolvedTitle });
             addRecentView(resolvedMovie);
         });
-    }, [id]);
+    }, [id, addRecentView]);
 
     // 스트리밍 플랫폼
     useEffect(() => {
@@ -176,7 +183,12 @@ export function Detail() {
                 isFavorite={isFavorite(movie.id)}
                 toggleFavorite={() => toggleFavorite(movie)}
                 isWatching={isWatching}
-                setIsWatching={() => setIsWatching((prev) => !prev)}
+                setIsWatching={() => {
+                    if (!movie?.id) return;
+                    const next = !isWatching;
+                    setIsWatching(next);
+                    localStorage.setItem(`watching_${movie.id}`, String(next));
+                }}
                 convertFive={convertFive}
             />
             <DetailStreamingPlatform provider={provider} />

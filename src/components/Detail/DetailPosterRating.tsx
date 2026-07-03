@@ -102,7 +102,7 @@ export function DetailPosterRating({
                                     onClick={setIsWatching}
                                     className={`flex flex-col items-center gap-1 transition-colors ${
                                         isWatching
-                                            ? "text-blue-500"
+                                            ? "text-mubee-burgundy"
                                             : "text-gray-400"
                                     }`}
                                 >
@@ -114,7 +114,7 @@ export function DetailPosterRating({
                                     </span>
                                 </button>
                             </div>
-                        </div>
+                        </div>``
                         <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
                         <div className="text-gray-700 leading-relaxed text-sm">
                             {movie.overview ? (
