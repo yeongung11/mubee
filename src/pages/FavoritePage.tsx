@@ -37,7 +37,7 @@ export function FavoritePage() {
         );
     }
     return (
-        <div className="max-w-screen-xl mx-auto px-10 py-10 mt-16">
+        <div className="max-w-7xl mx-auto px-10 py-10 mt-16">
             {/* 헤더 */}
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold">즐겨찾기한 영화</h1>
@@ -49,7 +49,7 @@ export function FavoritePage() {
             {/* 모바일 드롭다운 */}
             <div className="md:hidden mb-8">
                 <select
-                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-800 font-bold text-sm focus:border-blue-400 focus:outline-none"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-800 font-bold text-sm focus:border-mubee-burgundy focus:outline-none"
                     value={sort}
                     onChange={(e) => setSort(e.target.value as sortOptions)}
                 >
@@ -70,7 +70,7 @@ export function FavoritePage() {
                         className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all
                             ${
                                 sort === option.value
-                                    ? "bg-blue-600 text-white shadow-md"
+                                    ? "bg-mubee-burgundy text-white shadow-md"
                                     : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                             }`}
                     >
