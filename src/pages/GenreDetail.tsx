@@ -3,6 +3,7 @@ import { useInfiScrolls } from "@/utils/useInfiScrolls";
 import { useParams } from "react-router-dom";
 import { GENRE_NAMES } from "@/types/movie";
 import { MovieGrid } from "../components/MovieGrid";
+import { MovieGridSkeleton } from "../components/Skeleton";
 
 export default function GenreDetail() {
     const { genreId } = useParams();
@@ -11,8 +12,6 @@ export default function GenreDetail() {
         genreId ? Number(genreId) : null,
         fetchMovieGenre,
     );
-
-    
 
     return (
         <div className="max-w-7xl mx-auto px-10 py-10 mt-16 min-h-screen">
@@ -36,16 +35,15 @@ export default function GenreDetail() {
                 ) : null}
             </div>
             {movies.length === 0 && loading ? (
-                renderSkeletonCards(10)
+                <MovieGridSkeleton count={10} />
             ) : (
                 <MovieGrid movies={movies} />
             )}
-
-            {/* 추가 로딩 */}
             {loading && movies.length > 0 && (
-                <div className="mt-10">{renderSkeletonCards(5)}</div>
+                <div className="mt-10">
+                    <MovieGridSkeleton count={5} />
+                </div>
             )}
-
             <div ref={sentinelRef} className="h-20" />
         </div>
     );
