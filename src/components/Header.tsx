@@ -16,6 +16,7 @@ export function Header({ className }: HeaderProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    void isLoading;
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [isFocused, setIsFocused] = useState(false);
 
