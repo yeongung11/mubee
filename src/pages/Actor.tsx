@@ -1,17 +1,15 @@
 import type { Actor, Movie } from "../types/movie";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchActorDetail, fetchActorMovies } from "../api/tmdb";
-import { useRating } from "../utils/useRating";
+
 import { getEngTitle, getEngName } from "@/utils/movieTitle";
 import { ActorSkeleton } from "../components/Actor/ActorSkeleton";
 import { ActorProfile } from "../components/Actor/ActorProfile";
-import { ActorFeaturedMovies } from "../components/Actor/ACtorFeaturedMovies";
+import { ActorFeaturedMovies } from "../components/Actor/ActorFeaturedMovies";
 import { ActorMovieList } from "@/components/Actor/ActorMovieList";
 
 export function Actor() {
-    const navigate = useNavigate();
-    const { convertFive } = useRating();
     const { actorId } = useParams<{ actorId: string }>();
     const [actor, setActor] = useState<Actor | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
