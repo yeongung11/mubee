@@ -2,6 +2,8 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { searchMovies } from "../api/tmdb";
 import type { Movie, Actor } from "../types/movie";
+import { SearchResultList } from "./SearchResultList";
+import { RecentDropDown } from "./RecentDropdown";
 
 interface HeaderProps {
     className?: string;
@@ -82,61 +84,28 @@ export function Header({ className }: HeaderProps) {
         }, 200);
     }, []);
 
-    const RecentDropdown = ({
-        position = "top",
-    }: {
-        position?: "top" | "bottom";
-    }) => (
-        <div
-            className={`absolute ${
-                position === "top" ? "top-full mt-1" : "bottom-full mb-1"
-            } left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl z-50 border`}
-        >
-            <div className="flex items-center justify-between px-3 pt-2 pb-1">
-                <p className="text-xs text-gray-400">최근 검색어</p>
-                <button
-                    className="text-xs text-gray-400 hover:text-red-400 transition"
-                    onClick={() => setRecentSearches([])}
-                >
-                    전체 삭제
-                </button>
-            </div>
-            {recentSearches.map((q) => (
-                <div
-                    key={q}
-                    className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                    <button
-                        className="flex items-center gap-2 text-sm text-gray-700 flex-1 text-left"
-                        onClick={() => {
-                            setSearchQuery(q);
-                            handleSearch(q);
-                            handleNavigateSearch(q);
-                        }}
-                    >
-                        <span className="text-gray-400 text-xs">🕐</span>
-                        {q}
-                    </button>
-                    <button
-                        className="text-gray-300 hover:text-red-400 transition text-xs ml-2"
-                        onClick={() =>
-                            setRecentSearches((prev) =>
-                                prev.filter((item) => item !== q),
-                            )
-                        }
-                    >
-                        ✕
-                    </button>
-                </div>
-            ))}
-        </div>
-    );
+    const showRecentDropdown =
+        searchQuery === "" &&
+        isFocused &&
+        recentSearches.length > 0 &&
+        searchResults.length === 0;
+
+    const handleRecentSelect = (q: string) => {
+        setSearchQuery(q);
+        handleSearch(q);
+        handleNavigateSearch(q);
+    };
+
+    const handleRecentDelete = (q: string) => {
+        setRecentSearches((prev) => prev.filter((item) => item !== q));
+    };
 
     return (
         <>
             <div
-                className={`hidden flex items-center justify-around gap-3 px-4 py-4 lg:px-12 lg:flex
-    ${className || ""}`}
+                className={`hidden flex items-center justify-around gap-3 px-4 py-4 lg:px-12 lg:flex ${
+                    className ?? ""
+                }`}
             >
                 {/* 왼쪽 묶음 */}
                 <div className="flex items-center gap-4 md:gap-6 flex-wrap ">
@@ -195,64 +164,20 @@ export function Header({ className }: HeaderProps) {
                         </span>
                     )}
                     {searchResults.length > 0 && (
-                        <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-96 overflow-auto z-50 border">
-                            {searchResults.map((result) => {
-                                const isMovie = "poster_path" in result;
-                                const title = isMovie
-                                    ? (result as Movie).title
-                                    : (result as Actor).name;
-                                const imagePath = isMovie
-                                    ? (result as Movie).poster_path || ""
-                                    : (result as Actor).profile_path || "";
-
-                                return (
-                                    <Link
-                                        to={
-                                            isMovie
-                                                ? `/movie/${result.id}`
-                                                : `/actor/${result.id}`
-                                        }
-                                        key={result.id}
-                                        className="flex gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        {imagePath ? (
-                                            <img
-                                                src={`https://image.tmdb.org/t/p/w92${imagePath}`}
-                                                className="w-12 h-16 object-cover rounded shrink-0 bg-gray-200 "
-                                                alt={title}
-                                            />
-                                        ) : (
-                                            <div className="w-12 h-16 rounded shrink-0 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center text-center">
-                                                <span className="text-gray-400 text-xs font-medium">
-                                                    No Image
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        <div className="min-w-0 flex-1">
-                                            <p className="font-medium text-sm truncate text-black">
-                                                {title}
-                                            </p>
-                                            {isMovie && (
-                                                <p className="text-xs text-gray-500">
-                                                    {(result as Movie).release_date?.slice(
-                                                        0,
-                                                        4,
-                                                    )}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                        </div>
+                        <SearchResultList
+                            results={searchResults}
+                            position="top"
+                        />
                     )}
-                    {searchQuery === "" &&
-                        isFocused &&
-                        recentSearches.length > 0 &&
-                        searchResults.length === 0 && (
-                            <RecentDropdown position="top" />
-                        )}
+                    {showRecentDropdown && (
+                        <RecentDropDown
+                            position="top"
+                            recentSearches={recentSearches}
+                            onSelect={handleRecentSelect}
+                            onDelete={handleRecentDelete}
+                            onClearAll={() => setRecentSearches([])}
+                        />
+                    )}
                 </div>
             </div>
             {/* 모바일 bottom nav */}
@@ -313,65 +238,21 @@ export function Header({ className }: HeaderProps) {
                             }
                         />
                         {searchResults.length > 0 && (
-                            <div className="absolute bottom-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mb-1 max-h-96 overflow-auto z-50 border">
-                                {searchResults.map((result) => {
-                                    const isMovie = "poster_path" in result;
-                                    const title = isMovie
-                                        ? (result as Movie).title
-                                        : (result as Actor).name;
-                                    const imagePath = isMovie
-                                        ? (result as Movie).poster_path || ""
-                                        : (result as Actor).profile_path || "";
-                                    return (
-                                        <Link
-                                            to={
-                                                isMovie
-                                                    ? `/movie/${result.id}`
-                                                    : `/actor/${result.id}`
-                                            }
-                                            key={result.id}
-                                            className="flex gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors"
-                                            onClick={() =>
-                                                setMobileSearchOpen(false)
-                                            }
-                                        >
-                                            {imagePath ? (
-                                                <img
-                                                    src={`https://image.tmdb.org/t/p/w92${imagePath}`}
-                                                    className="w-12 h-16 object-cover rounded shrink-0 bg-gray-200"
-                                                    alt={title}
-                                                />
-                                            ) : (
-                                                <div className="w-12 h-16 rounded shrink-0 bg-gray-800 flex items-center justify-center">
-                                                    <span className="text-gray-400 text-xs">
-                                                        No Image
-                                                    </span>
-                                                </div>
-                                            )}
-                                            <div className="min-w-0 flex-1">
-                                                <p className="font-medium text-sm truncate text-black">
-                                                    {title}
-                                                </p>
-                                                {isMovie && (
-                                                    <p className="text-xs text-gray-500">
-                                                        {(result as Movie).release_date?.slice(
-                                                            0,
-                                                            4,
-                                                        )}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </Link>
-                                    );
-                                })}
-                            </div>
+                            <SearchResultList
+                                results={searchResults}
+                                position="bottom"
+                                onSelect={() => setMobileSearchOpen(false)}
+                            />
                         )}
-                        {searchQuery === "" &&
-                            isFocused &&
-                            recentSearches.length > 0 &&
-                            searchResults.length === 0 && (
-                                <RecentDropdown position="bottom" />
-                            )}
+                        {showRecentDropdown && (
+                            <RecentDropDown
+                                position="bottom"
+                                recentSearches={recentSearches}
+                                onSelect={handleRecentSelect}
+                                onDelete={handleRecentDelete}
+                                onClearAll={() => setRecentSearches([])}
+                            />
+                        )}
                     </div>
                 )}
             </nav>

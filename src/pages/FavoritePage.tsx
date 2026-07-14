@@ -7,9 +7,9 @@ type sortOptions = "default" | "rating_desc" | "rating_asc" | "title";
 
 const SORT_OPTIONS: { label: string; value: sortOptions }[] = [
     { label: "전체", value: "default" },
-    { label: " 평점 높은순", value: "rating_desc" },
-    { label: " 평점 낮은순", value: "rating_asc" },
-    { label: " 제목순", value: "title" },
+    { label: "평점 높은순", value: "rating_desc" },
+    { label: "평점 낮은순", value: "rating_asc" },
+    { label: "제목순", value: "title" },
 ];
 
 export function FavoritePage() {
