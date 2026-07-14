@@ -16,7 +16,6 @@ export function Header({ className }: HeaderProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    void isLoading;
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [isFocused, setIsFocused] = useState(false);
 
@@ -190,6 +189,11 @@ export function Header({ className }: HeaderProps) {
                             setTimeout(() => setIsFocused(false), 150)
                         }
                     />
+                    {isLoading && (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm animate-spin">
+                            ⏳
+                        </span>
+                    )}
                     {searchResults.length > 0 && (
                         <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl mt-1 max-h-96 overflow-auto z-50 border">
                             {searchResults.map((result) => {
