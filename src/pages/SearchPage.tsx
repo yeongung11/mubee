@@ -15,7 +15,6 @@ export default function SearchPage() {
     const [loading, setLoading] = useState(false);
     const [more, setMore] = useState(true);
     const pageRef = useRef(1);
-    const loadingRef = useRef(false);
     const sentinelRef = useRef<HTMLDivElement>(null);
 
     // 쿼리 또는 탭 바뀔 시 초기화
@@ -25,21 +24,21 @@ export default function SearchPage() {
         setActors([]);
         pageRef.current = 1;
         setMore(true);
-        loadingRef.current = true;
+
         setLoading(true);
 
         if (tab === "movie") {
             searchMoviesByQuery(query, 1).then((data) => {
                 setMovies(data.results || []);
                 setMore(data.total_pages > 1);
-                loadingRef.current = false;
+
                 setLoading(false);
             });
         } else {
             searchActorsByQuery(query, 1).then((data) => {
                 setActors(data.results || []);
                 setMore(data.total_pages > 1);
-                loadingRef.current = false;
+
                 setLoading(false);
             });
         }
@@ -47,8 +46,8 @@ export default function SearchPage() {
 
     // 추가 로딩
     const loadMore = useCallback(() => {
-        if (loadingRef.current || !more || !query) return;
-        loadingRef.current = true;
+        if (loading || !more || !query) return;
+
         setLoading(true);
         const nextPage = pageRef.current + 1;
 
@@ -57,7 +56,7 @@ export default function SearchPage() {
                 setMovies((prev) => [...prev, ...(data.results || [])]);
                 pageRef.current = nextPage;
                 setMore(nextPage < data.total_pages);
-                loadingRef.current = false;
+
                 setLoading(false);
             });
         } else {
@@ -65,11 +64,11 @@ export default function SearchPage() {
                 setActors((prev) => [...prev, ...(data.results || [])]);
                 pageRef.current = nextPage;
                 setMore(nextPage < data.total_pages);
-                loadingRef.current = false;
+
                 setLoading(false);
             });
         }
-    }, [query, more, tab]);
+    }, [query, more, tab, loading]);
 
     // 스크롤 감지
     useEffect(() => {

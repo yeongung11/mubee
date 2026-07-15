@@ -46,7 +46,7 @@ export function SearchResultList({
                                 alt={title}
                             />
                         ) : (
-                            <div className="w-12 h-16 rounded shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div className="w-12 h-16 rounded shrink-0 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
                                 <span className="text-gray-400 text-xs font-medium">
                                     No Image
                                 </span>
