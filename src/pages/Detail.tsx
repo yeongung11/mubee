@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useCallback, useState } from "react";
-import { useRating } from "../utils/useRating";
+import { convertFive } from "../utils/rating";
 import { useFavoritesStore } from "../store/favorite";
 import { useMoviePages } from "../utils/useMoviePages";
 import { DetailHeroBanner } from "../components/Detail/DetailHeroBanner";
@@ -22,7 +22,6 @@ export function Detail() {
     const [hoverRating, setHoverRating] = useState(0); // hover
     const [castIdx, setCastIdx] = useState(0);
     const castPageSize = 10;
-    const { convertFive } = useRating();
     const { isFavorite, toggleFavorite } = useFavoritesStore();
     const simPageSize = useMoviePages(3, 4, 6);
     const { movie } = useMovieDetail(id);

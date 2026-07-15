@@ -1,6 +1,6 @@
 import type { Movie } from "@/types/movie";
 import { useNavigate } from "react-router-dom";
-import { useRating } from "@/utils/useRating";
+import { convertFive } from "@/utils/rating";
 
 type Props = {
     sortedMovies: Movie[];
@@ -14,7 +14,6 @@ export function ActorMovieList({
     setMoreMovie,
 }: Props) {
     const navigate = useNavigate();
-    const { convertFive } = useRating();
 
     return (
         <section>

@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { fetchHeroBanner, fetchMovieLogos } from "../api/tmdb";
 import { type Movie } from "../types/movie";
 import Buttons from "../components/Buttons";
-import { useRating } from "../utils/useRating";
+import { convertFive } from "../utils/rating";
 
 export function HeroBanner() {
-    const { convertFive } = useRating();
+    
     const [movie, setMovies] = useState<Movie[]>([]);
     const [index, setIndex] = useState(0);
     const [logoPath, setLogoPath] = useState<string | null>(null);

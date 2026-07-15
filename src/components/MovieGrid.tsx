@@ -1,6 +1,6 @@
 import type { Movie } from "../types/movie";
 import { Link } from "react-router-dom";
-import { useRating } from "../utils/useRating";
+import { convertFive } from "../utils/rating";
 import { getEngTitle } from "../utils/movieTitle";
 import { useState, useEffect } from "react";
 
@@ -9,13 +9,11 @@ function MovieCard({
     index,
     renderBadge,
     showRating,
-    convertFive,
 }: {
     movie: Movie;
     index: number;
     renderBadge?: (movie: Movie, index?: number) => React.ReactNode;
     showRating: boolean;
-    convertFive: (n: number) => string;
 }) {
     const [displayTitle, setDisplayTitle] = useState(movie.title);
     const [noImage, setNoImage] = useState(false);
@@ -81,7 +79,6 @@ export function MovieGrid({
     renderBadge,
     showRating = true,
 }: MovieGridProps) {
-    const { convertFive } = useRating();
     return (
         <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 lg:gap-6">
             {movies.map((movie, index) => (
@@ -91,7 +88,6 @@ export function MovieGrid({
                     index={index}
                     renderBadge={renderBadge}
                     showRating={showRating}
-                    convertFive={convertFive}
                 />
             ))}
         </ul>
