@@ -3,13 +3,13 @@ import type { Movie } from "@/types/movie";
 import { getEngTitle } from "./movieTitle";
 
 interface FetchFn {
-    (id: number, page: number): Promise<{
+    (page: number): Promise<{
         results: Movie[];
         total_pages: number;
     }>;
 }
 
-export function useInfiScrolls(id: number | null, fetchFn: FetchFn) {
+export function useInfiScrolls(fetchFn: FetchFn, enabled = true) {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(false);
     const [more, setMore] = useState(true);
@@ -19,13 +19,13 @@ export function useInfiScrolls(id: number | null, fetchFn: FetchFn) {
 
     // 초기 로딩
     useEffect(() => {
-        if (!id) return;
+        if (!enabled) return;
         loadingRef.current = true;
         setLoading(true);
         pageRef.current = 1;
         setMovies([]);
 
-        fetchFn(id, 1)
+        fetchFn(1)
             .then(async (data) => {
                 const resolved = await Promise.all(
                     (data.results || []).map(async (movie: Movie) => ({
@@ -40,17 +40,17 @@ export function useInfiScrolls(id: number | null, fetchFn: FetchFn) {
                 loadingRef.current = false;
                 setLoading(false);
             });
-    }, [id, fetchFn]);
+    }, [enabled, fetchFn]);
 
     // 추가 로딩
     const loadMore = useCallback(async () => {
-        if (loadingRef.current || !more || !id) return;
+        if (loadingRef.current || !more || !enabled) return;
 
         loadingRef.current = true;
         setLoading(true);
         const nextPage = pageRef.current + 1;
 
-        fetchFn(id, nextPage)
+        fetchFn(nextPage)
             .then(async (data) => {
                 const resolved = await Promise.all(
                     (data.results || []).map(async (movie: Movie) => ({
@@ -66,7 +66,7 @@ export function useInfiScrolls(id: number | null, fetchFn: FetchFn) {
                 loadingRef.current = false;
                 setLoading(false);
             });
-    }, [id, more, fetchFn]);
+    }, [enabled, more, fetchFn]);
 
     // 스크롤 감지
     useEffect(() => {
