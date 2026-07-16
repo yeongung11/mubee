@@ -3,7 +3,7 @@ import { MovieGrid } from "./MovieGrid";
 import { useState, useCallback } from "react";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
-import { useMoviePages } from "../utils/useMoviePages";
+import { useMoviePages } from "../hooks/useMoviePages";
 
 export function NowPlaying({ movies }: { movies: Movie[] }) {
     const [index, setIndex] = useState(0);

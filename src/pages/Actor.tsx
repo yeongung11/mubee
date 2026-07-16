@@ -1,6 +1,6 @@
 import type { Actor, Movie } from "../types/movie";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { fetchActorDetail, fetchActorMovies } from "../api/tmdb";
 
 import { getEngTitle, getEngName } from "@/utils/movieTitle";
@@ -50,6 +50,16 @@ export function Actor() {
         load();
     }, [actorId]);
 
+    const sortedMovies = useMemo(
+        () =>
+            [...movies].sort((a, b) => {
+                const dateA = new Date(a.release_date ?? "").getTime();
+                const dateB = new Date(b.release_date ?? "").getTime();
+                return dateB - dateA;
+            }),
+        [movies],
+    );
+
     if (loading) return <ActorSkeleton />;
 
     if (!actor)
@@ -59,11 +69,11 @@ export function Actor() {
             </div>
         );
 
-    const sortedMovies = [...movies].sort((a, b) => {
-        const dateA = new Date(a.release_date ?? "").getTime();
-        const dateB = new Date(b.release_date ?? "").getTime();
-        return dateB - dateA;
-    });
+    // const sortedMovies = [...movies].sort((a, b) => {
+    //     const dateA = new Date(a.release_date ?? "").getTime();
+    //     const dateB = new Date(b.release_date ?? "").getTime();
+    //     return dateB - dateA;
+    // });
 
     return (
         <div className="px-4 md:px-10 lg:px-20">

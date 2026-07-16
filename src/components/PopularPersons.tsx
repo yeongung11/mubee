@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import type { Actor } from "../types/movie";
 import Buttons from "../components/Buttons";
 import { PersonCard } from "../components/PersonCard";
-import { useMoviePages } from "../utils/useMoviePages";
+import { useMoviePages } from "../hooks/useMoviePages";
 
 export function PopularPersons({ persons }: { persons: Actor[] }) {
     const [index, setIndex] = useState(0);

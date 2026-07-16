@@ -2,7 +2,7 @@ import type { Movie } from "@/types/movie";
 import { MovieGrid } from "./MovieGrid";
 import { useState, useCallback } from "react";
 import Buttons from "../components/Buttons";
-import { useMoviePages } from "../utils/useMoviePages";
+import { useMoviePages } from "../hooks/useMoviePages";
 import { useRecentViewStore } from "../store/recent";
 
 export function RecentView({ movies }: { movies: Movie[] }) {

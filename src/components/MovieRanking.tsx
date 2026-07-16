@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 import { MovieGrid } from "./MovieGrid";
 import Buttons from "../components/Buttons";
 import { Link } from "react-router-dom";
-import { useMoviePages } from "../utils/useMoviePages";
+import { useMoviePages } from "../hooks/useMoviePages";
 
 interface MovieRankingProps {
     movies: Movie[];

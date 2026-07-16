@@ -1,5 +1,5 @@
 import { fetchMovieGenre } from "@/api/tmdb";
-import { useInfiScrolls } from "@/utils/useInfiScrolls";
+import { useInfiScrolls } from "@/hooks/useInfiScrolls";
 import { useParams } from "react-router-dom";
 import { GENRE_NAMES } from "@/types/movie";
 import { MovieGrid } from "../components/MovieGrid";

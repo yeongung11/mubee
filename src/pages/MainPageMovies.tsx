@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { fetchMainPageMovies } from "@/api/tmdb";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { MovieGrid } from "@/components/MovieGrid";
-import { useInfiScrolls } from "@/utils/useInfiScrolls";
+import { useInfiScrolls } from "@/hooks/useInfiScrolls";
 
 const CATEGORY_MAP = {
     popular: "인기 영화",

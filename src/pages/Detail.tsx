@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useCallback, useState } from "react";
 import { convertFive } from "../utils/rating";
 import { useFavoritesStore } from "../store/favorite";
-import { useMoviePages } from "../utils/useMoviePages";
+import { useMoviePages } from "../hooks/useMoviePages";
 import { DetailHeroBanner } from "../components/Detail/DetailHeroBanner";
 import { DetailPosterRating } from "@/components/Detail/DetailPosterRating";
 import { DetailStreamingPlatform } from "@/components/Detail/DetailStreamingPlatform";
@@ -11,17 +11,19 @@ import { DetailSimilar } from "@/components/Detail/DetailSimilar";
 import { DetailReviews } from "@/components/Detail/DetailReview";
 import { DetailSkeleton } from "../components/Detail/DetailSkeleton";
 import { DetailTrailer } from "@/components/Detail/DetailTrailer";
-import { useMovieDetail } from "../utils/useMovieDetail";
-import { useMovieSimilar } from "@/utils/useMovieSimilar";
-import { useDetailExtras } from "@/utils/useDetailExtras";
+import { useMovieDetail } from "../hooks/useMovieDetail";
+import { useMovieSimilar } from "@/hooks/useMovieSimilar";
+import { useDetailExtras } from "@/hooks/useDetailExtras";
 import type { MovieWithCredits } from "../types/movie";
+
+const castPageSize = 10;
 
 export function Detail() {
     const { id } = useParams<{ id: string }>();
 
     const [hoverRating, setHoverRating] = useState(0); // hover
     const [castIdx, setCastIdx] = useState(0);
-    const castPageSize = 10;
+
     const { isFavorite, toggleFavorite } = useFavoritesStore();
     const simPageSize = useMoviePages(3, 4, 6);
     const { movie } = useMovieDetail(id);
@@ -50,13 +52,13 @@ export function Detail() {
 
     const handleCastPrev = useCallback(() => {
         setCastIdx((prev) => Math.max(0, prev - castPageSize));
-    }, [castPageSize]);
+    }, []);
 
     const handleCastNext = useCallback(() => {
         const maxIndex =
             (movieWithCredits?.credits?.cast?.length || 0) - castPageSize;
         setCastIdx((prev) => Math.min(maxIndex, prev + castPageSize));
-    }, [castPageSize, movieWithCredits?.credits?.cast?.length]);
+    }, [movieWithCredits?.credits?.cast?.length]);
 
     // 로딩 스켈레톤 ui
     if (!movie) return <DetailSkeleton />;

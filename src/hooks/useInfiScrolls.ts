@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { Movie } from "@/types/movie";
-import { getEngTitle } from "./movieTitle";
+import { getEngTitle } from "../utils/movieTitle";
 
 interface FetchFn {
     (page: number): Promise<{
