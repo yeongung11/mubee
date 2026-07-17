@@ -20,7 +20,7 @@ export function GenreFilter({
                         key={genre.id}
                         onClick={() => onSelect(genre)}
                         className={`px-6 py-3 rounded-xl font-bold text-lg transition-all shadow-lg border-2
-                            min-w-[120px] flex-1 sm:flex-none
+                            min-w-30px flex-1 sm:flex-none
                             ${
                                 selectedGenre?.id === genre.id
                                     ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-blue-500/50 border-blue-400"

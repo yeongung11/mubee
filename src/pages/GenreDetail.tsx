@@ -1,4 +1,5 @@
 import { fetchMovieGenre } from "@/api/tmdb";
+import { useCallback } from "react";
 import { useInfiScrolls } from "@/hooks/useInfiScrolls";
 import { useParams } from "react-router-dom";
 import { GENRE_NAMES } from "@/types/movie";
@@ -8,10 +9,11 @@ import { MovieGridSkeleton } from "../components/Skeleton";
 export default function GenreDetail() {
     const { genreId } = useParams();
     const genreName = genreId ? GENRE_NAMES[Number(genreId)] || "영화" : "장르";
-    const { movies, loading, sentinelRef } = useInfiScrolls(
-        genreId ? Number(genreId) : null,
-        fetchMovieGenre,
+    const fetchFn = useCallback(
+        (page: number) => fetchMovieGenre(Number(genreId), page),
+        [genreId],
     );
+    const { movies, loading, sentinelRef } = useInfiScrolls(fetchFn, !!genreId);
 
     return (
         <div className="max-w-7xl mx-auto px-10 py-10 mt-16 min-h-screen">
