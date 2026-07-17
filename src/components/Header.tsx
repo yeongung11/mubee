@@ -49,7 +49,7 @@ export function Header({ className }: HeaderProps) {
                         찜한 영화
                     </Link>
                 </div>
-                <div ref={containerRef} className="relative w-full lg:max-w-md">
+                <div className="relative w-full lg:max-w-md">
                     <SearchInput
                         position="top"
                         inputClassName="w-full bg-black-1600 text-black text-sm px-4 py-2 rounded-full outline-none border border-gray-300 focus:border-mubee-burgundy transition placeholder-black-100"
