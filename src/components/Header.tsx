@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { SearchInput } from "./SearchInput";
@@ -9,7 +9,6 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
     const location = useLocation();
-    const containerRef = useRef<HTMLDivElement>(null);
     const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
     useEffect(() => {
