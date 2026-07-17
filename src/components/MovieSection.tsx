@@ -1,11 +1,17 @@
 import type { Movie } from "@/types/movie";
 import { MovieGrid } from "./MovieGrid";
 import { useState, useCallback } from "react";
-import Buttons from "../components/Buttons";
+import Buttons from "./Buttons";
 import { Link } from "react-router-dom";
 import { useMoviePages } from "../hooks/useMoviePages";
 
-export function NowPlaying({ movies }: { movies: Movie[] }) {
+interface MovieSectionProps {
+    movies: Movie[];
+    title: string;
+    moreLink: string;
+}
+
+export function MovieSection({ movies, title, moreLink }: MovieSectionProps) {
     const [index, setIndex] = useState(0);
     const moviePages = useMoviePages();
     const current = movies.slice(index, index + moviePages);
@@ -22,20 +28,16 @@ export function NowPlaying({ movies }: { movies: Movie[] }) {
         <div className="relative max-w-8xl mx-auto p-8 py-10">
             <div className="flex justify-between">
                 <h2 className="text-xl font-bold mb-8 md:2xl lg:text-3xl text-mubee-burgundy">
-                    {" "}
-                    최신 개봉작
+                    {title}
                 </h2>
                 <Link
-                    to="/movies?category=now_playing"
+                    to={moreLink}
                     className="text-sm md:2xl lg:text-3xl hover:text-mubee-burgundy"
                 >
-                    {" "}
                     더보기
                 </Link>
             </div>
-
             <MovieGrid movies={current} />
-
             {movies.length > moviePages && (
                 <div className="flex justify-between mt-8 gap-4">
                     <Buttons

@@ -10,8 +10,7 @@ import type { Movie, Actor } from "../types/movie";
 import { MovieRanking } from "../components/MovieRanking";
 import { Upcoming } from "../components/Upcoming";
 import { HeroBanner } from "../components/HeroBanner";
-import { TopRate } from "../components/TopRate";
-import { NowPlaying } from "../components/NowPlaying";
+import { MovieSection } from "../components/MovieSection";
 import { MagazineSection } from "@/components/MagazineSection";
 import { HomeSkeleton } from "../components/Skeleton";
 import { PopularPersons } from "@/components/PopularPersons";
@@ -83,8 +82,16 @@ export function Home() {
             <Upcoming movies={upcomingMovies} />
             <PopularPersons persons={popularPersons} />
             <MagazineSection trendingMovies={popularMovies} />
-            <TopRate movies={topRateMovies} />
-            <NowPlaying movies={nowPlayingMovies} />
+            <MovieSection
+                movies={topRateMovies}
+                title="평점 높은 작품"
+                moreLink="/movie?category=top_rated"
+            />
+            <MovieSection
+                movies={nowPlayingMovies}
+                title="최신 개봉작"
+                moreLink="/movie?category=now_playing"
+            />
         </>
     );
 }
