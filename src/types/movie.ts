@@ -161,7 +161,7 @@ export const GENRE_NAMES: Record<number, string> = {
     10768: "전쟁 다큐멘터리",
 };
 
-export interface movieTitle {
+export interface MovieTitle {
     id: number;
     title: string;
 

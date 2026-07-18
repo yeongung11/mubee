@@ -9,39 +9,44 @@ const options = {
     },
 };
 
-export const fetchKoreanBoxOffice = async () => {
-    const key = import.meta.env.VITE_KOBIS_KEY;
-    const yesterday = new Date(Date.now() - 86400000);
-    const targetDt = yesterday.toISOString().slice(0, 10).replace(/-/g, "");
-    const res = await fetch(
-        `https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${key}&targetDt=${targetDt}`,
-    );
+//공통 에러 처리
+const fetchWithError = async (url: string, opts: RequestInit = options) => {
+    const res = await fetch(url, opts);
+    if (!res.ok) throw new Error(`API Error:${res.status}`);
     return res.json();
 };
 
+// 박스 오피스 순위
+// export const fetchKoreanBoxOffice = async () => {
+//     const key = import.meta.env.VITE_KOBIS_KEY;
+//     const yesterday = new Date(Date.now() - 86400000);
+//     const targetDt = yesterday.toISOString().slice(0, 10).replace(/-/g, "");
+//     return fetchWithError(
+//         `https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=${key}&targetDt=${targetDt}`,
+//     );
+// };
+
 // 영화 순위
 export const fetchPopularMovies = async () => {
-    const res = await fetch(
-        `${BASE_URL}/movie/popular?language=ko-KR`,
-        options,
-    );
-    return res.json();
+    return fetchWithError(`${BASE_URL}/movie/popular?language=ko-KR`, options);
 };
 
 // 공개 예정 영화
 export const fetchUpcomingMovies = async () => {
-    const [page1, page2, page3] = await Promise.all([
-        fetch(`${BASE_URL}/movie/upcoming?language=ko-KR&page=1`, options),
-        fetch(`${BASE_URL}/movie/upcoming?language=ko-KR&page=2`, options),
-        fetch(`${BASE_URL}/movie/upcoming?language=ko-KR&page=3`, options),
-    ]);
-
     const [data1, data2, data3] = await Promise.all([
-        page1.json(),
-        page2.json(),
-        page3.json(),
+        fetchWithError(
+            `${BASE_URL}/movie/upcoming?language=ko-KR&page=1`,
+            options,
+        ),
+        fetchWithError(
+            `${BASE_URL}/movie/upcoming?language=ko-KR&page=2`,
+            options,
+        ),
+        fetchWithError(
+            `${BASE_URL}/movie/upcoming?language=ko-KR&page=3`,
+            options,
+        ),
     ]);
-
     const allMovies = [
         ...data1.results,
         ...data2.results,
@@ -54,12 +59,10 @@ export const fetchUpcomingMovies = async () => {
 
 // 상세 페이지
 export const fetchDetail = async (id: string) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/movie/${id}?language=ko-KR&append_to_response=credits`,
         options,
     );
-
-    return res.json();
 };
 
 // 검색
@@ -67,14 +70,14 @@ export async function searchMovies(
     query: string,
     signal?: AbortSignal,
 ): Promise<(Movie | Actor)[]> {
-    const res = await fetch(
+    const data: {
+        results: MultiSearchItem[];
+    } = await fetchWithError(
         `${BASE_URL}/search/multi?query=${encodeURIComponent(
             query,
         )}&language=ko-KR`,
         { ...options, signal },
     );
-    const data: { results: MultiSearchItem[] } = await res.json();
-
     const movies = data.results
         .filter(
             (r): r is MultiSearchItem & { media_type: "movie" } =>
@@ -98,14 +101,12 @@ export async function searchMovies(
             directors: [],
             character: item.character,
         }));
-
     const actors = data.results
         .filter(
             (r): r is MultiSearchItem & { media_type: "person" } =>
                 r.media_type === "person",
         )
         .slice(0, 2)
-
         .map<Actor>((item) => ({
             id: item.id,
             name: item.name,
@@ -115,139 +116,122 @@ export async function searchMovies(
             place_of_birth: item.place_of_birth,
             birthday: item.birthday,
         }));
-
     return [...movies, ...actors];
 }
 
 // 배우 출연작
 export const fetchActorMovies = async (actorId: number) => {
-    const res = await fetch(
+    const data = await fetchWithError(
         `${BASE_URL}/person/${actorId}/movie_credits?language=ko-KR`,
         options,
     );
-    const data = await res.json();
     return data.cast;
 };
 
 // 배우 상세 정보
 export const fetchActorDetail = async (actorId: number) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/person/${actorId}?language=ko-KR`,
         options,
     );
-    return res.json();
 };
 
 // 넷플/왓챠/티빙 플랫폼 정보
 export const fetchWatchProvider = async (movieId: number) => {
-    const res = await fetch(
+    const data = await fetchWithError(
         `${BASE_URL}/movie/${movieId}/watch/providers?language=ko-KR`,
         options,
     );
-    const data = await res.json();
     return data.results?.KR ?? null;
 };
 
 // 리뷰
 export const fetchReview = async (movieId: number) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/movie/${movieId}/reviews?language=en-US&page=1`,
         options,
     );
-    return res.json();
 };
 
 // 히어로배너
 export const fetchHeroBanner = async () => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/trending/movie/day?language=ko-KR`,
         options,
     );
-    return res.json();
 };
 
 // 카테고리
 export const fetchGenre = async () => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/genre/movie/list?language=ko-KR`,
         options,
     );
-    return res.json();
 };
 
 // 카테고리별 영화 목록
 export const fetchMovieGenre = async (genreId: number | string, page = 1) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/discover/movie?with_genres=${genreId}&page=${page}&language=ko-KR`,
         options,
     );
-    return res.json();
 };
 
 // 유사한 영화 목록
 export const fetchSimilar = async (movieId: number) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/movie/${movieId}/similar?language=ko-KR&page=1`,
         options,
     );
-    return res.json();
 };
 
 // 추천 영화
 export const fetchRecommendations = async (movieId: number) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/movie/${movieId}/recommendations?language=ko-KR`,
         options,
     );
-    return res.json();
 };
 
 // 장르 기반 추천 영화
 export const fetchByGenre = async (genreId: number) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/discover/movie?with_genres=${genreId}&sort_by=popularity.desc&language=ko-KR`,
         options,
     );
-    return res.json();
 };
 
 // 평점 높은 작품
 export const fetchTopRate = async () => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/movie/top_rated?language=ko-KR&page=1`,
         options,
     );
-    return res.json();
 };
 
 // 현재 상영 중
 export const fetchNowPlaying = async () => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/movie/now_playing?language=ko-KR&page=1`,
         options,
     );
-    return res.json();
 };
 
 // 영화 트레일러(유튜브)
 export const fetchTrailer = async (movieId: number): Promise<string | null> => {
-    const res = await fetch(
+    const data = await fetchWithError(
         `${BASE_URL}/movie/${movieId}/videos?language=ko-KR`,
         options,
     );
-    const data = await res.json();
-
     let trailer = data.results?.find(
         (v: { type: string; site: string }) =>
             v.type === "Trailer" && v.site === "YouTube",
     );
-
     if (!trailer) {
-        const resEn = await fetch(
-            `${BASE_URL}/movie/${movieId}/videos?langugage=en-US`,
+        const dataEn = await fetchWithError(
+            `${BASE_URL}/movie/${movieId}/videos?language=en-US`,
             options,
         );
-        const dataEn = await resEn.json();
         trailer = dataEn.results?.find(
             (v: { type: string; site: string }) =>
                 v.type === "Trailer" && v.site === "YouTube",
@@ -258,8 +242,7 @@ export const fetchTrailer = async (movieId: number): Promise<string | null> => {
 
 // 스틸컷
 export const fetchStillCut = async (movieId: number) => {
-    const res = await fetch(`${BASE_URL}/movie/${movieId}/images`, options);
-    return res.json();
+    return fetchWithError(`${BASE_URL}/movie/${movieId}/images`, options);
 };
 
 // 메인 화면 페이지 더보기
@@ -273,86 +256,74 @@ export const fetchMainPageMovies = async (
         top_rated: `/movie/top_rated`,
         upcoming: `/movie/upcoming`,
     };
-
     const endpoint = endpoints[category];
     if (!endpoint) throw new Error("Invalid category");
-
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}${endpoint}?language=ko-KR&page=${page}`,
         options,
     );
-    return res.json();
 };
 
 // 한국어 표기 없는 영화 모두 영어로 변환
 export const fetchMovieEnglish = async (movieId: number) => {
-    const res = await fetch(`${BASE_URL}/movie/${movieId}?language=en-US`, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-    });
-    return res.json();
+    return fetchWithError(
+        `${BASE_URL}/movie/${movieId}?language=en-US`,
+        options,
+    );
 };
 
 // 한국어 표기 없는 배우 영어로 변환
 export const fetchActorDetailEnglish = async (actorId: number) => {
-    const res = await fetch(`${BASE_URL}/person/${actorId}?language=en-US`, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-    });
-    return res.json();
+    return fetchWithError(
+        `${BASE_URL}/person/${actorId}?language=en-US`,
+        options,
+    );
 };
 
 // 로고
 export const fetchMovieLogos = async (
     movieId: number,
 ): Promise<string | null> => {
-    const res = await fetch(
+    const data = await fetchWithError(
         `${BASE_URL}/movie/${movieId}/images?include_image_language=en,ko,null`,
-        {
-            headers: { Authorization: `Bearer ${TOKEN}` },
-        },
+        options,
     );
-    const data = await res.json();
     const logos = data.logos as {
         file_path: string;
         iso_639_1: string | null;
     }[];
-
     if (!logos || logos.length === 0) return null;
-
     const preferred =
         logos.find((l) => l.iso_639_1 === "ko") ??
         logos.find((l) => l.iso_639_1 === "en") ??
         logos[0];
-
     return preferred.file_path;
 };
 
 // 배우 순위
 export const fetchPopularPersons = async (page = 1) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/person/popular?language=ko-KR&page=${page}`,
         options,
     );
-    return res.json();
 };
 
 // 배우 검색 페이지
 export const searchActorsByQuery = async (query: string, page = 1) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/search/person?query=${encodeURIComponent(
             query,
         )}&language=ko-KR&page=${page}`,
         options,
     );
-    return res.json();
 };
 
 // 검색 페이지
 export const searchMoviesByQuery = async (query: string, page = 1) => {
-    const res = await fetch(
+    return fetchWithError(
         `${BASE_URL}/search/movie?query=${encodeURIComponent(
             query,
         )}&language=ko-KR&page=${page}`,
         options,
     );
-    return res.json();
 };
