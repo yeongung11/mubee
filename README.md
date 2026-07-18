@@ -1,11 +1,23 @@
 # mubee
 
 TMDB API 기반의 영화 검색 및 목록 관리 앱입니다.
-평소 구현하고 싶었던 디자인과 시그니처 컬러로 만든 프로젝트입니다.
+버건디 컬러를 시그니처로 활용해 차분한 느낌을 표현했습니다.
 
 ## 배포링크
 
 -   [mubee](https://mubee.vercel.app/)
+
+## 폴더 구조
+
+src/
+├── api/ # TMDB, KOBIS API 호출 함수
+├── components/ # 재사용 UI 컴포넌트
+├── hooks/ # 커스텀 훅 (데이터 fetching, 무한 스크롤)
+├── layouts/ # 페이지 레이아웃 (MainLayout, DetailLayout)
+├── pages/ # 라우트 단위 페이지
+├── store/ # Zustand 전역 상태 (찜, 최근 본 영화)
+├── types/ # 타입 정의
+└── utils/ # 공통 유틸 함수
 
 ## 스크린샷
 
@@ -38,11 +50,13 @@ TMDB API 기반의 영화 검색 및 목록 관리 앱입니다.
 ## 기능
 
 -   영화 제목, 배우 검색
--   영화 상세 페이지(줄거리, 평점, 출연진, 리뷰, 예고편)
+-   영화 상세 페이지(줄거리, 평점, 출연진, 리뷰, 예고편, 트레일러, OTT 플랫폼 정보,)
 -   배우 상세 페이지(배우 대표작, 배우 정보)
 -   카테고리별 영화
+-   장르별 필터링
 -   찜한 영화 추가/삭제
 -   최근에 본 영화 목록
+-
 
 ## 환경변수
 
@@ -94,3 +108,20 @@ npm run dev
 
 -   `AbortController`로 query가 바뀔 때마다 이전 요청 취소
 -   `useEffect` cleanup 함수에서 controller.abort()를 호출해 항상 마지막 요청의 결과만 반영하게 처리
+
+### 3. hook에서 null 반환 문제
+
+에러
+
+-   커스텀 hook으로 로직 분리 중, return null 처리를 했는데 컴포넌트에서 구조 분해 할당 시 타입 에러 발생
+
+원인
+
+-   hook의 반환 타입이 {movies, index} | null로 추론되어 컴포넌트에서 movies에 접근할 때 null일 가능성 때문에 타입 에러 발생
+-   hook 아래 useEffect 호출이 조건부로 실행되어 React hook 규칙에 위배
+
+해결
+
+-   hook은 일관된 타입만 반환하도록 수정
+-   hook이 아니라 컴포넌트에서 조건부 렌더링 처리
+-   hook과 컴포넌트의 역할을 분리
