@@ -13,7 +13,10 @@ export default function GenreDetail() {
         (page: number) => fetchMovieGenre(Number(genreId), page),
         [genreId],
     );
-    const { movies, loading, sentinelRef } = useInfiScrolls(fetchFn, !!genreId);
+    const { movies, loading, error, retry, sentinelRef } = useInfiScrolls(
+        fetchFn,
+        !!genreId,
+    );
 
     return (
         <div className="max-w-7xl mx-auto px-10 py-10 mt-16 min-h-screen">
@@ -44,6 +47,19 @@ export default function GenreDetail() {
             {loading && movies.length > 0 && (
                 <div className="mt-10">
                     <MovieGridSkeleton count={5} />
+                </div>
+            )}
+            {error && (
+                <div className="flex flex-col items-center gap-3 py-8">
+                    <p className="text-red-500">{error}</p>
+
+                    <button
+                        type="button"
+                        onClick={retry}
+                        className="rounded bg-mubee-burgundy px-4 py-2 text-white"
+                    >
+                        다시 시도
+                    </button>
                 </div>
             )}
             <div ref={sentinelRef} className="h-20" />

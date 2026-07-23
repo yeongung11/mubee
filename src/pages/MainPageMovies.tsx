@@ -59,7 +59,9 @@ export function MainPageMovies() {
         [category],
     );
 
-    const { movies, loading, sentinelRef } = useInfiScrolls(fetchFn);
+    const { movies, loading, error, retry, sentinelRef } = useInfiScrolls(
+        fetchFn,
+    );
 
     return (
         <div className="max-w-8xl mx-auto p-8 mt-12">
@@ -88,6 +90,19 @@ export function MainPageMovies() {
                     <MovieGrid movies={movies} />
                     {loading && <LoadingSkeleton />}
                 </>
+            )}
+            {error && (
+                <div className="flex flex-col items-center gap-3 py-8">
+                    <p className="text-red-500">{error}</p>
+
+                    <button
+                        type="button"
+                        onClick={retry}
+                        className="rounded bg-white px-4 py-2 text-black"
+                    >
+                        다시 시도
+                    </button>
+                </div>
             )}
 
             {/* 바닥 감지  */}
