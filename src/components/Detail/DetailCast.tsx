@@ -66,14 +66,14 @@ export function DetailCast({
                     <button
                         onClick={handleCastPrev}
                         disabled={castIdx === 0}
-                        className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold shadow-lg transition-all disabled:opacity-50 lg:min-w-20"
+                        className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold shadow-lg transition-all disabled:cursor-not-allowed disabled:opacity-30 lg:min-w-20"
                     >
                         이전
                     </button>
                     <button
                         onClick={handleCastNext}
                         disabled={castIdx + castPageSize >= totalCastLength}
-                        className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold transition-all disabled:opacity-50 lg:min-w-20"
+                        className="px-2 lg:px-6 lg:py-3 text-sm lg:text-lg bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold transition-all disabled:cursor-not-allowed disabled:opacity-30 lg:min-w-20"
                     >
                         다음
                     </button>

@@ -55,8 +55,10 @@ export function Detail() {
     }, []);
 
     const handleCastNext = useCallback(() => {
-        const maxIndex =
-            (movieWithCredits?.credits?.cast?.length || 0) - castPageSize;
+        const castLength = movieWithCredits?.credits?.cast?.length ?? 0;
+
+        const maxIndex = Math.max(0, castLength - castPageSize);
+
         setCastIdx((prev) => Math.min(maxIndex, prev + castPageSize));
     }, [movieWithCredits?.credits?.cast?.length]);
 
