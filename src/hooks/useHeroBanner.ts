@@ -15,6 +15,7 @@ export function useHeroBanner() {
         if (movies.length === 0 || isPaused) return;
 
         const id = setInterval(() => {
+            setProgress(0);
             setIndex((prevIndex) =>
                 prevIndex === movies.length - 1 ? 0 : prevIndex + 1,
             );
@@ -32,7 +33,6 @@ export function useHeroBanner() {
     // 슬라이드 진행바
     useEffect(() => {
         if (isPaused) return;
-        setProgress(0);
         const start = Date.now();
         const id = setInterval(() => {
             const elapsed = Date.now() - start;
@@ -46,8 +46,15 @@ export function useHeroBanner() {
         fetchMovieLogos(movies[index].id).then(setLogoPath);
     }, [index, movies]);
 
-    const handlePrev = () => setIndex(Math.max(0, index - 1));
-    const handleNext = () => setIndex(Math.min(movies.length - 1, index + 1));
+    // 이전, 다음 버튼
+    const handlePrev = () => {
+        setProgress(0);
+        setIndex(Math.max(0, index - 1));
+    };
+    const handleNext = () => {
+        setProgress(0);
+        setIndex(Math.min(movies.length - 1, index + 1));
+    };
 
     return {
         movies,

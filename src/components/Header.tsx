@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+// import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { SearchInput } from "./SearchInput";
 
@@ -8,12 +8,7 @@ interface HeaderProps {
 }
 
 export function Header({ className }: HeaderProps) {
-    const location = useLocation();
     const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-
-    useEffect(() => {
-        setMobileSearchOpen(false);
-    }, [location.pathname]);
 
     return (
         <>
@@ -62,18 +57,21 @@ export function Header({ className }: HeaderProps) {
                 <div className="flex items-center">
                     <Link
                         to="/"
+                        onClick={() => setMobileSearchOpen(false)}
                         className="flex-1 text-center text-sm py-3 hover:text-mubee-burgundy transition text-gray-700"
                     >
                         홈
                     </Link>
                     <Link
                         to="/genre"
+                        onClick={() => setMobileSearchOpen(false)}
                         className="flex-1 text-center text-sm py-3 hover:text-mubee-burgundy transition text-gray-700"
                     >
                         카테고리
                     </Link>
                     <Link
                         to="/favorites"
+                        onClick={() => setMobileSearchOpen(false)}
                         className="flex-1 text-center text-sm py-3 hover:text-mubee-burgundy transition text-gray-700"
                     >
                         찜한 영화

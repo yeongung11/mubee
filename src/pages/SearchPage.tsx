@@ -5,43 +5,79 @@ import { MovieGrid } from "../components/MovieGrid";
 import { PersonCard } from "../components/PersonCard";
 import type { Movie, Actor } from "@/types/movie";
 
+interface SearchResultsProps {
+    query: string;
+    tab: "movie" | "actor";
+    onTabChange: (tab: "movie" | "actor") => void;
+}
+
 export default function SearchPage() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
+
     const [tab, setTab] = useState<"movie" | "actor">("movie");
 
+    return (
+        <SearchResults
+            key={`${query}-${tab}`}
+            query={query}
+            tab={tab}
+            onTabChange={setTab}
+        />
+    );
+}
+
+function SearchResults({ query, tab, onTabChange }: SearchResultsProps) {
     const [movies, setMovies] = useState<Movie[]>([]);
+
     const [actors, setActors] = useState<Actor[]>([]);
-    const [loading, setLoading] = useState(false);
+
+    const [loading, setLoading] = useState(Boolean(query));
+
     const [more, setMore] = useState(true);
+
     const pageRef = useRef(1);
+
     const sentinelRef = useRef<HTMLDivElement>(null);
 
-    // 쿼리 또는 탭 바뀔 시 초기화
     useEffect(() => {
         if (!query) return;
-        setMovies([]);
-        setActors([]);
-        pageRef.current = 1;
-        setMore(true);
 
-        setLoading(true);
+        let cancelled = false;
 
-        if (tab === "movie") {
-            searchMoviesByQuery(query, 1).then((data) => {
-                setMovies(data.results || []);
-                setMore(data.total_pages > 1);
+        const loadInitialResults = async () => {
+            try {
+                if (tab === "movie") {
+                    const data = await searchMoviesByQuery(query, 1);
 
-                setLoading(false);
-            });
-        } else {
-            searchActorsByQuery(query, 1).then((data) => {
-                setActors(data.results || []);
-                setMore(data.total_pages > 1);
+                    if (cancelled) return;
 
-                setLoading(false);
-            });
-        }
+                    setMovies(data.results || []);
+                    setMore(data.total_pages > 1);
+                } else {
+                    const data = await searchActorsByQuery(query, 1);
+
+                    if (cancelled) return;
+
+                    setActors(data.results || []);
+                    setMore(data.total_pages > 1);
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    console.error(error);
+                }
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadInitialResults();
+
+        return () => {
+            cancelled = true;
+        };
     }, [query, tab]);
 
     // 추가 로딩
@@ -96,7 +132,7 @@ export default function SearchPage() {
             {/* 탭 */}
             <div className="flex gap-4 mb-8 border-b border-gray-200">
                 <button
-                    onClick={() => setTab("movie")}
+                    onClick={() => onTabChange("movie")}
                     className={`pb-2 text-sm font-semibold transition border-b-2 ${
                         tab === "movie"
                             ? "border-mubee-burgundy text-mubee-burgundy"
@@ -106,7 +142,7 @@ export default function SearchPage() {
                     영화 {movies.length > 0 && `${movies.length}+`}
                 </button>
                 <button
-                    onClick={() => setTab("actor")}
+                    onClick={() => onTabChange("actor")}
                     className={`pb-2 text-sm font-semibold transition border-b-2 ${
                         tab === "actor"
                             ? "border-mubee-burgundy text-mubee-burgundy"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchGenre, fetchMovieGenre } from "@/api/tmdb";
 import type { Movie, GenreType } from "@/types/movie";
 import { useNavigate } from "react-router-dom";
@@ -13,23 +13,43 @@ export default function Genre() {
     const [selectedGenre, setSelectedGenre] = useState<GenreType | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(false);
+    const requestIdRef = useRef(0);
 
     useEffect(() => {
         fetchGenre().then((data) => setGenres(data.genres));
     }, []);
 
-    useEffect(() => {
-        if (!selectedGenre) return;
+    const handleSelectGenre = async (genre: GenreType) => {
+        const requestId = ++requestIdRef.current;
+
+        setSelectedGenre(genre);
         setLoading(true);
         setMovies([]);
-        fetchMovieGenre(selectedGenre.id)
-            .then((data) => setMovies(data.results || []))
-            .catch(() => {})
-            .finally(() => setLoading(false));
-    }, [selectedGenre]);
+
+        try {
+            const data = await fetchMovieGenre(genre.id);
+
+            if (requestId !== requestIdRef.current) {
+                return;
+            }
+
+            setMovies(data.results || []);
+        } catch (error) {
+            if (requestId !== requestIdRef.current) {
+                return;
+            }
+
+            console.error(error);
+            setMovies([]);
+        } finally {
+            if (requestId === requestIdRef.current) {
+                setLoading(false);
+            }
+        }
+    };
 
     return (
-        <div className="max-w-screen-xl mx-auto px-10 py-10 mt-16 min-h-screen">
+        <div className="max-w-7xl mx-auto px-10 py-10 mt-16 min-h-screen">
             <div className="max-w-7xl mx-auto">
                 <GenreHeader
                     selectedGenre={selectedGenre}
@@ -39,7 +59,7 @@ export default function Genre() {
                 <GenreFilter
                     genres={genres}
                     selectedGenre={selectedGenre}
-                    onSelect={setSelectedGenre}
+                    onSelect={handleSelectGenre}
                 />
 
                 {selectedGenre && movies.length > 0 && !loading && (
