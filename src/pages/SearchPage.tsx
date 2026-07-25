@@ -40,6 +40,8 @@ function SearchResults({ query, tab, onTabChange }: SearchResultsProps) {
 
     const sentinelRef = useRef<HTMLDivElement>(null);
 
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
         if (!query) return;
 
@@ -81,43 +83,57 @@ function SearchResults({ query, tab, onTabChange }: SearchResultsProps) {
     }, [query, tab]);
 
     // 추가 로딩
-    const loadMore = useCallback(() => {
+    const loadMore = useCallback(async () => {
         if (loading || !more || !query) return;
 
         setLoading(true);
+        setError(null);
         const nextPage = pageRef.current + 1;
 
-        if (tab === "movie") {
-            searchMoviesByQuery(query, nextPage).then((data) => {
+        try {
+            if (tab === "movie") {
+                const data = await searchMoviesByQuery(query, nextPage);
+
                 setMovies((prev) => [...prev, ...(data.results || [])]);
+
                 pageRef.current = nextPage;
                 setMore(nextPage < data.total_pages);
+            } else {
+                const data = await searchActorsByQuery(query, nextPage);
 
-                setLoading(false);
-            });
-        } else {
-            searchActorsByQuery(query, nextPage).then((data) => {
                 setActors((prev) => [...prev, ...(data.results || [])]);
+
                 pageRef.current = nextPage;
                 setMore(nextPage < data.total_pages);
+            }
+        } catch (error) {
+            console.error(error);
 
-                setLoading(false);
-            });
+            setError("추가 검색 결과를 불러오지 못했습니다.");
+        } finally {
+            setLoading(false);
         }
     }, [query, more, tab, loading]);
 
     // 스크롤 감지
     useEffect(() => {
-        if (!more) return;
+        if (!more || error) return;
+
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) loadMore();
+                if (entry.isIntersecting) {
+                    loadMore();
+                }
             },
             { threshold: 0.1 },
         );
-        if (sentinelRef.current) observer.observe(sentinelRef.current);
+
+        if (sentinelRef.current) {
+            observer.observe(sentinelRef.current);
+        }
+
         return () => observer.disconnect();
-    }, [loadMore, more]);
+    }, [loadMore, more, error]);
 
     const isEmpty = tab === "movie" ? movies.length === 0 : actors.length === 0;
 
@@ -169,13 +185,21 @@ function SearchResults({ query, tab, onTabChange }: SearchResultsProps) {
                 </div>
             )}
 
-            {loading && (
-                <div className="flex justify-center mt-10">
-                    <div className="w-8 h-8 border-4 border-mubee-burgundy border-t-transparent rounded-full animate-spin" />
+            {error && (
+                <div className="flex flex-col items-center gap-3 py-8">
+                    <p className="text-red-500">{error}</p>
+
+                    <button
+                        type="button"
+                        onClick={loadMore}
+                        className="rounded bg-mubee-burgundy px-4 py-2 text-white"
+                    >
+                        다시 시도
+                    </button>
                 </div>
             )}
 
-            <div ref={sentinelRef} className="h-20" />
+            {!error && <div ref={sentinelRef} className="h-20" />}
         </div>
     );
 }
