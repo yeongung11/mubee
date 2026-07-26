@@ -22,12 +22,12 @@ export function RecentView({ movies }: { movies: Movie[] }) {
     return (
         <div className="relative max-w-8xl mx-auto p-8 py-10">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold mb-8 md:2xl lg:text-3xl text-mubee-burgundy">
+                <h2 className="text-xl font-bold mb-8 md:text-2xl lg:text-3xl text-mubee-burgundy">
                     최근 본 영화
                 </h2>
                 <button
                     onClick={clearRecentView}
-                    className="text-sm text-gray-400 hover:text-gray-600 transition"
+                    className="text-sm text-gray-600 hover:text-gray-900 transition"
                 >
                     기록 삭제
                 </button>

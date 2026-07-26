@@ -81,3 +81,8 @@ h3 {
     outline: 2px solid rgba(232, 184, 75, 0.8);
     outline-offset: 3px;
 } */
+
+.hero-text-shadow {
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.8), 0 1px 3px rgba(0, 0, 0, 1),
+        0 3px 6px rgba(0, 0, 0, 0.8);
+}

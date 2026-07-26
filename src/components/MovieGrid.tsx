@@ -15,14 +15,26 @@ function MovieCard({
     renderBadge?: (movie: Movie, index?: number) => React.ReactNode;
     showRating: boolean;
 }) {
-    const [displayTitle, setDisplayTitle] = useState(movie.title);
+    const [displayTitle, setDisplayTitle] = useState(() => movie.title);
     const [noImage, setNoImage] = useState(false);
 
     useEffect(() => {
-        setDisplayTitle(movie.title);
-        getEngTitle(movie).then(setDisplayTitle); // 여기서만 async 호출
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [movie.id]);
+        let ignore = false;
+
+        const resolveTitle = async () => {
+            const resolvedTitle = await getEngTitle(movie);
+
+            if (!ignore) {
+                setDisplayTitle(resolvedTitle);
+            }
+        };
+
+        resolveTitle();
+
+        return () => {
+            ignore = true;
+        };
+    }, [movie]);
 
     return (
         <li className="relative group">
@@ -52,11 +64,11 @@ function MovieCard({
                     </div>
                 )}
 
-                <h3 className="font-bold text-sm md:text-lg lg:text-xl truncate">
+                <p className="font-bold text-sm md:text-lg lg:text-xl truncate">
                     {displayTitle ?? (
                         <span className="block h-4 w-24 bg-gray-300 rounded animate-pulse" />
                     )}
-                </h3>
+                </p>
                 {renderBadge && renderBadge(movie, index)}
                 {showRating && (
                     <p className="text-xs">

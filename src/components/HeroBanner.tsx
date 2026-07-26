@@ -46,18 +46,14 @@ export function HeroBanner() {
 
                     <span
                         className="text-base  md:text-2xl lg:text-3xl lg:mb-4 block font-bold text-white
-                    drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
-                    drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
-                    drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]"
+                    hero-text-shadow"
                     >
                         오늘 트렌드 {index + 1} 위
                     </span>
 
                     <span
                         className="text-sm md:text-lg lg:text-xl block font-bold text-white mb-4
-                    drop-shadow-[0_0_1px_rgba(255,255,255,0.8)]
-                    drop-shadow-[0_1px_3px_rgba(0,0,0,1)]
-                    drop-shadow-[0_3px_6px_rgba(0,0,0,0.8)]"
+                    hero-text-shadow"
                     >
                         ⭐{convertFive(hero.vote_average)} •{" "}
                         {hero.release_date?.slice(0, 4)}
