@@ -84,11 +84,13 @@ export function Upcoming({ movies }: UpcomingProps) {
                         direction="left"
                         onClick={handlePrev}
                         disabled={index === 0}
+                        ariaLabel="이전 공개 예정 영화 보기"
                     />
                     <Buttons
                         direction="right"
                         onClick={handleNext}
                         disabled={index + moviePages >= movies.length}
+                        ariaLabel="다음 공개 예정 영화 보기"
                     />
                 </div>
             )}

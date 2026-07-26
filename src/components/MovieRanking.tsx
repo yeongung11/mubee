@@ -57,11 +57,13 @@ export function MovieRanking({ movies }: MovieRankingProps) {
                     direction="left"
                     onClick={handlePrev}
                     disabled={index === 0}
+                    ariaLabel="이전 영화 순위 보기"
                 />
                 <Buttons
                     direction="right"
                     onClick={handleNext}
                     disabled={index + moviePages >= movies.length}
+                    ariaLabel="다음 영화 순위 보기"
                 />
             </div>
         </div>

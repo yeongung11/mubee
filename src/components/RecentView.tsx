@@ -41,11 +41,13 @@ export function RecentView({ movies }: { movies: Movie[] }) {
                         direction="left"
                         onClick={handlePrev}
                         disabled={index === 0}
+                        ariaLabel="이전 최근 본 영화 보기"
                     />
                     <Buttons
                         direction="right"
                         onClick={handleNext}
                         disabled={index + moviePages >= movies.length}
+                        ariaLabel="다음 최근 본 영화 보기"
                     />
                 </div>
             )}

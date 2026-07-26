@@ -37,11 +37,13 @@ export function PopularPersons({ persons }: { persons: Actor[] }) {
                         direction="left"
                         onClick={handlePrev}
                         disabled={index === 0}
+                        ariaLabel="이전 인기 배우 보기"
                     />
                     <Buttons
                         direction="right"
                         onClick={handleNext}
                         disabled={index + personPages >= persons.length}
+                        ariaLabel="다음 인기 배우 보기"
                     />
                 </div>
             )}

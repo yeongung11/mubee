@@ -4,11 +4,19 @@ type ButtonProps = {
     direction: "left" | "right";
     onClick: () => void;
     disabled: boolean;
+    ariaLabel: string;
 };
 
-export default function Buttons({ direction, onClick, disabled }: ButtonProps) {
+export default function Buttons({
+    direction,
+    onClick,
+    disabled,
+    ariaLabel,
+}: ButtonProps) {
     return (
         <button
+            type="button"
+            aria-label={ariaLabel}
             onClick={onClick}
             disabled={disabled}
             className={`absolute ${direction === "left" ? "left-1" : "right-1"} 
@@ -19,11 +27,13 @@ export default function Buttons({ direction, onClick, disabled }: ButtonProps) {
                         transition-all duration-200 
                         disabled:opacity-0 active:scale-95`}
         >
-            {direction === "left" ? (
-                <ArrowLeftIcon className="w-2 h-2 md:w-3 md:w-3 lg:w-6 lg:h-6" />
-            ) : (
-                <ArrowRightIcon className="w-2 h-2 md:w-3 md:w-3 lg:w-6 lg:h-6" />
-            )}
+            <span aria-hidden="true">
+                {direction === "left" ? (
+                    <ArrowLeftIcon className="w-2 h-2 md:w-3 lg:w-6 lg:h-6" />
+                ) : (
+                    <ArrowRightIcon className="w-2 h-2 md:w-3  lg:w-6 lg:h-6" />
+                )}
+            </span>
         </button>
     );
 }

@@ -44,11 +44,13 @@ export function MovieSection({ movies, title, moreLink }: MovieSectionProps) {
                         direction="left"
                         onClick={handlePrev}
                         disabled={index === 0}
+                        ariaLabel={`${title} 이전 목록 보기`}
                     />
                     <Buttons
                         direction="right"
                         onClick={handleNext}
                         disabled={index + moviePages >= movies.length}
+                        ariaLabel={`${title} 다음 목록 보기`}
                     />
                 </div>
             )}

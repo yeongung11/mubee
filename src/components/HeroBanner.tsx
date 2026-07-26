@@ -71,11 +71,13 @@ export function HeroBanner() {
                     direction="left"
                     onClick={handlePrev}
                     disabled={index === 0}
+                    ariaLabel="이전 배너 보기"
                 />
                 <Buttons
                     direction="right"
                     onClick={handleNext}
                     disabled={index === movies.length - 1}
+                    ariaLabel="다음 배너 보기"
                 />
 
                 {/* 일시정지 / 재생 버튼 */}
