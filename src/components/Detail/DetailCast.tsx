@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import type { CastMember, CrewMember } from "../../types/movie";
 
 type Person = CastMember | CrewMember;
@@ -20,13 +21,64 @@ export function DetailCast({
     totalCastLength,
     castPageSize,
 }: Props) {
+    const mobileScrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = mobileScrollRef.current;
+
+        if (!el) return;
+
+        const handleWheel = (e: WheelEvent) => {
+            if (window.matchMedia("(min-width: 1024px)").matches) {
+                return;
+            }
+
+            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                return;
+            }
+
+            const maxScrollLeft = el.scrollWidth - el.clientWidth;
+
+            if (maxScrollLeft <= 0) return;
+
+            const movingRight = e.deltaY > 0;
+
+            const movingLeft = e.deltaY < 0;
+
+            const canMoveRight =
+                movingRight && el.scrollLeft < maxScrollLeft - 1;
+
+            const canMoveLeft = movingLeft && el.scrollLeft > 1;
+
+            if (!canMoveRight && !canMoveLeft) {
+                return;
+            }
+
+            e.preventDefault();
+
+            el.scrollLeft += e.deltaY;
+        };
+
+        el.addEventListener("wheel", handleWheel, { passive: false });
+
+        return () => {
+            el.removeEventListener("wheel", handleWheel);
+        };
+    }, []);
+
     return (
         <section className="py-20 bg-white">
             <div className="mx-auto px-6 max-w-6xl pb-20">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 pb-4 border-b border-white/30 text-left">
                     출연/제작
                 </h2>
-                <div className="flex gap-4 pb-4 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8">
+                <div
+                    ref={mobileScrollRef}
+                    role="region"
+                    aria-label="출연진 및 제작진 목록"
+                    tabIndex={0}
+                    className="flex gap-4 pb-4 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide lg:grid lg:grid-cols-5 lg:overflow-visible lg:snap-none mb-8"
+                >
                     {currentCasts.map((person, index) => (
                         <Link
                             to={`/actor/${person.id}`}
