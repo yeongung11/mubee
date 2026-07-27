@@ -24,10 +24,10 @@ export function PersonCard({ person, rank }: { person: Actor; rank?: number }) {
                             <img
                                 src={`https://image.tmdb.org/t/p/w342${person.profile_path}`}
                                 alt={dpName}
-                                className="w-full h-full object-cover object-"
+                                className="w-full h-full object-cover object-center"
                             />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-800 to-gray-900">
                                 <span className="text-gray-400 font-semibold">
                                     No Image
                                 </span>

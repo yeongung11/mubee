@@ -47,7 +47,7 @@ export function SearchResultList({
                             />
                         ) : (
                             <div className="w-12 h-16 rounded shrink-0 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                <span className="text-gray-400 text-xs font-medium">
+                                <span className="w-full px-1 text-center text-gray-400 text-xs leading-tight font-medium">
                                     No Image
                                 </span>
                             </div>
