@@ -20,6 +20,7 @@ export function Home() {
         error,
     } = useHomeData();
     const { recentView } = useRecentViewStore();
+    throw new Error("ErrorBoundary 화면 테스트");
 
     if (loading) return <HomeSkeleton />;
     if (error)
