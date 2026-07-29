@@ -1,4 +1,5 @@
 import type { Review } from "../../types/movie";
+import { useState } from "react";
 
 interface Props {
     reviews: Review[];
@@ -21,38 +22,7 @@ export function DetailReviews({ reviews }: Props) {
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     {reviews.map((review) => (
-                        <article
-                            key={review.id}
-                            className="rounded-2xl border border-gray-200 bg-gray-50 p-6 transition hover:border-mubee-burgundy/30 hover:shadow-md"
-                        >
-                            <div className="mb-4 flex items-center gap-3">
-                                <div
-                                    aria-hidden="true"
-                                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-mubee-burgundy font-bold text-white"
-                                >
-                                    {review.author.slice(0, 2).toUpperCase()}
-                                </div>
-
-                                <div className="min-w-0">
-                                    <h3 className="truncate font-semibold text-gray-900">
-                                        {review.author}
-                                    </h3>
-
-                                    <time
-                                        dateTime={review.created_at}
-                                        className="text-sm text-gray-500"
-                                    >
-                                        {new Date(
-                                            review.created_at,
-                                        ).toLocaleDateString("ko-KR")}
-                                    </time>
-                                </div>
-                            </div>
-
-                            <p className="text-sm leading-6 text-gray-700">
-                                {review.content}
-                            </p>
-                        </article>
+                        <ReviewCard key={review.id} review={review} />
                     ))}
                 </div>
 
@@ -61,5 +31,62 @@ export function DetailReviews({ reviews }: Props) {
                 </p>
             </div>
         </section>
+    );
+}
+
+function ReviewCard({ review }: { review: Review }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const isLongReview = review.content.length > 200;
+    const contentId = `review-content-${review.id}`;
+
+    return (
+        <article className="self-start rounded-2xl border border-gray-200 bg-gray-50 p-6 transition hover:border-mubee-burgundy/30 hover:shadow-md">
+            <div className="mb-4 flex items-center gap-3">
+                <div
+                    aria-hidden="true"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-mubee-burgundy font-bold text-white"
+                >
+                    {review.author.trim()
+                        ? review.author.slice(0, 2).toUpperCase()
+                        : "?"}
+                </div>
+
+                <div className="min-w-0">
+                    <h3 className="truncate font-semibold text-gray-900">
+                        {review.author || "알 수 없는 사용자"}
+                    </h3>
+
+                    <time
+                        dateTime={review.created_at}
+                        className="text-sm text-gray-500"
+                    >
+                        {new Date(review.created_at).toLocaleDateString(
+                            "ko-KR",
+                        )}
+                    </time>
+                </div>
+            </div>
+
+            <p
+                id={contentId}
+                className={`whitespace-pre-line text-sm leading-6 text-gray-700 ${
+                    isExpanded ? "" : "line-clamp-4"
+                }`}
+            >
+                {review.content}
+            </p>
+
+            {isLongReview && (
+                <button
+                    type="button"
+                    aria-expanded={isExpanded}
+                    aria-controls={contentId}
+                    onClick={() => setIsExpanded((prev) => !prev)}
+                    className="mt-4 text-sm font-semibold text-mubee-burgundy transition hover:opacity-70"
+                >
+                    {isExpanded ? "접기" : "더보기"}
+                </button>
+            )}
+        </article>
     );
 }
