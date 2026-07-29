@@ -89,14 +89,14 @@ export function DetailPosterRating({
                                     </span>
                                 </button>
 
-                                <button className="flex flex-col items-center gap-1 text-gray-400 ">
+                                {/* <button className="flex flex-col items-center gap-1 text-gray-400 ">
                                     <span className="text-lg lg:text-2xl">
                                         ...
                                     </span>
                                     <span className="text-sm lg:text-2xl whitespace-nowrap">
-                                        코멘트
+                                        관객 리뷰
                                     </span>
-                                </button>
+                                </button> */}
 
                                 <button
                                     onClick={setIsWatching}
@@ -114,7 +114,8 @@ export function DetailPosterRating({
                                     </span>
                                 </button>
                             </div>
-                        </div>``
+                        </div>
+                        ``
                         <div className="w-full h-px bg-gray-300 mb-4 mt-5" />
                         <div className="text-gray-700 leading-relaxed text-sm">
                             {movie.overview ? (

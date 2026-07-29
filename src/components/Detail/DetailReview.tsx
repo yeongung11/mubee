@@ -16,7 +16,7 @@ export function DetailReviews({ reviews }: Props) {
                         관객 리뷰
                     </h2>
 
-                    <p className="text-xs text-gray-400">TMDB 제공</p>
+                    <p className="text-xs text-gray-500">TMDB 제공</p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -49,7 +49,7 @@ export function DetailReviews({ reviews }: Props) {
                                 </div>
                             </div>
 
-                            <p className="line-clamp-4 text-sm leading-6 text-gray-700">
+                            <p className="text-sm leading-6 text-gray-700">
                                 {review.content}
                             </p>
                         </article>

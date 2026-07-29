@@ -2,91 +2,90 @@ import type { Movie } from "../types/movie";
 import { Link } from "react-router-dom";
 
 type MagazineArticle = {
+    id: number;
     title: string;
     content: string;
-    backdrop: string;
+    backdrop: string | null;
 };
 
-export function MagazineSection({
-    trendingMovies,
-}: {
+interface MagazineSectionProps {
     trendingMovies: Movie[];
-}) {
-    const magazineArticles: MagazineArticle[] = [
-        {
-            title: trendingMovies[0].title,
-            content: "대중이 선택한 컨텐츠...",
-            backdrop: trendingMovies[0]?.backdrop_path
-                ? `https://image.tmdb.org/t/p/w1280${trendingMovies[0].backdrop_path}`
-                : "/static/fallback.jpg",
-        },
-        {
-            title: trendingMovies[1].title,
-            content: "요즘 넷플릭스 덕에 집에서 영화를 보지만...",
-            backdrop: trendingMovies[1]?.backdrop_path
-                ? `https://image.tmdb.org/t/p/w1280${trendingMovies[1].backdrop_path}`
-                : "/static/fallback.jpg",
-        },
-        {
-            title: trendingMovies[2].title,
-            content: "요즘 넷플릭스 덕에 집에서 영화를 보지만...",
-            backdrop: trendingMovies[2]?.backdrop_path
-                ? `https://image.tmdb.org/t/p/w1280${trendingMovies[2].backdrop_path}`
-                : "/static/fallback.jpg",
-        },
-        {
-            title: trendingMovies[3].title,
-            content: "대중이 선택한 컨텐츠...",
-            backdrop: trendingMovies[3]?.backdrop_path
-                ? `https://image.tmdb.org/t/p/w1280${trendingMovies[3].backdrop_path}`
-                : "/static/fallback.jpg",
-        },
-    ];
+}
+
+export function MagazineSection({ trendingMovies }: MagazineSectionProps) {
+    const magazineArticles: MagazineArticle[] = trendingMovies
+        .slice(0, 4)
+        .map((movie) => ({
+            id: movie.id,
+            title: movie.title,
+            content:
+                movie.overview?.trim() ||
+                "지금 관객들의 관심을 받고 있는 작품을 만나보세요.",
+            backdrop: movie.backdrop_path
+                ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                : null,
+        }));
+
+    if (magazineArticles.length === 0) {
+        return null;
+    }
 
     return (
-        <section className="max-w-8xl mx-auto py-16 px-4 ml-4">
-            {/* <h1 className="text-3xl text-semibold">지금 많이 보는 영화</h1> */}
-            <div className="flex gap-6 overflow-x-auto touch-pan-x snap-x snap-mandatory scrollbar-hide md:grid md:grid-cols-2 md:overflow-visible md:snap-none">
-                {magazineArticles.map((article, idx) => (
-                    <MagazineCard
-                        key={idx}
-                        article={article}
-                        id={trendingMovies[idx].id}
-                    />
+        <section className="mx-auto max-w-7xl px-4 py-16">
+            <div className="mb-8">
+                <p className="text-sm font-bold tracking-widest text-mubee-burgundy">
+                    MUBEE MAGAZINE
+                </p>
+
+                <h2 className="mt-2 text-2xl font-bold text-gray-900 md:text-3xl">
+                    지금 주목할 영화
+                </h2>
+
+                <p className="mt-2 text-sm text-gray-500">
+                    지금 관객들의 관심을 받고 있는 작품을 만나보세요.
+                </p>
+            </div>
+
+            <div className="flex gap-6 overflow-x-auto pb-4 touch-pan-x snap-x snap-proximity scrollbar-hide md:grid md:grid-cols-2 md:overflow-visible md:pb-0 md:snap-none">
+                {magazineArticles.map((article) => (
+                    <MagazineCard key={article.id} article={article} />
                 ))}
             </div>
         </section>
     );
 }
 
-function MagazineCard({
-    article,
-    id,
-}: {
-    article: MagazineArticle;
-    id: number;
-}) {
+function MagazineCard({ article }: { article: MagazineArticle }) {
     return (
         <Link
-            to={`/movie/${id}`}
-            className="group cursor-pointer block min-w-[85vw] snap-start md:min-w-0"
+            to={`/movie/${article.id}`}
+            aria-label={`${article.title} 상세 페이지로 이동`}
+            className="group block min-w-[85vw] snap-start rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mubee-burgundy focus-visible:ring-offset-4 md:min-w-0"
         >
-            <article className="group cursor-pointer">
+            <article>
                 <div
-                    className="relative h-80 md:h-112.5 rounded-3xl overflow-hidden bg-linear-to-br from-gray-900 via-neutral-800 to-black mb-6 transition-all duration-500 group-hover:scale-[1.02]"
+                    className="relative mb-6 h-80 overflow-hidden rounded-3xl bg-linear-to-br from-gray-900 via-neutral-800 to-black transition-transform duration-500 group-hover:scale-[1.02] md:h-112.5"
                     style={{
-                        backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3)), url(${article.backdrop})`,
+                        backgroundImage: article.backdrop
+                            ? `linear-gradient(
+                                  135deg,
+                                  rgba(0, 0, 0, 0.8),
+                                  rgba(0, 0, 0, 0.3)
+                              ),
+                              url("${article.backdrop}")`
+                            : undefined,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                     }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/10 to-transparent" />
 
-                    <div className="absolute bottom-8 left-8 right-8 md:left-12 md:right-12">
-                        <h3 className="text-2xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg group-hover:translate-x-2 transition-transform duration-300">
+                    <div className="absolute inset-x-8 bottom-8 md:inset-x-12">
+                        <h3 className="mb-4 text-2xl font-bold text-white drop-shadow-lg transition-transform duration-300 group-hover:translate-x-2 md:text-4xl">
                             {article.title}
                         </h3>
-                        <p className="text-neutral-200 leading-relaxed max-w-2xl md:text-lg line-clamp-4 drop-shadow-md">
+
+                        <p className="line-clamp-4 max-w-2xl text-sm leading-relaxed text-neutral-200 drop-shadow-md md:text-lg">
                             {article.content}
                         </p>
                     </div>
