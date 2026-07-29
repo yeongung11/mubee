@@ -70,7 +70,7 @@ function ReviewCard({ review }: { review: Review }) {
             <p
                 id={contentId}
                 className={`whitespace-pre-line text-sm leading-6 text-gray-700 ${
-                    isExpanded ? "" : "line-clamp-4"
+                    isLongReview && !isExpanded ? "line-clamp-4" : ""
                 }`}
             >
                 {review.content}
